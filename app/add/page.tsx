@@ -1,11 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { today } from "../lib/utils";
 import ItemForm from "../ui/item-form";
 
 const Page = () => {
-  const items: Item[] = JSON.parse(localStorage.getItem("items") || "[]");
+  const [items, setItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+  }, []);
+
   const [status, setStatus] = useState<Mode>('show');
   const itemCard: Item = {
     id: Date.now(),
@@ -20,10 +25,16 @@ const Page = () => {
   
   const handleSave = (updatedItem: Item) => {
     console.log("Item actualizado:", updatedItem);
-    const newList = [...items, updatedItem];
-    localStorage.setItem("items", JSON.stringify(newList));
+  
+    // Usa la versión basada en el valor anterior
+    setItems((prevItems) => [...prevItems, updatedItem]);
+  
+    // También guarda en localStorage para persistencia
+    localStorage.setItem("items", JSON.stringify([...items, updatedItem]));
+  
     setStatus('hide');
   };
+  
 
   return (
     <div className="pt-16 pb-4 w-full flex flex-col items-center border border-black">
