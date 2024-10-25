@@ -1,12 +1,17 @@
-'use client'
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import Listcard from "../ui/list-card";
 import Total from "../ui/total";
 import { Item } from "../lib/definitions";
 
 const Page = () => {
-  const items: Item[] = JSON.parse(localStorage.getItem('items') || '[]');
-  const [listItems,setListItems] = useState( items.filter((item) => item.location === "list"));
+ 
+  const [listItems, setListItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    const items: Item[] = JSON.parse(localStorage.getItem("items") || "[]");
+    setListItems(items.filter((item) => item.location === "list"));
+  }, []);
 
   return (
     <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-slate-100">

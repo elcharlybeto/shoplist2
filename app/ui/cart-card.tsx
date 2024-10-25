@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -16,9 +16,14 @@ const CartCard = ({
   item: Item;
   setCartItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-  const items: Item[] = JSON.parse(localStorage.getItem("items") || "[]");
+  
+  const [items, setItems] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
   const total = roundToTwoDecimals(item.qty * item.onSalePrice);
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+  }, []);
 
   const updateCart = (item: Item) => {
     const newCart = items.map((itemCart) =>

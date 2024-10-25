@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaBars, FaList, FaShoppingCart, FaHourglass, FaPlus, FaTimes } from 'react-icons/fa';
 import clsx from 'clsx';
 import { Item } from '../lib/definitions';
@@ -10,9 +10,14 @@ import Swal from 'sweetalert2';
 
 
 const Navbar = () => {
-  const items: Item[] = JSON.parse(localStorage.getItem('items') || '[]');
+  
+  const [items, setItems] = useState<Item[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+  }, []);
 
 const router = useRouter()
 

@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { FaEdit, FaPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -14,8 +14,14 @@ const HistorialCard = ({
   item: Item;
   setHistorialItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-  const items: Item[] = JSON.parse(localStorage.getItem("items") || "[]");
+  const [items, setItems] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
+
+
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+  }, []);
 
   const updateHistorial = (item: Item) => {
     const newHistorial = items.map((itemHistorial) =>
