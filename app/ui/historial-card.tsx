@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { FaEdit, FaPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -8,28 +8,22 @@ import ItemForm from "./item-form";
 
 const HistorialCard = ({
   item,
-  setHistorialItems,
+  items,
+  setItems,
 }: {
   item: Item;
-  setHistorialItems: Dispatch<SetStateAction<Item[]>>;
+  items: Item[];
+  setItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-  const [items, setItems] = useState<Item[]>([]);
+
   const [status, setStatus] = useState<Mode>("show");
-
-
-
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
 
   const updateHistorial = (item: Item) => {
     const newHistorial = items.map((itemHistorial) =>
       itemHistorial.id === item.id ? item : itemHistorial
     );
     localStorage.setItem("items", JSON.stringify(newHistorial));
-    setHistorialItems(
-      ...[newHistorial.filter((itemHistorial) => itemHistorial.location === "historial")]
-    );
+    setItems(newHistorial);
   };
 
   const handleSave = (updatedItem: Item) => {
@@ -40,9 +34,7 @@ const HistorialCard = ({
   const deleteItem = () => {
     const newItems = items.filter((itemList) => itemList.id !== item.id );
     localStorage.setItem("items", JSON.stringify(newItems));
-    setHistorialItems(
-      ...[newItems.filter((itemList) => itemList.location === "historial")]
-    );
+    setItems(newItems);
   };
 
   const addItemToList = () =>{

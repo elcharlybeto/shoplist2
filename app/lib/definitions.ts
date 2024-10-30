@@ -11,4 +11,4 @@ boughtDate: string;
 
 export type Mode = 'show' | 'edit' | 'onsale'| 'hide';
 
-export type Action = 'save' | 'hide' | 'buy';
+export type Action = 'save' | 'hide' | 'buy' | 'discard';

@@ -7,6 +7,7 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import { today } from "../lib/utils";
+import Swal from "sweetalert2";
 
 const ItemForm = ({
   item,
@@ -30,6 +31,11 @@ const ItemForm = ({
     return <div className="text-sm text-error-msg  font-semibold h-6">{msg}</div>;
   };
 
+  const resetForm = () =>{
+    setName("");
+    setQty("1");
+    setPrice("0");
+  }
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const regex = /^\d*\.?\d*$/; 
@@ -73,7 +79,13 @@ const ItemForm = ({
           onSalePrice : Number(price),
           boughtDate: today()
         };
+        Swal.fire({
+          icon: "success",
+          title: "Item agregado a la  Lista",
+          confirmButtonText: "OK",
+        })
         setStatus("show");
+        resetForm();
         onSave(updatedItem);
       } else if (action === "buy") {
         const updatedItem: Item = {
@@ -85,9 +97,18 @@ const ItemForm = ({
           location: "cart",
           boughtDate: today()
         };
+        Swal.fire({
+          icon: "success",
+          title: "Item agregado al Carrito",
+          confirmButtonText: "OK",
+        })
         setStatus("show");
+        resetForm();
         onBuy(updatedItem);
-      } else setStatus("show");
+      } else {
+        setStatus("show");
+        resetForm();
+      }
     }
   };
 
@@ -164,7 +185,7 @@ const ItemForm = ({
         </span>
         <span
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
-          onClick={() => setStatus("show")}
+          onClick={(e) => handleSubmit(e, "discard")}
         >
           <FaRegWindowClose size={24} />
         </span>
