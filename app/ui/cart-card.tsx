@@ -52,7 +52,7 @@ const CartCard = ({
   return (
     <>
       <div
-        className={clsx("flex items-center justify-around rounded-md border border-blue-950 bg-slate-300 p-3 shadow-xl", {
+        className={clsx("flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list", {
           hidden: status === "edit" || status === "onsale",
         })}
       >
@@ -68,7 +68,7 @@ const CartCard = ({
         </div>
         <div className="flex gap-4 mr-2">
           <span
-            className="hover:text-gray-400 text-red-900"
+            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={() => {
               setStatus("edit");
             }}
@@ -76,13 +76,13 @@ const CartCard = ({
             <FaEdit size={24} />
           </span>
           <span
-            className="hover:text-gray-400 text-red-900"
+            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={deleteItem}
           >
             <RiDeleteBin6Line size={24} />
           </span>
           <span
-            className="hover:text-gray-400 text-red-900"
+            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={() => setStatus("onsale")}
           >
             <TbRosetteDiscountCheck size={24} />
@@ -91,7 +91,7 @@ const CartCard = ({
       </div>
       <div
         className={clsx(
-          "flex w-[400px] shadow-lg items-center justify-around bg-yellow-300 p-2",
+          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }
@@ -105,7 +105,7 @@ const CartCard = ({
         />
       </div>
       <div
-        className={clsx("flex items-center justify-around bg-green-300 p-2", {
+        className={clsx(" flex items-center rounded-md shadow-xl justify-around shadow-shadow-list bg-accent p-2 border border-border-list", {
           hidden: status === "show" || status === "edit",
         })}
       >

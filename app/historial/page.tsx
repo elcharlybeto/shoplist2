@@ -13,7 +13,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-red-100">
+    <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center">
       <ul className="flex flex-col gap-2 p-2 items-center">
         {historialItems.map((item) => (
           <li key={item.id}>
