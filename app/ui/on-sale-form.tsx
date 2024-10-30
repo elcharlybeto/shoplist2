@@ -16,7 +16,7 @@ const OnSaleForm = ({
   const [onSalePriceError, setOnSalePriceError] = useState(false);
 
   const showErrorMsg = (msg: string) => {
-    return <div className="text-sm text-red-700 font-semibold h-4">{msg}</div>;
+    return <div className="text-sm text-red-700 dark:text-red-200 font-semibold h-4">{msg}</div>;
   };
 
   const handleOnSalePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +47,7 @@ const OnSaleForm = ({
 
   return (
     <div className="flex flex-col w-full p-1 ">
-      <div className=" bg-green-600 py-1 text-white font-bold text-center">
+      <div className=" bg-secondary py-1 font-bold border border-border-list text-center">
         {item.name}
       </div>
 
@@ -62,7 +62,7 @@ const OnSaleForm = ({
               id="onSalePrice"
               value={onSalePrice}
               onChange={handleOnSalePriceChange}
-              className="p-1 mr-2   border border-gray-700"
+              className="p-1 mr-2 border border-border-input bg-input-bg"
               autoFocus={true}
               autoComplete="off"
               required
@@ -76,13 +76,13 @@ const OnSaleForm = ({
         </div>
         <div className="flex gap-2 w-1/5 items-center justify-around ">
           <span
-            className="hover:text-gray-400 text-red-900"
+            className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
             onClick={(e) => handleSubmit(e, "hide")}
           >
             <FaRegWindowClose size={24} />
           </span>
           <span
-            className="hover:text-gray-400 text-red-900"
+            className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
             onClick={(e) =>
               Number(onSalePrice) > 0 && Number(onSalePrice) < item.price
                 ? handleSubmit(e, "buy")

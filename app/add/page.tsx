@@ -24,12 +24,8 @@ const Page = () => {
   };
   
   const handleSave = (updatedItem: Item) => {
-    console.log("Item actualizado:", updatedItem);
-  
-    // Usa la versión basada en el valor anterior
     setItems((prevItems) => [...prevItems, updatedItem]);
   
-    // También guarda en localStorage para persistencia
     localStorage.setItem("items", JSON.stringify([...items, updatedItem]));
   
     setStatus('hide');
@@ -37,9 +33,9 @@ const Page = () => {
   
 
   return (
-    <div className="pt-16 pb-4 w-full flex flex-col items-center border border-black">
+    <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       {status === 'show' && (
-        <div className="flex w-[400px] shadow-lg items-center justify-around bg-yellow-300 p-2">
+        <div className="flex w-[400px] shadow-lg items-center justify-around p-2 bg-secondary shadow-shadow-list">
           <ItemForm
             item={itemCard}
             onSave={handleSave}

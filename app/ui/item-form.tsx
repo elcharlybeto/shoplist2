@@ -27,7 +27,7 @@ const ItemForm = ({
   const [priceError, setPriceError] = useState(false);
 
   const showErrorMsg = (msg: string) => {
-    return <div className="text-sm text-red-700 font-semibold h-4">{msg}</div>;
+    return <div className="text-sm text-error-msg  font-semibold h-6">{msg}</div>;
   };
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,14 +108,14 @@ const ItemForm = ({
               } else setNameError(true);
               setName(e.target.value);
             }}
-            className="p-1 mr-2 mb-2  border border-gray-700"
+            className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
             autoComplete="off"
             required
           />
           {nameError ? (
             showErrorMsg("Se debe ingresar un producto")
           ) : (
-            <div className="min-h-4"></div>
+            <div className="min-h-6"></div>
           )}
 
           <label htmlFor="qty" className="text-sm">
@@ -126,14 +126,14 @@ const ItemForm = ({
             id="qty"
             value={qty}
             onChange={handleQtyChange}
-            className="p-1 mr-2 mb-2  border border-gray-700"
+            className="p-1 mr-2 mb-2  border border-border-input bg-input-bg"
             autoComplete="off"
             required
           />
           {qtyError ? (
             showErrorMsg("Cantidad no válida")
           ) : (
-            <div className="min-h-4"></div>
+            <div className="min-h-6"></div>
           )}
 
           <label htmlFor="price" className="text-sm">
@@ -144,32 +144,32 @@ const ItemForm = ({
             id="price"
             value={price}
             onChange={handlePriceChange}
-            className="p-1 mr-2 mb-2  border border-gray-700"
+            className="p-1 mr-2 mb-2  border border-border-input bg-input-bg"
             autoComplete="off"
             required
           />
           {priceError ? (
             showErrorMsg("Precio no válido")
           ) : (
-            <div className="min-h-4"></div>
+            <div className="min-h-6"></div>
           )}
         </form>
       </div>
       <div className="flex flex-col w-1/12 items-center justify-around ">
         <span
-          className="hover:text-gray-400 text-red-900"
+          className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
           onClick={(e) => handleSubmit(e, "save")}
         >
           <FaRegCheckCircle size={24} />
         </span>
         <span
-          className="hover:text-gray-400 text-red-900"
+          className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
           onClick={() => setStatus("show")}
         >
           <FaRegWindowClose size={24} />
         </span>
         <span
-          className="hover:text-gray-400 text-red-900"
+          className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
           onClick={(e) => Number(price) > 0 ? handleSubmit(e, "buy") : setPriceError(true)}
         >
           <FaShoppingCart size={24} />
