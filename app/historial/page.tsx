@@ -4,8 +4,12 @@ import { Item } from "../lib/definitions";
 import HistorialCard from "../ui/historial-card";
 
 const Page = () => {
-  const [items, setItems] = useState<Item[]>(JSON.parse(localStorage.getItem("items") || "[]"));
+  const [items, setItems] = useState<Item[]>([]);
   const [historialItems,setHistorialItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+  }, []);
   
   useEffect(() => {
     setHistorialItems(items.filter((item) => item.location === "historial"));

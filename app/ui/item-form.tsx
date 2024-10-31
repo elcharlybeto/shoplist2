@@ -81,7 +81,7 @@ const ItemForm = ({
         };
         Swal.fire({
           icon: "success",
-          title: "Item agregado a la  Lista",
+          title: "Item agregado a la Lista",
           confirmButtonText: "OK",
         })
         setStatus("show");
