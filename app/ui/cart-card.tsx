@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -11,28 +11,24 @@ import OnSaleForm from "./on-sale-form";
 
 const CartCard = ({
   item,
-  setCartItems,
+  items,
+  setItems,
 }: {
   item: Item;
-  setCartItems: Dispatch<SetStateAction<Item[]>>;
+  items: Item[];
+  setItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
   
-  const [items, setItems] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
   const total = roundToTwoDecimals(item.qty * item.onSalePrice);
 
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
 
   const updateCart = (item: Item) => {
     const newCart = items.map((itemCart) =>
       itemCart.id === item.id ? item : itemCart
     );
     localStorage.setItem("items", JSON.stringify(newCart));
-    setCartItems(
-      ...[newCart.filter((itemCart) => itemCart.location === "cart")]
-    );
+    setItems(newCart)
   };
 
   const handleSave = (updatedItem: Item) => {

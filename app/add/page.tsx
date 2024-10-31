@@ -12,7 +12,7 @@ const Page = () => {
   }, []);
 
   const [status, setStatus] = useState<Mode>('show');
-  const itemCard: Item = {
+  const itemCard : Item = {
     id: Date.now(),
     location: "list",
     name: "",
@@ -28,7 +28,7 @@ const Page = () => {
   
     localStorage.setItem("items", JSON.stringify([...items, updatedItem]));
   
-    setStatus('hide');
+    setStatus('show');
   };
   
 

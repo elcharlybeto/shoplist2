@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { FaEdit, FaShoppingCart } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -11,29 +11,22 @@ import OnSaleForm from "./on-sale-form";
 
 const Listcard = ({
   item,
-  setListItems,
+  items,
+  setItems,
 }: {
   item: Item;
-  setListItems: Dispatch<SetStateAction<Item[]>>;
+  items: Item[];
+  setItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-  const [items, setItems] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
   const total = roundToTwoDecimals(item.qty * item.price);
-
-
-
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
 
   const updateList = (item: Item) => {
     const newList = items.map((itemList) =>
       itemList.id === item.id ? item : itemList
     );
     localStorage.setItem("items", JSON.stringify(newList));
-    setListItems(
-      ...[newList.filter((itemList) => itemList.location === "list")]
-    );
+    setItems(newList);
   };
 
   const handleSave = (updatedItem: Item) => {
