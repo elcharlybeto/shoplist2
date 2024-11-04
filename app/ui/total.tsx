@@ -14,8 +14,8 @@ const Total = ({ items }: { items: Array<Item> }) => {
   );
 
   return (
-    <div className="w-full h-10 flex border-text  border-2 mb-2">
-      <div className="bg-secondary w-1/2 text-xl flex justify-center items-center font-bold"><span>{`Estimado: $ ${roundToTwoDecimals(
+    <div className="w-full h-10 flex border-text  border-2">
+      <div className="bg-secondary w-1/2 text-xl flex justify-center items-center font-bold"><span>{`Pendiente: $ ${roundToTwoDecimals(
         estimated
       )}`}</span></div>
       <div className="bg-accent w-1/2 text-xl flex justify-center items-center font-bold"><span>{`Facturado: $ ${roundToTwoDecimals(

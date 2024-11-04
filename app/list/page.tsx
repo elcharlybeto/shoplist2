@@ -18,8 +18,8 @@ const Page = () => {
 
   return (
     <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
-      <Total items={items} />
-      <ul className="flex flex-col gap-2 p-2  items-center">
+      <div className="min-w-full fixed"><Total items={items} /></div>
+      <ul className="flex flex-col gap-2 p-2 mt-10 items-center">
         {listItems.map((item) => (
           <li key={item.id}>
             <Listcard item={item} items={items} setItems={setItems} />

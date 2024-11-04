@@ -1,12 +1,11 @@
 "use client";
+import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Item, Mode } from "../lib/definitions";
-import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
-import clsx from "clsx";
+import { Field, Item, Mode } from "../lib/definitions";
 import { roundToTwoDecimals } from "../lib/utils";
-import ItemForm from "./item-form";
+import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
 
 const CartCard = ({
@@ -20,8 +19,13 @@ const CartCard = ({
 }) => {
   
   const [status, setStatus] = useState<Mode>("show");
+  const [editField, setEditField] = useState<Field>("qty");
   const total = roundToTwoDecimals(item.qty * item.onSalePrice);
 
+  const editValue = (field: Field) => {
+    setEditField(field);
+    setStatus("edit");
+  };
 
   const updateCart = (item: Item) => {
     const newCart = items.map((itemCart) =>
@@ -42,7 +46,9 @@ const CartCard = ({
       location: "list",
       onSalePrice: item.price
     };
-    updateCart(deletedItem);
+    const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
+    localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
+    setItems([deletedItem, ...newList]);
   };
 
   return (
@@ -52,37 +58,52 @@ const CartCard = ({
           hidden: status === "edit" || status === "onsale",
         })}
       >
-        <div className="flex flex-col px-4">
-          <div>
-            <span className="py-2 px-1 w-6">{item.qty}</span>
-            <span className="py-2 px-1 text-xl w-40">{item.name}</span>
-            <span>{` ( $ ${total} )`}</span>
+
+        <div className="flex flex-col px-4 ">
+          <div className="flex flex-wrap w-60">
+            <div className="flex ">
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("qty")}
+              >
+                {item.qty}
+              </span>
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("name")}
+              >
+                {item.name}
+              </span>
+            </div>
+            <span className="py-2 px-1 text-lg font-bold">{` ( $ ${total} ) `}{item.onSalePrice< item.price ? "[PROMO]" : ""}</span>
           </div>
-          <div className="pl-2 text-xs font-bold w-60">
-            <span> {`$ ${item.onSalePrice} uni/Kg, ${item.boughtDate}`}</span>
+          <div className=" pl-2 text-xs font-bold w-60">
+            <span className="cursor-pointer" onClick={() => editValue("price")}>
+              {" "}
+              {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
+            </span>
           </div>
         </div>
+
         <div className="flex gap-4 mr-2">
-          <span
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={() => {
-              setStatus("edit");
-            }}
-          >
-            <FaEdit size={24} />
-          </span>
-          <span
+         
+          <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={deleteItem}
           >
             <RiDeleteBin6Line size={24} />
-          </span>
-          <span
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={() => setStatus("onsale")}
+          </button>
+          <button
+           className={clsx("text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none", {
+            "text-error-msg" : item.price !== item.onSalePrice,
+          })}
+           disabled={item.price === 0}
+           onClick={() => {
+             if (item.price > 0) setStatus("onsale");
+           }}
           >
             <TbRosetteDiscountCheck size={24} />
-          </span>
+          </button>
         </div>
       </div>
       <div
@@ -93,10 +114,10 @@ const CartCard = ({
           }
         )}
       >
-        <ItemForm
+        <EditForm
           item={item}
+          field={editField}
           onSave={handleSave}
-          onBuy={handleSave}
           setStatus={setStatus}
         />
       </div>

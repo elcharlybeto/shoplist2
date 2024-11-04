@@ -1,10 +1,11 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
-import { Item, Mode } from "../lib/definitions";
-import { FaEdit, FaPlus } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import clsx from "clsx";
-import ItemForm from "./item-form";
+import { Dispatch, SetStateAction, useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import Swal from "sweetalert2";
+import { Field, Item, Mode } from "../lib/definitions";
+import EditForm from "./edit-form";
 
 const HistorialCard = ({
   item,
@@ -15,8 +16,25 @@ const HistorialCard = ({
   items: Item[];
   setItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-
   const [status, setStatus] = useState<Mode>("show");
+  const [editField, setEditField] = useState<Field>("qty");
+
+  const editValue = (field: Field) => {
+    setEditField(field);
+    setStatus("edit");
+  };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const updateHistorial = (item: Item) => {
     const newHistorial = items.map((itemHistorial) =>
@@ -32,56 +50,78 @@ const HistorialCard = ({
   };
 
   const deleteItem = () => {
-    const newItems = items.filter((itemList) => itemList.id !== item.id );
+    const newItems = items.filter((itemList) => itemList.id !== item.id);
     localStorage.setItem("items", JSON.stringify(newItems));
     setItems(newItems);
   };
 
-  const addItemToList = () =>{
-   const newListItem : Item = {
-    ...item,
-    qty: 1,
-    location : "list"
-   }
-   updateHistorial(newListItem);
-  }
+  const addItemToList = () => {
+    const newListItem: Item = {
+      ...item,
+      qty: 1,
+      location: "list",
+    };
+
+    const newList = items.filter((itemList) => itemList.id !== newListItem.id);
+    localStorage.setItem("items", JSON.stringify([newListItem, ...newList]));
+    setItems([newListItem, ...newList]);
+
+    Toast.fire({
+      icon: "success",
+      title: "Item agregado a lista!",
+    });
+  };
 
   return (
     <>
       <div
-        className={clsx("flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list", {
-          hidden: status === "edit" || status === "onsale",
-        })}
+        className={clsx(
+          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          {
+            hidden: status === "edit" || status === "onsale",
+          }
+        )}
       >
-        <div className="flex flex-col">
-          <div>
-            <span className="py-2 px-1 text-xl w-40">{item.name}</span>
+      
+        <div className="flex flex-col px-4 ">
+          <div className="flex flex-wrap w-60">
+            <div className="flex ">
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("qty")}
+              >
+                {item.qty}
+              </span>
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("name")}
+              >
+                {item.name}
+              </span>
+            </div>
           </div>
-          <div className="pl-2 text-xs font-bold w-60">
-            <span> {`$ ${item.price} uni/Kg, ${item.boughtDate}`}</span>
+          <div className=" pl-2 text-xs font-bold w-60">
+            <span className="cursor-pointer" onClick={() => editValue("price")}>
+              {" "}
+              {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
+            </span>
           </div>
         </div>
+
         <div className="flex gap-4 mr-2">
-          <span
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={() => {
-              setStatus("edit");
-            }}
-          >
-            <FaEdit size={24} />
-          </span>
-          <span
+         
+          <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={deleteItem}
           >
             <RiDeleteBin6Line size={24} />
-          </span>
-          <span
+          </button>
+          <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={addItemToList}
           >
             <FaPlus size={24} />
-          </span>
+          </button>
         </div>
       </div>
       <div
@@ -92,14 +132,13 @@ const HistorialCard = ({
           }
         )}
       >
-        <ItemForm
+        <EditForm
           item={item}
+          field={editField}
           onSave={handleSave}
-          onBuy={handleSave}
           setStatus={setStatus}
         />
       </div>
-    
     </>
   );
 };

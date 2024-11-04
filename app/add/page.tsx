@@ -24,9 +24,9 @@ const Page = () => {
   });
 
   const handleSave = (updatedItem: Item) => {
-    setItems((prevItems) => [...prevItems, updatedItem]);
+    setItems([updatedItem, ...items]);
 
-    localStorage.setItem("items", JSON.stringify([...items, updatedItem]));
+    localStorage.setItem("items", JSON.stringify([updatedItem, ...items]));
 
     setStatus("show");
   };
