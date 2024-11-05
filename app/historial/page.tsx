@@ -2,15 +2,12 @@
 import { useEffect, useState } from "react";
 import { Item } from "../lib/definitions";
 import HistorialCard from "../ui/historial-card";
+import { useMyContext } from "../lib/myContext";
 
 const Page = () => {
-  const [items, setItems] = useState<Item[]>([]);
+  const {items, setItems } = useMyContext();
   const [historialItems,setHistorialItems] = useState<Item[]>([]);
 
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
-  
   useEffect(() => {
     setHistorialItems(items.filter((item) => item.location === "historial"));
   }, [items]);

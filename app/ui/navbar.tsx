@@ -1,36 +1,48 @@
 "use client";
 
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   FaBars,
-  FaList,
-  FaShoppingCart,
   FaHourglass,
+  FaList,
   FaPlus,
+  FaShoppingCart,
   FaTimes,
 } from "react-icons/fa";
-import clsx from "clsx";
-import { Item } from "../lib/definitions";
+import { CiLight } from "react-icons/ci";
+import { MdDarkMode } from "react-icons/md";
 import Swal from "sweetalert2";
+import { useMyContext } from "../lib/myContext";
 
 const Navbar = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const {items, setItems, isOpen, setIsOpen} = useMyContext();
+  
   const [theme, setTheme] = useState<"dark" | "light">("light");
+  const [qList, setQList] = useState(0);
+  const [qCart, setQCart] = useState(0);
+  const [qHistorial, setQHistorial] = useState(0);
 
   const pathname = usePathname();
   const router = useRouter();
 
+
   useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
     const savedTheme = localStorage.getItem("theme") as "dark" | "light";
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.classList.add(savedTheme);
     }
   }, []);
+
+  useEffect(() => {
+  setQList(items.filter((item) => item.location === "list").length);
+  setQCart(items.filter((item) => item.location === "cart").length);
+  setQHistorial(items.filter((item) => item.location === "historial").length);
+  }, [items])
+  
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -39,20 +51,15 @@ const Navbar = () => {
 
     document.documentElement.classList.remove(theme);
     document.documentElement.classList.add(newTheme);
+    setIsOpen(false);
   };
 
-  // useEffect(() => {
-  //   setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  // }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
-
+  
   const clearList = () => {
     setIsOpen(false);
     Swal.fire({
@@ -68,7 +75,72 @@ const Navbar = () => {
           if (item.location === "list") item.location = "historial";
         });
         localStorage.setItem("items", JSON.stringify(items));
+        setItems(items);
         Swal.fire("¡Lista vacía!", "", "success");
+        router.replace("/list");
+      }
+    });
+  };
+
+  const clearCart = () => {
+    setIsOpen(false);
+    Swal.fire({
+      icon: "warning",
+      title: "¿Estás seguro?",
+      text: "Todos los items pasarán al historial...",
+      showDenyButton: true,
+      confirmButtonText: "Vaciar",
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        items.map((item) => {
+          if (item.location === "cart") item.location = "historial";
+        });
+        localStorage.setItem("items", JSON.stringify(items));
+        setItems(items);
+        Swal.fire("¡Carro vacío!", "", "success");
+        router.replace("/list");
+      }
+    });
+  };
+
+  const clearHistorial = () => {
+    setIsOpen(false);
+    Swal.fire({
+      icon: "warning",
+      title: "¿Estás seguro?",
+      text: "Todos los items se borrarán del historial!",
+      showDenyButton: true,
+      confirmButtonText: "Vaciar",
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newItems = items.filter(item => item.location !== 'historial');
+        localStorage.setItem("items", JSON.stringify(newItems));
+        setItems(newItems);
+        Swal.fire("¡Historial vacío!", "", "success");
+        router.replace("/list");
+      }
+    });
+  };
+
+  const unShop = () => {
+    setIsOpen(false);
+    Swal.fire({
+      icon: "warning",
+      title: "¿Estás seguro?",
+      text: "Todos los items volverán a la lista!",
+      showDenyButton: true,
+      confirmButtonText: "Anular Compra",
+      denyButtonText: `Cancelar`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        items.map((item) => {
+          if (item.location === "cart") item.location = "list";
+        });
+        localStorage.setItem("items", JSON.stringify(items));
+        setItems(items);
+        Swal.fire("¡Compra anulada!", "", "success");
         router.replace("/list");
       }
     });
@@ -96,58 +168,48 @@ const Navbar = () => {
       >
         <div className="flex justify-between p-4">
           <span className="p-2 font-semibold">ShopList</span>
-          <button onClick={closeMenu} className="text-white focus:outline-none">
+          <button onClick={()=>setIsOpen(false)} className="text-white focus:outline-none">
             <FaTimes size={24} />
           </button>
         </div>
 
         <ul className="p-4">
           <li className="flex items-center justify-between p-2">
-            <span className="hover:text-gray-400" onClick={clearList}>
+            <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qList === 0}  onClick={clearList}>
               Vaciar Lista
-            </span>
+            </button>
             <span className="bg-blue-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-              {items.filter((item) => item.location === "list").length}
+              {qList}
             </span>
           </li>
           <li className="flex items-center justify-between p-2">
-            <span className="hover:text-gray-400" onClick={closeMenu}>
+            <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={clearCart}>
               Vaciar Carro
-            </span>
+            </button>
             <span className="bg-red-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-              {items.filter((item) => item.location === "cart").length}
+              {qCart}
             </span>
           </li>
           <li className="flex items-center justify-between p-2">
-            <span className="hover:text-gray-400" onClick={closeMenu}>
+            <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qHistorial === 0} onClick={clearHistorial}>
               Vaciar Historial
-            </span>
+            </button>
             <span className="bg-green-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-              {items.filter((item) => item.location === "historial").length}
+              {qHistorial}
             </span>
           </li>
           <li className="p-2">
-            <a href="#" className="hover:text-gray-400" onClick={closeMenu}>
+            <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={unShop}>
               Anular Compra
-            </a>
+            </button>
           </li>
           <li className="p-2">
-            <div className={clsx("app-container", { dark: theme === "dark" })}>
-              <button
-                onClick={toggleTheme}
-                className={clsx(
-                  "p-2 border rounded",
-                  { "bg-gray-700 text-white": theme === "dark" },
-                  { "bg-yellow-300 text-black": theme === "light" }
-                )}
-              >
-                Cambiar a {theme === "light" ? "Oscuro" : "Claro"}
+            <div className="cursor-pointer flex justify-between">
+              <button onClick={toggleTheme}>
+                Cambiar modo 
               </button>
-              {/* Aquí iría el resto de tu app */}
+              <div onClick={toggleTheme}>{theme === "light" ? <MdDarkMode size={24} /> : <CiLight size={24}/>}</div>
             </div>
-            {/* <a href="#" className="hover:text-gray-400" onClick={closeMenu}>
-              Opción 5
-            </a> */}
           </li>
         </ul>
       </div>
