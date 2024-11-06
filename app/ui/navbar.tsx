@@ -206,9 +206,11 @@ const Navbar = () => {
           <li className="p-2">
             <div className="cursor-pointer flex justify-between">
               <button onClick={toggleTheme}>
-                Cambiar modo 
+                Cambiar tema 
               </button>
-              <div onClick={toggleTheme}>{theme === "light" ? <MdDarkMode size={24} /> : <CiLight size={24}/>}</div>
+              <div className='flex border w-20 border-white rounded-lg justify-around p-1' onClick={toggleTheme}>
+                <button className="cursor-pointer disabled:opacity-40 disabled:cursor-none" disabled={theme === "dark"}><MdDarkMode size={24} /></button> 
+                <button className="cursor-pointer font-extrabold disabled:opacity-40 disabled:cursor-none" disabled={theme === "light"}><CiLight size={24}/></button></div>
             </div>
           </li>
         </ul>

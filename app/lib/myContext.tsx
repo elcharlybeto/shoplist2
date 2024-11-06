@@ -21,7 +21,11 @@ export const useMyContext = () => {
   return context;
 };
 
-export const MyContextProvider = ({ children }) => {
+export const MyContextProvider = ({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) => {
 
   const [items, setItems] = useState<Item[]>(JSON.parse(localStorage.getItem("items") || "[]"));
 
