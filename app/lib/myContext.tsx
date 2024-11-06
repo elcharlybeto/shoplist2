@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Item } from './definitions';
 
 
@@ -27,9 +27,14 @@ export const MyContextProvider = ({
   children: React.ReactNode;
 }>) => {
 
-  const [items, setItems] = useState<Item[]>(JSON.parse(localStorage.getItem("items") || "[]"));
+  const [items, setItems] = useState<Item[]>([]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"))
+  }, []);
+  
 
   return (
     <myContext.Provider value={{ items, setItems, isOpen, setIsOpen }}>
