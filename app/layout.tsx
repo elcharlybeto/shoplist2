@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import { geistMono, geistSans } from "@/app/ui/fonts";
 import "@/app/ui/global.css";
-import { geistSans , geistMono } from "@/app/ui/fonts";
+import type { Metadata } from "next";
 import NavBar from "./ui/navbar";
+import { MyContextProvider } from "./lib/myContext";
 
 export const metadata: Metadata = {
   title: "ShopList",
@@ -13,13 +14,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed top-0 left-0 w-full z-10"><NavBar/></div>
+        <MyContextProvider>
+        <div className="fixed top-0 left-0 w-full z-10"><NavBar /></div>
         <div className="flex justify-center">{children}</div>
+        </MyContextProvider>
       </body>
     </html>
   );

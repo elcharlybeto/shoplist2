@@ -33,11 +33,12 @@ const EditForm = ({
 
     if (field === "price" || field === "qty") {
       const regex = /^[0-9]*\.?[0-9]*$/;
-      if (regex.test(value)) {
+      if (regex.test(value) || value === "") {
         if (Number(value) > 0) {
           setEditValueError(false);
-          setEditValue(value);
+          
         } else setEditValueError(true);
+        setEditValue(value);
       }
     } else {
       setEditValueError(false);
@@ -49,19 +50,21 @@ const EditForm = ({
     e.preventDefault();
 
     if (action === "save") {
-      const updatedItem: Item = item;
-      if (field === "name") updatedItem.name = String(editValue);
-      else if (field === "price") {
-        if(item.price !== Number(editValue)) 
-        {
-        updatedItem.price = Number(editValue);
-        updatedItem.boughtDate = today();
-        }
-      } else updatedItem.qty = Number(editValue);
+      if(editValue !== "" || Number(editValue)>0){
+          const updatedItem: Item = item;
+          if (field === "name") updatedItem.name = String(editValue);
+          else if (field === "price") {
+            if(item.price !== Number(editValue)) 
+            {
+            updatedItem.price = Number(editValue);
+            updatedItem.boughtDate = today();
+            }
+          } else updatedItem.qty = Number(editValue);
 
-      onSave(updatedItem);
-    }
-    setStatus("show");
+          onSave(updatedItem);
+          setStatus("show");
+        }
+    } else setStatus("show");
   };
 
   useEffect(() => {

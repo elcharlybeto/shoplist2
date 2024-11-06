@@ -46,9 +46,9 @@ const Listcard = ({
       qty: 1,
       location: "historial",
     };
-     const newList = items.filter(itemList => itemList.id !== deletedItem.id);
-    localStorage.setItem("items", JSON.stringify([deletedItem,...newList]));
-    setItems([deletedItem,...newList]);
+    const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
+    localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
+    setItems([deletedItem, ...newList]);
   };
 
   const buyItem = () => {
@@ -56,11 +56,11 @@ const Listcard = ({
       const boughtItem: Item = {
         ...item,
         location: "cart",
-        boughtDate: today()
+        boughtDate: today(),
       };
-      const newList = items.filter(itemList => itemList.id !== boughtItem.id);
-      localStorage.setItem("items", JSON.stringify([boughtItem,...newList]));
-      setItems([boughtItem,...newList]);
+      const newList = items.filter((itemList) => itemList.id !== boughtItem.id);
+      localStorage.setItem("items", JSON.stringify([boughtItem, ...newList]));
+      setItems([boughtItem, ...newList]);
     }
   };
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Item } from "../lib/definitions";
 import { roundToTwoDecimals } from "../lib/utils";
 
@@ -14,13 +15,16 @@ const Total = ({ items }: { items: Array<Item> }) => {
   );
 
   return (
-    <div className="w-full h-10 flex border-text  border-2">
-      <div className="bg-secondary w-1/2 text-xl flex justify-center items-center font-bold"><span>{`Pendiente: $ ${roundToTwoDecimals(
-        estimated
-      )}`}</span></div>
-      <div className="bg-accent w-1/2 text-xl flex justify-center items-center font-bold"><span>{`Facturado: $ ${roundToTwoDecimals(
+    <div className="w-full h-14 flex border-text  border-2">
+      <Link href='/list' className="bg-secondary w-1/2 text-xl flex justify-center items-center font-bold">
+        <div><span>{`Pendiente: $ ${roundToTwoDecimals(
+          estimated
+        )}`}</span></div>
+      </Link>
+      <Link href='/cart' className="bg-accent w-1/2 text-xl flex justify-center items-center font-bold">
+      <div><span>{`Facturado: $ ${roundToTwoDecimals(
         spent
-      )}`}</span></div>
+      )}`}</span></div></Link>
     </div>
   );
 };

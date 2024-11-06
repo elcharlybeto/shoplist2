@@ -5,9 +5,11 @@ import { today } from "../lib/utils";
 import ItemForm from "../ui/item-form";
 import HistorialCard from "../ui/historial-card";
 import { TiDeleteOutline } from "react-icons/ti";
+import { useMyContext } from "../lib/myContext";
 
 const Page = () => {
-  const [items, setItems] = useState<Item[]>([]);
+
+  const {items, setItems } = useMyContext();
   const [fromHistorial, setFromHistorial] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
   const [search, setSearch] = useState("");
@@ -51,9 +53,6 @@ const Page = () => {
     );
   }, [items]);
 
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
   
   useEffect(() => {
     if (search.length > 0) {
