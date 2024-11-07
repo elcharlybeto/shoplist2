@@ -74,7 +74,7 @@ const Listcard = ({
           }
         )}
       >
-        <div className="flex flex-col px-4 ">
+        <div className="flex flex-col pr-4 ">
           <div className="flex flex-wrap w-60">
             <div className="flex ">
               <span
