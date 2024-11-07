@@ -71,11 +71,12 @@ const Navbar = () => {
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        items.map((item) => {
+        const newList= items.map((item) => {
           if (item.location === "list") item.location = "historial";
+          return item;
         });
-        localStorage.setItem("items", JSON.stringify(items));
-        setItems(items);
+        localStorage.setItem("items", JSON.stringify(newList));
+        setItems(newList);
         Swal.fire("¡Lista vacía!", "", "success");
         router.replace("/list");
       }
@@ -93,11 +94,12 @@ const Navbar = () => {
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        items.map((item) => {
+        const newList= items.map((item) => {
           if (item.location === "cart") item.location = "historial";
+          return item;
         });
-        localStorage.setItem("items", JSON.stringify(items));
-        setItems(items);
+        localStorage.setItem("items", JSON.stringify(newList));
+        setItems(newList);
         Swal.fire("¡Carro vacío!", "", "success");
         router.replace("/list");
       }
@@ -135,11 +137,12 @@ const Navbar = () => {
       denyButtonText: `Cancelar`,
     }).then((result) => {
       if (result.isConfirmed) {
-        items.map((item) => {
+        const newList= items.map((item) => {
           if (item.location === "cart") item.location = "list";
+          return item;
         });
-        localStorage.setItem("items", JSON.stringify(items));
-        setItems(items);
+        localStorage.setItem("items", JSON.stringify(newList));
+        setItems(newList);
         Swal.fire("¡Compra anulada!", "", "success");
         router.replace("/list");
       }
