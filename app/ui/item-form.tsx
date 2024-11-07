@@ -7,6 +7,7 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import { today } from "../lib/utils";
+import Swal from "sweetalert2";
 
 const ItemForm = ({
   item,
@@ -26,22 +27,41 @@ const ItemForm = ({
   const [price, setPrice] = useState(item.price.toString());
   const [priceError, setPriceError] = useState(false);
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+
   const showErrorMsg = (msg: string) => {
-    return <div className="text-sm text-error-msg  font-semibold h-6">{msg}</div>;
+    return (
+      <div className="text-sm text-error-msg  font-semibold h-6">{msg}</div>
+    );
   };
 
+  const resetForm = () => {
+    setName("");
+    setQty("1");
+    setPrice("0");
+  };
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const regex = /^\d*\.?\d*$/; 
+    const regex = /^\d*\.?\d*$/;
 
     if (regex.test(value)) {
       setQty(value);
       setQtyError(false);
-    }else{
+    } else {
       setQtyError(true);
     }
   };
- 
+
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const regex = /^[0-9]*\.?[0-9]*$/;
@@ -49,7 +69,7 @@ const ItemForm = ({
     if (value === "" || regex.test(value)) {
       setPrice(value);
       setPriceError(false);
-    }else{
+    } else {
       setPriceError(true);
     }
   };
@@ -70,10 +90,20 @@ const ItemForm = ({
           name,
           qty: Number(qty),
           price: Number(price),
-          onSalePrice : Number(price),
-          boughtDate: today()
+          onSalePrice: Number(price),
+          boughtDate: today(),
         };
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Item agregado a la Lista",
+        //   confirmButtonText: "OK",
+        // })
+        Toast.fire({
+          icon: "success",
+          title: "Item agregado a la lista!",
+        });
         setStatus("show");
+        resetForm();
         onSave(updatedItem);
       } else if (action === "buy") {
         const updatedItem: Item = {
@@ -81,13 +111,26 @@ const ItemForm = ({
           name,
           qty: Number(qty),
           price: Number(price),
-          onSalePrice : Number(price),
+          onSalePrice: Number(price),
           location: "cart",
-          boughtDate: today()
+          boughtDate: today(),
         };
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Item agregado al Carrito",
+        //   confirmButtonText: "OK",
+        // })
+        Toast.fire({
+          icon: "success",
+          title: "Item agregado al carrito!",
+        });
         setStatus("show");
+        resetForm();
         onBuy(updatedItem);
-      } else setStatus("show");
+      } else {
+        setStatus("show");
+        resetForm();
+      }
     }
   };
 
@@ -164,13 +207,15 @@ const ItemForm = ({
         </span>
         <span
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
-          onClick={() => setStatus("show")}
+          onClick={(e) => handleSubmit(e, "discard")}
         >
           <FaRegWindowClose size={24} />
         </span>
         <span
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
-          onClick={(e) => Number(price) > 0 ? handleSubmit(e, "buy") : setPriceError(true)}
+          onClick={(e) =>
+            Number(price) > 0 ? handleSubmit(e, "buy") : setPriceError(true)
+          }
         >
           <FaShoppingCart size={24} />
         </span>

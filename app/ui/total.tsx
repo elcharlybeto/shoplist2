@@ -1,20 +1,31 @@
-import clsx from "clsx";
+import Link from "next/link";
 import { Item } from "../lib/definitions";
 import { roundToTwoDecimals } from "../lib/utils";
 
-const Total = ({ items, type }: { items: Array<Item>; type: "l" | "c" }) => {
-  
-  const total = items.reduce((acc, item) => {
-    return type === 'l' ? acc + item.qty * item.price : acc + item.qty * item.onSalePrice;
-  }, 0);
-  
+const Total = ({ items }: { items: Array<Item> }) => {
+  const estimated = items.reduce(
+    (acc, item) =>
+      item.location === "list" ? acc + item.qty * item.price : acc + 0,
+    0
+  );
+  const spent = items.reduce(
+    (acc, item) =>
+      item.location === "cart" ? acc + item.qty * item.onSalePrice : acc + 0,
+    0
+  );
+
   return (
-    <div
-      className={clsx("w-full text-xl text-center font-bold border-2 p-2 mb-2", {
-        "bg-secondary border-slate-950": type === "l",
-        "bg-accent  border-blue-950": type === "c",
-      })}
-    >{`Total ${type === "l" ? "estimado" : "facturado"}: $ ${roundToTwoDecimals(total)}`}</div>
+    <div className="w-full h-14 flex border-text  border-2">
+      <Link href='/list' className="bg-secondary w-1/2 text-xl flex justify-center items-center font-bold">
+        <div><span>{`Pendiente: $ ${roundToTwoDecimals(
+          estimated
+        )}`}</span></div>
+      </Link>
+      <Link href='/cart' className="bg-accent w-1/2 text-xl flex justify-center items-center font-bold">
+      <div><span>{`Facturado: $ ${roundToTwoDecimals(
+        spent
+      )}`}</span></div></Link>
+    </div>
   );
 };
 

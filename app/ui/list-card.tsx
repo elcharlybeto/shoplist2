@@ -1,39 +1,38 @@
 "use client";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Item, Mode } from "../lib/definitions";
-import { FaEdit, FaShoppingCart } from "react-icons/fa";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Field, Item, Mode } from "../lib/definitions";
+import { FaShoppingCart } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
 import clsx from "clsx";
-import { roundToTwoDecimals } from "../lib/utils";
-import ItemForm from "./item-form";
+import { roundToTwoDecimals, today } from "../lib/utils";
 import OnSaleForm from "./on-sale-form";
+import EditForm from "./edit-form";
 
 const Listcard = ({
   item,
-  setListItems,
+  items,
+  setItems,
 }: {
   item: Item;
-  setListItems: Dispatch<SetStateAction<Item[]>>;
+  items: Item[];
+  setItems: Dispatch<SetStateAction<Item[]>>;
 }) => {
-  const [items, setItems] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
+  const [editField, setEditField] = useState<Field>("qty");
   const total = roundToTwoDecimals(item.qty * item.price);
 
-
-
-  useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
-  }, []);
+  const editValue = (field: Field) => {
+    setEditField(field);
+    setStatus("edit");
+  };
 
   const updateList = (item: Item) => {
     const newList = items.map((itemList) =>
       itemList.id === item.id ? item : itemList
     );
     localStorage.setItem("items", JSON.stringify(newList));
-    setListItems(
-      ...[newList.filter((itemList) => itemList.location === "list")]
-    );
+    setItems(newList);
   };
 
   const handleSave = (updatedItem: Item) => {
@@ -47,7 +46,9 @@ const Listcard = ({
       qty: 1,
       location: "historial",
     };
-    updateList(deletedItem);
+    const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
+    localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
+    setItems([deletedItem, ...newList]);
   };
 
   const buyItem = () => {
@@ -55,8 +56,11 @@ const Listcard = ({
       const boughtItem: Item = {
         ...item,
         location: "cart",
+        boughtDate: today(),
       };
-      updateList(boughtItem);
+      const newList = items.filter((itemList) => itemList.id !== boughtItem.id);
+      localStorage.setItem("items", JSON.stringify([boughtItem, ...newList]));
+      setItems([boughtItem, ...newList]);
     }
   };
 
@@ -70,40 +74,53 @@ const Listcard = ({
           }
         )}
       >
-        <div className="flex flex-col px-4">
-          <div>
-            <span className="py-2 px-1 w-6">{item.qty}</span>
-            <span className="py-2 px-1 text-xl w-40">{item.name}</span>
-            <span>{` ( $ ${total} )`}</span>
+        <div className="flex flex-col pr-4 ">
+          <div className="flex flex-wrap w-60">
+            <div className="flex ">
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("qty")}
+              >
+                {item.qty}
+              </span>
+              <span
+                className="py-2 px-1 text-lg cursor-pointer"
+                onClick={() => editValue("name")}
+              >
+                {item.name}
+              </span>
+            </div>
+            <span className="py-2 px-1 text-lg font-bold">{` ( $ ${total} )`}</span>
           </div>
           <div className=" pl-2 text-xs font-bold w-60">
-            <span> {`$ ${item.price} uni/Kg, ${item.boughtDate}`}</span>
+            <span className="cursor-pointer" onClick={() => editValue("price")}>
+              {" "}
+              {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
+            </span>
           </div>
         </div>
         <div className="flex gap-4 mr-2">
-          <span
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={() => {
-              setStatus("edit");
-            }}
-          >
-            <FaEdit size={24} />
-          </span>
-          <span
+          <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={deleteItem}
           >
             <RiDeleteBin6Line size={24} />
-          </span>
-          <span
-            className="text-icon-list hover:text-hover-icon-listcursor-pointer transition-colors"
-            onClick={() => {if(item.price > 0) setStatus("onsale")}}
+          </button>
+          <button
+            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+            disabled={item.price === 0}
+            onClick={() => {
+              if (item.price > 0) setStatus("onsale");
+            }}
           >
             <TbRosetteDiscountCheck size={24} />
-          </span>
-          <span className="text-icon-list hover:text-hover-icon-listcursor-pointer transition-colors">
+          </button>
+          <button
+            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+            disabled={item.price === 0 || item.qty === 0}
+          >
             <FaShoppingCart size={24} onClick={buyItem} />
-          </span>
+          </button>
         </div>
       </div>
       <div
@@ -114,17 +131,20 @@ const Listcard = ({
           }
         )}
       >
-        <ItemForm
+        <EditForm
           item={item}
+          field={editField}
           onSave={handleSave}
-          onBuy={handleSave}
           setStatus={setStatus}
         />
       </div>
       <div
-        className={clsx("flex items-center rounded-md shadow-xl justify-around shadow-shadow-list bg-accent p-2 border border-border-list", {
-          hidden: status === "show" || status === "edit",
-        })}
+        className={clsx(
+          "flex items-center rounded-md shadow-xl justify-around shadow-shadow-list bg-accent p-2 border border-border-list",
+          {
+            hidden: status === "show" || status === "edit",
+          }
+        )}
       >
         <OnSaleForm item={item} onSave={handleSave} setStatus={setStatus} />
       </div>

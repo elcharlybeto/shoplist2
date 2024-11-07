@@ -48,7 +48,7 @@ const OnSaleForm = ({
   return (
     <div className="flex flex-col w-full p-1 ">
       <div className=" bg-secondary py-1 font-bold border border-border-list text-center">
-        {item.name}
+        {`${item.name} - $${item.price}`} 
       </div>
 
       <div className="flex ">
