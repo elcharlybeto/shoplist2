@@ -7,6 +7,7 @@ import { Field, Item, Mode } from "../lib/definitions";
 import { roundToNDecimals } from "../lib/utils";
 import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
+import Swal from "sweetalert2";
 
 const CartCard = ({
   item,
@@ -20,6 +21,18 @@ const CartCard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const total = roundToNDecimals(item.qty * item.onSalePrice,2);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -48,6 +61,10 @@ const CartCard = ({
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
     setItems([deletedItem, ...newList]);
+    Toast.fire({
+      icon: "success",
+      title: "Item devuelto a lista!",
+    });
   };
 
   return (
@@ -79,7 +96,7 @@ const CartCard = ({
             <div className="p-1 font-bold">
               <span className="text-lg">{` ( $ ${total} ) `}</span>
               <span className="text-sm text-white bg-icon-form">
-                {item.onSalePrice < item.price ? "[PROMO]" : ""}
+                {item.onSalePrice < item.price ? "PROMO" : ""}
               </span>
             </div>
           </div>

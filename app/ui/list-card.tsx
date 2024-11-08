@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { roundToNDecimals, today } from "../lib/utils";
 import OnSaleForm from "./on-sale-form";
 import EditForm from "./edit-form";
+import Swal from "sweetalert2";
 
 const Listcard = ({
   item,
@@ -21,6 +22,18 @@ const Listcard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const total = roundToNDecimals(item.qty * item.price,2);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -50,6 +63,10 @@ const Listcard = ({
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
     setItems([deletedItem, ...newList]);
+    Toast.fire({
+      icon: "success",
+      title: "Item devuelto al historial!",
+    });
   };
 
   const buyItem = () => {
@@ -62,6 +79,10 @@ const Listcard = ({
       const newList = items.filter((itemList) => itemList.id !== boughtItem.id);
       localStorage.setItem("items", JSON.stringify([boughtItem, ...newList]));
       setItems([boughtItem, ...newList]);
+      Toast.fire({
+        icon: "success",
+        title: "Item agregado al carrito!",
+      });
     }
   };
 
