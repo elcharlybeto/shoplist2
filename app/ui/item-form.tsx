@@ -94,11 +94,7 @@ const ItemForm = ({
           onSalePrice: Number(price),
           boughtDate: today(),
         };
-        // Swal.fire({
-        //   icon: "success",
-        //   title: "Item agregado a la Lista",
-        //   confirmButtonText: "OK",
-        // })
+
         Toast.fire({
           icon: "success",
           title: "Item agregado a la lista!",
@@ -116,11 +112,7 @@ const ItemForm = ({
           location: "cart",
           boughtDate: today(),
         };
-        // Swal.fire({
-        //   icon: "success",
-        //   title: "Item agregado al Carrito",
-        //   confirmButtonText: "OK",
-        // })
+        
         Toast.fire({
           icon: "success",
           title: "Item agregado al carrito!",
@@ -166,7 +158,7 @@ const ItemForm = ({
             Cantidad
           </label>
           <input
-            type="text"
+            type="number"
             id="qty"
             value={qty}
             onChange={handleQtyChange}
@@ -184,7 +176,7 @@ const ItemForm = ({
             Precio x un/kg
           </label>
           <input
-            type="text"
+            type="number"
             id="price"
             value={price}
             onChange={handlePriceChange}
