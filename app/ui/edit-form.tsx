@@ -22,9 +22,7 @@ const EditForm = ({
 
   const showErrorMsg = (msg: string) => {
     return (
-      <div className="text-sm text-error-msg font-semibold h-4">
-        {msg}
-      </div>
+      <div className="text-sm text-error-msg font-semibold h-4">{msg}</div>
     );
   };
 
@@ -36,7 +34,6 @@ const EditForm = ({
       if (regex.test(value) || value === "") {
         if (Number(value) > 0) {
           setEditValueError(false);
-          
         } else setEditValueError(true);
         setEditValue(value);
       }
@@ -50,20 +47,19 @@ const EditForm = ({
     e.preventDefault();
 
     if (action === "save") {
-      if(editValue !== "" || Number(editValue)>0){
-          const updatedItem: Item = item;
-          if (field === "name") updatedItem.name = String(editValue);
-          else if (field === "price") {
-            if(item.price !== Number(editValue)) 
-            {
+      if (editValue !== "" || Number(editValue) > 0) {
+        const updatedItem: Item = item;
+        if (field === "name") updatedItem.name = String(editValue);
+        else if (field === "price") {
+          if (item.price !== Number(editValue)) {
             updatedItem.price = Number(editValue);
             updatedItem.boughtDate = today();
-            }
-          } else updatedItem.qty = Number(editValue);
-
-          onSave(updatedItem);
-          setStatus("show");
-        }
+          }
+        } else updatedItem.qty = Number(editValue);
+        
+        onSave(updatedItem);
+        setStatus("show");
+      }
     } else setStatus("show");
   };
 
@@ -90,7 +86,7 @@ const EditForm = ({
                 : "Cantidad"}
             </label>
             <input
-              type="string"
+              type={field === "name" ? "string" : "number"}
               id="editValue"
               value={editValue}
               onChange={handleEditValueChange}

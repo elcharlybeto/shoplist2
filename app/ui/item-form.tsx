@@ -87,6 +87,7 @@ const ItemForm = ({
       if (action === "save") {
         const updatedItem: Item = {
           ...item,
+          id: Date.now(),
           name,
           qty: Number(qty),
           price: Number(price),
