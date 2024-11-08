@@ -31,6 +31,7 @@ const Listcard = ({
     const newList = items.map((itemList) =>
       itemList.id === item.id ? item : itemList
     );
+    
     localStorage.setItem("items", JSON.stringify(newList));
     setItems(newList);
   };
