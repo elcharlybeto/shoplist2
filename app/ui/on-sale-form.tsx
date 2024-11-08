@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Action, Item, Mode } from "../lib/definitions";
 import { FaRegWindowClose, FaShoppingCart } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const OnSaleForm = ({
   item,
@@ -14,6 +15,18 @@ const OnSaleForm = ({
 }) => {
   const [onSalePrice, setOnSalePrice] = useState("");
   const [onSalePriceError, setOnSalePriceError] = useState(false);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const showErrorMsg = (msg: string) => {
     return <div className="text-sm text-red-700 dark:text-red-200 font-semibold h-4">{msg}</div>;
@@ -42,6 +55,10 @@ const OnSaleForm = ({
       };
       setStatus("show");
       onSave(updatedItem);
+      Toast.fire({
+        icon: "success",
+        title: "Item agregado al carrito!",
+      });
     } else setStatus("show");
   };
 

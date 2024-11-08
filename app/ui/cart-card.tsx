@@ -4,9 +4,10 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
 import { Field, Item, Mode } from "../lib/definitions";
-import { roundToTwoDecimals } from "../lib/utils";
+import { roundToNDecimals } from "../lib/utils";
 import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
+import Swal from "sweetalert2";
 
 const CartCard = ({
   item,
@@ -19,7 +20,19 @@ const CartCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  const total = roundToTwoDecimals(item.qty * item.onSalePrice);
+  const total = roundToNDecimals(item.qty * item.onSalePrice,2);
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -48,50 +61,55 @@ const CartCard = ({
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
     setItems([deletedItem, ...newList]);
+    Toast.fire({
+      icon: "success",
+      title: "Item devuelto a lista!",
+    });
   };
 
   return (
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[370px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
-        <div className="flex flex-col px-4 ">
-          <div className="flex flex-wrap w-60">
+        <div className="w-full min-w-full">
+          <div className="flex flex-wrap">
             <div className="flex ">
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
             </div>
-            <div className="pl-1 pt-2 font-bold">
-              <span>{` ( $ ${total} ) `}</span>
+            <div className="p-1 font-bold">
+              <span className="text-lg">{` ( $ ${total} ) `}</span>
               <span className="text-sm text-white bg-icon-form">
-                {item.onSalePrice < item.price ? "[PROMO]" : ""}
+                {item.onSalePrice < item.price ? "PROMO" : ""}
               </span>
             </div>
           </div>
-          <div className=" pl-2 text-xs font-bold w-60">
-            <span className="cursor-pointer" onClick={() => editValue("price")}>
-              {" "}
-              {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
+
+          <div className=" p-1 flex justify-between">
+            <span className="cursor-pointer font-bold" onClick={() => editValue("price")}>
+              {`$ ${item.price} uni/Kg`}</span>
+              <span>{`${item.boughtDate}`}
             </span>
           </div>
-        </div>
+        
 
-        <div className="flex gap-4 mr-2">
+        <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
           <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={deleteItem}
@@ -113,7 +131,10 @@ const CartCard = ({
             <TbRosetteDiscountCheck size={24} />
           </button>
         </div>
+
       </div>
+      </div>
+
       <div
         className={clsx(
           "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",

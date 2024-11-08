@@ -74,14 +74,19 @@ const SortableListcard = ({
       id: item.id,
     });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+    const style = {
+      transform: CSS.Transform.toString({
+        x: 0,
+        y: transform?.y || 0, 
+        scaleX: 1, 
+        scaleY: 1, 
+      }),
+      transition,
+    };
 
   return (
     <li ref={setNodeRef} style={style}>
-      <div className="flex items-start">
+      <div className="flex items-stretch">
        
         <div {...attributes} {...listeners} className="p-1 cursor-move rounded-md border border-border-list bg-icon-list shadow-xl shadow-shadow-list">
           <FaGripLines className="text-secondary" size={12} />
