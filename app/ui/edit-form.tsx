@@ -53,6 +53,7 @@ const EditForm = ({
         else if (field === "price") {
           if (item.price !== Number(editValue)) {
             updatedItem.price = Number(editValue);
+            updatedItem.onSalePrice= Number(editValue);
             updatedItem.boughtDate = today();
           }
         } else updatedItem.qty = Number(editValue);
