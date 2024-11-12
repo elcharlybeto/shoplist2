@@ -1,99 +1,105 @@
 "use client";
 
-import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Dispatch, SetStateAction } from "react";
 import { Item } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import Listcard from "../ui/list-card";
 import Total from "../ui/total";
-import { FaGripLines } from "react-icons/fa"; 
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { MultiBackend, TouchTransition } from "dnd-multi-backend";
+
+const multiBackendOptions = {
+  backends: [
+    {
+      backend: HTML5Backend, // Para dispositivos de escritorio
+    },
+    {
+      backend: TouchBackend, // Para dispositivos táctiles
+      options: { enableMouseEvents: true }, // Activa los eventos de mouse para compatibilidad
+      preview: true,
+      transition: TouchTransition,
+    },
+  ],
+};
+
+type DraggableListcardProps = {
+  item: Item;
+  index: number;
+  items: Item[];
+  setItems: Dispatch<SetStateAction<Item[]>>;
+};
+
+const DraggableListcard = ({
+  item,
+  index,
+  items,
+  setItems,
+}: DraggableListcardProps) => {
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "LISTCARD",
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [, dropRef] = useDrop({
+    accept: "LISTCARD",
+    hover: (draggedItem: { index: number }) => {
+      if (draggedItem.index !== index) {
+        const reorderedItems = [...items];
+        const [removed] = reorderedItems.splice(draggedItem.index, 1);
+        reorderedItems.splice(index, 0, removed);
+        setItems(reorderedItems);
+        localStorage.setItem("items", JSON.stringify(reorderedItems));
+        draggedItem.index = index;
+      }
+    },
+  });
+
+  return (
+    <li
+      ref={(node) => {
+        dragRef(node);
+        dropRef(node);
+      }}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: "move",
+      }}
+    >
+      <Listcard item={item} items={items} setItems={setItems} />
+    </li>
+  );
+};
 
 const Page = () => {
   const { items, setItems } = useMyContext();
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (over !== null) {
-      if (active.id !== over.id) {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
-        const reorderedItems = arrayMove(items, oldIndex, newIndex);
-        setItems(reorderedItems);
-        localStorage.setItem("items", JSON.stringify(reorderedItems));
-      }
-    }
-  };
-
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndProvider backend={MultiBackend} options={multiBackendOptions}>
       <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
         <div className="min-w-full fixed">
           <Total items={items} />
         </div>
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
-            {items.map((item) =>
-              item.location === "list" ? (
-                <SortableListcard
-                  key={item.id}
-                  item={item}
-                  items={items}
-                  setItems={setItems}
-                />
-              ) : null
-            )}
-          </ul>
-        </SortableContext>
+        <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
+          {items.map((item, index) =>
+            item.location === "list" ? (
+              <DraggableListcard
+                key={item.id}
+                item={item}
+                index={index}
+                items={items}
+                setItems={setItems}
+              />
+            ) : null
+          )}
+        </ul>
       </div>
-    </DndContext>
+    </DndProvider>
   );
 };
 
 export default Page;
-
-
-const SortableListcard = ({
-  item,
-  items,
-  setItems,
-}: {
-  item: Item;
-  items: Item[];
-  setItems: Dispatch<SetStateAction<Item[]>>;
-}) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: item.id,
-    });
-
-    const style = {
-      transform: CSS.Transform.toString({
-        x: 0,
-        y: transform?.y || 0, 
-        scaleX: 1, 
-        scaleY: 1, 
-      }),
-      transition,
-    };
-
-  return (
-    <li ref={setNodeRef} style={style}>
-      <div className="flex items-stretch">
-       
-        <div {...attributes} {...listeners} className="p-1 cursor-move rounded-md border border-border-list bg-icon-list shadow-xl shadow-shadow-list">
-          <FaGripLines className="text-secondary" size={12} />
-        </div>
-        
-        <Listcard item={item} items={items} setItems={setItems} />
-      </div>
-    </li>
-  );
-};
