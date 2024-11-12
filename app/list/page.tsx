@@ -7,6 +7,22 @@ import Listcard from "../ui/list-card";
 import Total from "../ui/total";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { MultiBackend, TouchTransition } from "dnd-multi-backend";
+
+const multiBackendOptions = {
+  backends: [
+    {
+      backend: HTML5Backend, // Para dispositivos de escritorio
+    },
+    {
+      backend: TouchBackend, // Para dispositivos táctiles
+      options: { enableMouseEvents: true }, // Activa los eventos de mouse para compatibilidad
+      preview: true,
+      transition: TouchTransition,
+    },
+  ],
+};
 
 type DraggableListcardProps = {
   item: Item;
@@ -63,7 +79,7 @@ const Page = () => {
   const { items, setItems } = useMyContext();
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={MultiBackend} options={multiBackendOptions}>
       <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
         <div className="min-w-full fixed">
           <Total items={items} />
