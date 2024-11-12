@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Item } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import Listcard from "../ui/list-card";
@@ -15,7 +15,12 @@ type DraggableListcardProps = {
   setItems: Dispatch<SetStateAction<Item[]>>;
 };
 
-const DraggableListcard = ({ item, index, items, setItems }: DraggableListcardProps) => {
+const DraggableListcard = ({
+  item,
+  index,
+  items,
+  setItems,
+}: DraggableListcardProps) => {
   const [{ isDragging }, dragRef] = useDrag({
     type: "LISTCARD",
     item: { index },
@@ -40,7 +45,10 @@ const DraggableListcard = ({ item, index, items, setItems }: DraggableListcardPr
 
   return (
     <li
-      ref={(node) => dragRef(dropRef(node))}
+      ref={(node) => {
+        dragRef(node);
+        dropRef(node);
+      }}
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
@@ -79,5 +87,3 @@ const Page = () => {
 };
 
 export default Page;
-
-
