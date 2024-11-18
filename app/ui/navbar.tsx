@@ -167,7 +167,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="ml-4 text-2xl font-bold flex ">
+      <div className="ml-4 text-lg font-bold flex ">
         <Link href="/">ShopList v3.0</Link>
       </div>
 
