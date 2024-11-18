@@ -135,7 +135,7 @@ const Listcard = ({
             {editCategory ? (
               <select
                 id="category"
-                value={item?.categoryId}
+                value={item.categoryId}
                 onChange={(e) => handleSelectCategory(e.target.value)}
                 className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
               >
@@ -150,9 +150,9 @@ const Listcard = ({
               <div className="flex gap-1">
                 <span
                   className="rounded-lg p-2 bg-tertiary border border-primary cursor-pointer"
-                  onClick={() => filterByThisCategory(item?.categoryId)}
+                  onClick={() => filterByThisCategory(item.categoryId)}
                 >
-                  {item?.categoryId === 0
+                  {item.categoryId === 0
                     ? "misceláneos"
                     : getCategoryNameById(item.categoryId, categories)}{" "}
                 </span>

@@ -83,8 +83,6 @@ const Page = () => {
             <li key={category.id}>
               <CategoryCard
                 category={category}
-                categories={categories}
-                setCategories={setCategories}
               />
             </li>
           ))}

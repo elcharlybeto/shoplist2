@@ -156,6 +156,11 @@ const Navbar = () => {
    setCategories(activateAllCategories(categories))
   }
 
+  const editCategories = () => {
+    setIsOpen(false);
+    router.replace("/categories");
+  }
+
   return (
     <nav className="bg-primary opacity-95 text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -183,59 +188,61 @@ const Navbar = () => {
           </button>
         </div>
   
-          <ul className="p-4 justify-self-center border border-slate-300 border-opacity-20 w-3/4 ">
-            <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qList === 0}  onClick={clearList}>
-                Vaciar Lista
-              </button>
-              <Link href='/list'>
-              <span className="bg-blue-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-                {qList}
-              </span>
-              </Link>
-            </li>
-            <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={clearCart}>
-                Vaciar Carro
-              </button>
-              <Link href='/cart'>
-              <span className="bg-red-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-                {qCart}
-              </span>
-              </Link>
-            </li>
-            <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qHistorial === 0} onClick={clearHistorial}>
-                Vaciar Historial
-              </button>
-              <Link href='/historial'>
-              <span className="bg-green-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
-                {qHistorial}
-              </span>
-              </Link>
-            </li>
-            <li className="p-2">
-              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={unShop}>
-                Anular Compra
-              </button>
-            </li>
-            <li>
-              <Link href='/categories' className="flex items-center justify-between p-2">
-                Categorías
-              <FaFilter size={24} />
-              </Link>
-            </li>
-            <li className="p-2">
-              <div className="cursor-pointer flex justify-between">
-                <button onClick={toggleTheme}>
-                  Cambiar tema 
+          <div className="flex justify-center">
+            <ul className="p-4 border border-slate-300 border-opacity-20 w-3/4 ">
+              <li className="flex items-center justify-between p-2">
+                <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qList === 0}  onClick={clearList}>
+                  Vaciar Lista
                 </button>
-                <div className='flex border w-20 border-white rounded-lg justify-around p-1' onClick={toggleTheme}>
-                  <button className="cursor-pointer disabled:opacity-40 disabled:cursor-none" disabled={theme === "dark"}><MdDarkMode size={24} /></button> 
-                  <button className="cursor-pointer font-extrabold disabled:opacity-40 disabled:cursor-none" disabled={theme === "light"}><CiLight size={24}/></button></div>
-              </div>
-            </li>
-          </ul>
+                <Link href='/list'>
+                <span className="bg-blue-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
+                  {qList}
+                </span>
+                </Link>
+              </li>
+              <li className="flex items-center justify-between p-2">
+                <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={clearCart}>
+                  Vaciar Carro
+                </button>
+                <Link href='/cart'>
+                <span className="bg-red-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
+                  {qCart}
+                </span>
+                </Link>
+              </li>
+              <li className="flex items-center justify-between p-2">
+                <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qHistorial === 0} onClick={clearHistorial}>
+                  Vaciar Historial
+                </button>
+                <Link href='/historial'>
+                <span className="bg-green-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
+                  {qHistorial}
+                </span>
+                </Link>
+              </li>
+              <li className="p-2">
+                <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={unShop}>
+                  Anular Compra
+                </button>
+              </li>
+              <li className="flex items-center justify-between p-2">
+                <button className="cursor-pointer" onClick={editCategories}>
+                  Categorías
+                </button>
+                <FaFilter className="cursor-pointer" onClick={editCategories} size={24} />
+              </li>
+              <li className="p-2">
+                <div className="cursor-pointer flex justify-between">
+                  <button onClick={toggleTheme}>
+                    Cambiar tema 
+                  </button>
+                  <div className='flex border w-20 border-white rounded-lg justify-around p-1' onClick={toggleTheme}>
+                    <button className="cursor-pointer disabled:opacity-40 disabled:cursor-none" disabled={theme === "dark"}><MdDarkMode size={24} /></button> 
+                    <button className="cursor-pointer font-extrabold disabled:opacity-40 disabled:cursor-none" disabled={theme === "light"}><CiLight size={24}/></button></div>
+                </div>
+              </li>
+            </ul>
+          </div>
       </div>
 
       <div className="flex space-x-6">
