@@ -1,14 +1,20 @@
 "use client";
+import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Field, Item, Mode } from "../lib/definitions";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaEdit, FaShoppingCart } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
-import clsx from "clsx";
-import { roundToNDecimals, today } from "../lib/utils";
-import OnSaleForm from "./on-sale-form";
+import { Field, Item, Mode } from "../lib/definitions";
+import { useMyContext } from "../lib/myContext";
+import {
+  getCategoryNameById,
+  roundToNDecimals,
+  Toast,
+  today,
+  updateCategoryActiveState,
+} from "../lib/utils";
 import EditForm from "./edit-form";
-import Swal from "sweetalert2";
+import OnSaleForm from "./on-sale-form";
 
 const Listcard = ({
   item,
@@ -21,19 +27,9 @@ const Listcard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  const total = roundToNDecimals(item.qty * item.price,2);
-
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+  const [editCategory, setEditCategory] = useState(false);
+  const total = roundToNDecimals(item.qty * item.price, 2);
+  const { categories, setCategories } = useMyContext();
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -57,7 +53,6 @@ const Listcard = ({
   const deleteItem = () => {
     const deletedItem: Item = {
       ...item,
-      qty: 1,
       location: "historial",
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
@@ -65,7 +60,7 @@ const Listcard = ({
     setItems([deletedItem, ...newList]);
     Toast.fire({
       icon: "success",
-      title: "Item devuelto al historial!",
+      title: "¡Item devuelto al historial!",
     });
   };
 
@@ -81,9 +76,22 @@ const Listcard = ({
       setItems([boughtItem, ...newList]);
       Toast.fire({
         icon: "success",
-        title: "Item agregado al carrito!",
+        title: "¡Item agregado al carrito!",
       });
     }
+  };
+
+  const filterByThisCategory = (id: number) => {
+    setCategories(updateCategoryActiveState(id, categories));
+  };
+
+  const handleSelectCategory = (categoryId: string) => {
+    const updatedItem = {
+      ...item,
+      categoryId: Number(categoryId)
+    }
+    setEditCategory(false);
+    updateList(updatedItem);
   };
 
   return (
@@ -97,60 +105,91 @@ const Listcard = ({
         )}
       >
         <div className="w-full min-w-full">
-            <div className="flex flex-wrap">
-              <div className="flex ">
-                <span
-                  className="p-1 text-lg cursor-pointer"
-                  onClick={() => editValue("qty")}
-                >
-                  {item.qty}
-                </span>
-                <span
-                  className="p-1 text-lg cursor-pointer"
-                  onClick={() => editValue("name")}
-                >
-                  {item.name}
-                </span>
-              </div>
-              <span className="p-1 text-lg font-bold">{` ( $ ${total} )`}</span>
+          <div className="flex flex-wrap">
+            <div className="flex ">
+              <span
+                className="p-1 text-lg cursor-pointer"
+                onClick={() => editValue("qty")}
+              >
+                {item.qty}
+              </span>
+              <span
+                className="p-1 text-lg cursor-pointer capitalize"
+                onClick={() => editValue("name")}
+              >
+                {item.name}
+              </span>
             </div>
-
-              <div className="p-1 flex justify-between  ">
-                <span
-                  className="cursor-pointer font-bold"
-                  onClick={() => editValue("price")}
-                >{`$ ${item.price} uni/Kg`}</span>
-                <span>
-                  { `${item.boughtDate}`}
-                </span>
-              </div>
-          
-          <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
-            <button
-              className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-              onClick={deleteItem}
-            >
-              <RiDeleteBin6Line size={24} />
-            </button>
-            <button
-              className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
-              disabled={item.price === 0}
-              onClick={() => {
-                if (item.price > 0) setStatus("onsale");
-              }}
-            >
-              <TbRosetteDiscountCheck size={24} />
-            </button>
-            <button
-              className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
-              disabled={item.price === 0 || item.qty === 0}
-            >
-              <FaShoppingCart size={24} onClick={buyItem} />
-            </button>
+            <span className="p-1 text-lg font-bold">{` ( $ ${total} )`}</span>
           </div>
-          
-        </div>
 
+          <div className="p-1 flex justify-between  ">
+            <span
+              className="cursor-pointer font-bold"
+              onClick={() => editValue("price")}
+            >{`$ ${item.price} uni/Kg`}</span>
+            <span>{`${item.boughtDate}`}</span>
+          </div>
+
+          <div className="flex justify-between">
+            {editCategory ? (
+              <select
+                id="category"
+                value={item.categoryId}
+                onChange={(e) => handleSelectCategory(e.target.value)}
+                className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
+              >
+                <option value={0}>misceláneos</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div className="flex gap-1">
+                <span
+                  className="rounded-lg p-2 bg-tertiary border border-primary cursor-pointer"
+                  onClick={() => filterByThisCategory(item.categoryId)}
+                >
+                  {item.categoryId === 0
+                    ? "misceláneos"
+                    : getCategoryNameById(item.categoryId, categories)}{" "}
+                </span>
+                <button
+                  className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                  onClick={() => setEditCategory(true)}
+                >
+                  <FaEdit size={24} />
+                </button>
+              </div>
+            )}
+
+            <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
+                onClick={deleteItem}
+              >
+                <RiDeleteBin6Line size={24} />
+              </button>
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                disabled={item.price === 0}
+                onClick={() => {
+                  if (item.price > 0) setStatus("onsale");
+                }}
+              >
+                <TbRosetteDiscountCheck size={24} />
+              </button>
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                disabled={item.price === 0 || item.qty === 0}
+              >
+                <FaShoppingCart size={24} onClick={buyItem} />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div
         className={clsx(

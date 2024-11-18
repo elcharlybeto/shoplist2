@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Action, Item, Mode } from "../lib/definitions";
 import {
   FaRegCheckCircle,
   FaRegWindowClose,
   FaShoppingCart,
 } from "react-icons/fa";
-import { today } from "../lib/utils";
-import Swal from "sweetalert2";
+import { Action, Item, Mode } from "../lib/definitions";
+import { useMyContext } from "../lib/myContext";
+import { formatString, isItemNameInArray, Toast, today } from "../lib/utils";
 
 const ItemForm = ({
   item,
@@ -26,18 +26,9 @@ const ItemForm = ({
   const [qtyError, setQtyError] = useState(false);
   const [price, setPrice] = useState(item.price.toString());
   const [priceError, setPriceError] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+  const { items, categories } = useMyContext();
 
   const showErrorMsg = (msg: string) => {
     return (
@@ -49,7 +40,9 @@ const ItemForm = ({
     setName("");
     setQty("1");
     setPrice("0");
+    setSelectedCategory(0);
   };
+
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const regex = /^\d*\.?\d*$/;
@@ -76,8 +69,8 @@ const ItemForm = ({
 
   const handleSubmit = (e: React.FormEvent, action: Action) => {
     e.preventDefault();
-
-    if (name.length === 0) {
+    const newItemName = formatString(name)
+    if (newItemName.length === 0) {
       setNameError(true);
     } else if (Number(qty) <= 0) {
       setQtyError(true);
@@ -85,14 +78,16 @@ const ItemForm = ({
       setPriceError(true);
     } else {
       if (action === "save") {
+        if(!isItemNameInArray(items,newItemName)){
         const updatedItem: Item = {
           ...item,
           id: Date.now(),
-          name,
+          name: newItemName,
           qty: Number(qty),
           price: Number(price),
           onSalePrice: Number(price),
           boughtDate: today(),
+          categoryId: selectedCategory,
         };
 
         Toast.fire({
@@ -102,20 +97,25 @@ const ItemForm = ({
         setStatus("show");
         resetForm();
         onSave(updatedItem);
+      } else {
+            setNameError(true);
+      }
+
       } else if (action === "buy") {
         const updatedItem: Item = {
           ...item,
-          name,
+          name: newItemName,
           qty: Number(qty),
           price: Number(price),
           onSalePrice: Number(price),
           location: "cart",
           boughtDate: today(),
+          categoryId: selectedCategory,
         };
-        
+
         Toast.fire({
           icon: "success",
-          title: "Item agregado al carrito!",
+          title: "¡Item agregado al carrito!",
         });
         setStatus("show");
         resetForm();
@@ -139,17 +139,15 @@ const ItemForm = ({
             id="name"
             value={name}
             onChange={(e) => {
-              if (e.target.value.length > 0) {
-                setNameError(false);
-              } else setNameError(true);
               setName(e.target.value);
+              setNameError(false);
             }}
             className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
             autoComplete="off"
             required
           />
           {nameError ? (
-            showErrorMsg("Se debe ingresar un producto")
+            showErrorMsg(formatString(name).length > 0 ? "¡Ya está agregado en la lista!":"¡Se debe ingresar un producto!")
           ) : (
             <div className="min-h-6"></div>
           )}
@@ -167,7 +165,7 @@ const ItemForm = ({
             required
           />
           {qtyError ? (
-            showErrorMsg("Cantidad no válida")
+            showErrorMsg("¡Cantidad no válida!")
           ) : (
             <div className="min-h-6"></div>
           )}
@@ -185,10 +183,27 @@ const ItemForm = ({
             required
           />
           {priceError ? (
-            showErrorMsg("Precio no válido")
+            showErrorMsg("¡Precio no válido!")
           ) : (
             <div className="min-h-6"></div>
           )}
+
+          <label htmlFor="category" className="text-sm">
+            Categoría
+          </label>
+          <select
+            id="category"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(Number(e.target.value))}
+            className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
+          >
+            <option value={0}>misceláneos</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </form>
       </div>
       <div className="flex flex-col w-1/12 items-center justify-around ">

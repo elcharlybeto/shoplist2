@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { FaCheckCircle, FaRegWindowClose } from "react-icons/fa";
 import { Action, Field, Item, Mode } from "../lib/definitions";
-import { FaRegWindowClose, FaCheckCircle } from "react-icons/fa";
-import { today } from "../lib/utils";
+import { formatString, today } from "../lib/utils";
 
 const EditForm = ({
   item,
@@ -49,7 +49,7 @@ const EditForm = ({
     if (action === "save") {
       if (editValue !== "" || Number(editValue) > 0) {
         const updatedItem: Item = item;
-        if (field === "name") updatedItem.name = String(editValue);
+        if (field === "name") updatedItem.name = formatString(String(editValue));
         else if (field === "price") {
           if (item.price !== Number(editValue)) {
             updatedItem.price = Number(editValue);
@@ -60,6 +60,7 @@ const EditForm = ({
         
         onSave(updatedItem);
         setStatus("show");
+        
       }
     } else setStatus("show");
   };
@@ -97,7 +98,7 @@ const EditForm = ({
               required
             />
             {editValueError ? (
-              showErrorMsg("Valor no válido")
+              showErrorMsg("¡Valor no válido!")
             ) : (
               <div className="min-h-4"></div>
             )}

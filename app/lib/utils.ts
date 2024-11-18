@@ -1,3 +1,6 @@
+import Swal from "sweetalert2";
+import { Category, Item } from "./definitions";
+
 export const roundToNDecimals = (value: number, n: number): number => {
   const factor = Math.pow(10, n);
   return Math.round(value * factor) / factor;
@@ -20,3 +23,49 @@ export const parseDDMMAAAAtoDate = (dateStr: string): Date => {
 
   return new Date(year, month, day);
 };
+
+export const Toast = Swal.mixin({
+  toast: true,
+  position: "center-start",
+  showConfirmButton: false,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
+export const formatString = (input: string): string =>  {
+  return input.trim().toLowerCase();
+}
+
+export const isCategoryNameInArray = (categories: Category[], name: string): boolean =>  {
+  return categories.some(category => category.name === name);
+}
+
+export const isItemNameInArray = (items: Item[], name: string): boolean =>  {
+  return items.some(item => item.name === name);
+}
+
+export const getCategoryNameById = (categoryId: number, categories: Category[]): string => {
+  const category = categories.find((cat) => cat.id === categoryId);
+  return category ? category.name : "Categoría no encontrada";
+}
+
+export const updateCategoryActiveState = (id: number, categories: Category[]): Category[] => {
+  return categories.map((category) => ({
+    ...category,
+    active: category.id === id,
+  }));
+}
+
+export const isCategoryActive = (id: number, categories: Category[]): boolean => {
+  const category = categories.find((category) => category.id === id);
+  return category ? category.active : false;
+}
+
+export const activateAllCategories = (categories: Category[]): Category[] => {
+  return categories.map((category) => ({ ...category, active: true }));
+};
+

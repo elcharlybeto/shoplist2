@@ -3,9 +3,9 @@ import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Swal from "sweetalert2";
 import { Field, Item, Mode } from "../lib/definitions";
 import EditForm from "./edit-form";
+import { Toast } from "../lib/utils";
 
 const HistorialCard = ({
   item,
@@ -24,17 +24,7 @@ const HistorialCard = ({
     setStatus("edit");
   };
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+ 
 
   const updateHistorial = (item: Item) => {
     const newHistorial = items.map((itemHistorial) =>
@@ -58,7 +48,6 @@ const HistorialCard = ({
   const addItemToList = () => {
     const newListItem: Item = {
       ...item,
-      qty: 1,
       location: "list",
     };
 
@@ -68,7 +57,7 @@ const HistorialCard = ({
 
     Toast.fire({
       icon: "success",
-      title: "Item agregado a lista!",
+      title: "¡Item agregado a lista!",
     });
   };
 
@@ -93,7 +82,7 @@ const HistorialCard = ({
                 {item.qty}
               </span>
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="py-2 px-1 text-lg cursor-pointer capitalize"
                 onClick={() => editValue("name")}
               >
                 {item.name}

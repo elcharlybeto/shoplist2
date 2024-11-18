@@ -9,20 +9,22 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend, TouchTransition } from "dnd-multi-backend";
+import { isCategoryActive } from "../lib/utils";
 
 const multiBackendOptions = {
   backends: [
     {
-      backend: HTML5Backend, // Para dispositivos de escritorio
+      backend: HTML5Backend,
     },
     {
-      backend: TouchBackend, // Para dispositivos táctiles
-      options: { enableMouseEvents: true }, // Activa los eventos de mouse para compatibilidad
+      backend: TouchBackend, 
+      options: { enableMouseEvents: true }, 
       preview: true,
       transition: TouchTransition,
     },
   ],
 };
+
 
 type DraggableListcardProps = {
   item: Item;
@@ -76,7 +78,7 @@ const DraggableListcard = ({
 };
 
 const Page = () => {
-  const { items, setItems } = useMyContext();
+  const { items, setItems, categories } = useMyContext();
 
   return (
     <DndProvider backend={MultiBackend} options={multiBackendOptions}>
@@ -86,7 +88,7 @@ const Page = () => {
         </div>
         <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
           {items.map((item, index) =>
-            item.location === "list" ? (
+            item.location === "list" && isCategoryActive(item.categoryId, categories) ? (
               <DraggableListcard
                 key={item.id}
                 item={item}
