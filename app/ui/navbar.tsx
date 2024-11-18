@@ -4,21 +4,24 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CiLight } from "react-icons/ci";
 import {
   FaBars,
-  FaHourglass,
   FaList,
   FaPlus,
   FaShoppingCart,
-  FaTimes,
+  FaTimes
 } from "react-icons/fa";
-import { CiLight } from "react-icons/ci";
+import { MdFilterAltOff } from "react-icons/md";
+import { FaFilter } from "react-icons/fa6";
+import { GoBook } from "react-icons/go";
 import { MdDarkMode } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useMyContext } from "../lib/myContext";
+import { activateAllCategories } from "../lib/utils";
 
 const Navbar = () => {
-  const {items, setItems, isOpen, setIsOpen} = useMyContext();
+  const {items, setItems, isOpen, setIsOpen, categories, setCategories} = useMyContext();
   
   const [theme, setTheme] = useState<"dark" | "light">("light");
   const [qList, setQList] = useState(0);
@@ -111,7 +114,7 @@ const Navbar = () => {
     Swal.fire({
       icon: "warning",
       title: "¿Estás seguro?",
-      text: "Todos los items se borrarán del historial!",
+      text: "¡Todos los items se borrarán del historial!",
       showDenyButton: true,
       confirmButtonText: "Vaciar",
       denyButtonText: `Cancelar`,
@@ -131,7 +134,7 @@ const Navbar = () => {
     Swal.fire({
       icon: "warning",
       title: "¿Estás seguro?",
-      text: "Todos los items volverán a la lista!",
+      text: "¡Todos los items volverán a la lista!",
       showDenyButton: true,
       confirmButtonText: "Anular Compra",
       denyButtonText: `Cancelar`,
@@ -149,6 +152,10 @@ const Navbar = () => {
     });
   };
 
+  const clearFilters = () =>{
+   setCategories(activateAllCategories(categories))
+  }
+
   return (
     <nav className="bg-primary text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -160,12 +167,12 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="ml-4 text-2xl font-bold">
+      <div className="ml-4 text-2xl font-bold flex ">
         <Link href="/">ShopList v3.0</Link>
       </div>
 
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-blue-900 text-white transform ${
+        className={`fixed top-0 left-0 h-full w-full bg-blue-900 text-white transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out`}
       >
@@ -181,30 +188,42 @@ const Navbar = () => {
             <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qList === 0}  onClick={clearList}>
               Vaciar Lista
             </button>
+            <Link href='/list'>
             <span className="bg-blue-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
               {qList}
             </span>
+            </Link>
           </li>
           <li className="flex items-center justify-between p-2">
             <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={clearCart}>
               Vaciar Carro
             </button>
+            <Link href='/cart'>
             <span className="bg-red-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
               {qCart}
             </span>
+            </Link>
           </li>
           <li className="flex items-center justify-between p-2">
             <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qHistorial === 0} onClick={clearHistorial}>
               Vaciar Historial
             </button>
+            <Link href='/historial'>
             <span className="bg-green-600 border rounded-2xl text-center font-semibold border-white py-1 px-2">
               {qHistorial}
             </span>
+            </Link>
           </li>
           <li className="p-2">
             <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none" disabled={qCart === 0} onClick={unShop}>
               Anular Compra
             </button>
+          </li>
+          <li>
+            <Link href='/categories' className="flex items-center justify-between p-2">
+              Categorías
+            <FaFilter size={24} />
+            </Link>
           </li>
           <li className="p-2">
             <div className="cursor-pointer flex justify-between">
@@ -242,7 +261,7 @@ const Navbar = () => {
             "text-blue-300": pathname === "/historial",
           })}
         >
-          <FaHourglass size={24} />
+          <GoBook size={24} />
         </Link>
         <Link
           href="/add"
@@ -252,6 +271,13 @@ const Navbar = () => {
         >
           <FaPlus size={24} />
         </Link>
+        <span
+          className="hover:text-gray-400"
+          onClick={clearFilters}
+        >
+          <MdFilterAltOff size={24} />
+         
+        </span>
       </div>
     </nav>
   );

@@ -4,10 +4,9 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
 import { Field, Item, Mode } from "../lib/definitions";
-import { roundToNDecimals } from "../lib/utils";
+import { roundToNDecimals, Toast } from "../lib/utils";
 import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
-import Swal from "sweetalert2";
 
 const CartCard = ({
   item,
@@ -22,17 +21,6 @@ const CartCard = ({
   const [editField, setEditField] = useState<Field>("qty");
   const total = roundToNDecimals(item.qty * item.onSalePrice,2);
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -63,7 +51,7 @@ const CartCard = ({
     setItems([deletedItem, ...newList]);
     Toast.fire({
       icon: "success",
-      title: "Item devuelto a lista!",
+      title: "¡Item devuelto a lista!",
     });
   };
 
@@ -87,7 +75,7 @@ const CartCard = ({
                 {item.qty}
               </span>
               <span
-                className="p-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer capitalize"
                 onClick={() => editValue("name")}
               >
                 {item.name}

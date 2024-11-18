@@ -14,6 +14,7 @@ const config: Config = {
         'background': 'var(--background)',
         'primary': 'var(--primary)',
         'secondary': 'var(--secondary)',
+        'tertiary': 'var(--tertiary)',
         'accent': 'var(--accent)',
         'border-list': 'var(--border-list)',
         'bg-list': 'var(--bg-list)',

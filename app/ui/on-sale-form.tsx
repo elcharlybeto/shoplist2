@@ -57,7 +57,7 @@ const OnSaleForm = ({
       onSave(updatedItem);
       Toast.fire({
         icon: "success",
-        title: "Item agregado al carrito!",
+        title: "¡Item agregado al carrito!",
       });
     } else setStatus("show");
   };
@@ -75,7 +75,7 @@ const OnSaleForm = ({
               Precio PROMO x un/kg
             </label>
             <input
-              type="string"
+              type="number"
               id="onSalePrice"
               value={onSalePrice}
               onChange={handleOnSalePriceChange}
@@ -85,7 +85,7 @@ const OnSaleForm = ({
               required
             />
             {onSalePriceError ? (
-              showErrorMsg("Precio de Oferta no válido")
+              showErrorMsg("¡Precio de Oferta no válido!")
             ) : (
               <div className="min-h-4"></div>
             )}

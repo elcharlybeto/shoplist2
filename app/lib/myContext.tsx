@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Item } from './definitions';
+import { Category, Item } from './definitions';
 
 
 interface myContextType {
@@ -8,6 +8,8 @@ interface myContextType {
   setItems : React.Dispatch<React.SetStateAction<Item[]>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  categories : Category[];
+  setCategories : React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
 const myContext = createContext<myContextType | undefined>(undefined);
@@ -31,13 +33,16 @@ export const MyContextProvider = ({
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const [categories, setCategories] = useState<Category[]>([]);
+
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem("items") || "[]"))
+    setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'))
   }, []);
   
 
   return (
-    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen }}>
+    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories }}>
       {children}
     </myContext.Provider>
   );

@@ -9,7 +9,7 @@ import { useMyContext } from "../lib/myContext";
 
 const Page = () => {
 
-  const {items, setItems } = useMyContext();
+  const {items, setItems} = useMyContext();
   const [fromHistorial, setFromHistorial] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("show");
   const [search, setSearch] = useState("");
@@ -23,6 +23,7 @@ const Page = () => {
     onSale: false,
     onSalePrice: 0,
     boughtDate: today(),
+    categoryId: 0
   });
 
   const handleSave = (updatedItem: Item) => {

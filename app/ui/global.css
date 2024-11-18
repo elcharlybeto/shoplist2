@@ -20,6 +20,7 @@ body {
     --background: #cecfe8;
     --primary: #140374;
     --secondary: #fff479;
+    --tertiary: #68ee9c;
     --accent: #f6baba;
     --border-list: #172554;
     --bg-list: #cbd5e1;
@@ -38,12 +39,13 @@ body {
     --background: #171831;
     --primary: #140374;
     --secondary: #5baa67;
+    --tertiary: #e90d0d;
     --accent: #82688f;
     --border-list: #94a3b8;
     --bg-list: #4c505a;
     --shadow-list: #965eb2;
-    --icon-list: #93c5fd;
-    --hover-icon-list: #1f2937;
+    --icon-list:#1f2937;
+    --hover-icon-list: #b12323;
     --error-msg: #a2fdc3;
     --icon-form:  rgb(30 58 138 /1);
     --hover-icon-form: #9ca3af;
