@@ -48,6 +48,7 @@ const HistorialCard = ({
   const addItemToList = () => {
     const newListItem: Item = {
       ...item,
+      categoryId: item?.categoryId ? item.categoryId : 0, 
       location: "list",
     };
 
