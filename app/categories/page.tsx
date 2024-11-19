@@ -26,7 +26,7 @@ const Page = () => {
           name: formatString(name),
           active: true,
         };
-        setCategories([newCategory, ...categories]);
+        setCategories([newCategory, ...categories].sort());
         Toast.fire({
           icon: "success",
           title: "¡Categoría agregada!",
@@ -36,7 +36,7 @@ const Page = () => {
 
         localStorage.setItem(
           "categories",
-          JSON.stringify([newCategory, ...categories])
+          JSON.stringify([newCategory, ...categories].sort())
         );
       } else setNameError(true);
     } else setNameError(true);

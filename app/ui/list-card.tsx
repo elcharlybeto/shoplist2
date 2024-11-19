@@ -10,8 +10,7 @@ import {
   getCategoryNameById,
   roundToNDecimals,
   Toast,
-  today,
-  updateCategoryActiveState,
+  updateCategoryActiveState
 } from "../lib/utils";
 import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
@@ -69,7 +68,6 @@ const Listcard = ({
       const boughtItem: Item = {
         ...item,
         location: "cart",
-        boughtDate: today(),
       };
       const newList = items.filter((itemList) => itemList.id !== boughtItem.id);
       localStorage.setItem("items", JSON.stringify([boughtItem, ...newList]));
@@ -98,15 +96,15 @@ const Listcard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[370px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[350px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap">
-            <div className="flex ">
+          <div className="flex flex-wrap justify-between">
+            <div className="flex">
               <span
                 className="p-1 text-lg cursor-pointer"
                 onClick={() => editValue("qty")}
@@ -120,12 +118,12 @@ const Listcard = ({
                 {item.name}
               </span>
             </div>
-            <span className="p-1 text-lg font-bold">{` ( $ ${total} )`}</span>
+            <span className="p-1 bg-accent rounded-2xl shadow-md">{`$ ${total} `}</span>
           </div>
 
-          <div className="p-1 flex justify-between  ">
+          <div className="p-1 flex justify-between">
             <span
-              className="cursor-pointer font-bold"
+              className="cursor-pointer text-lg font-bold"
               onClick={() => editValue("price")}
             >{`$ ${item.price} uni/Kg`}</span>
             <span>{`${item.boughtDate}`}</span>
@@ -137,11 +135,10 @@ const Listcard = ({
                 id="category"
                 value={item.categoryId}
                 onChange={(e) => handleSelectCategory(e.target.value)}
-                className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
+                className="p-1 mr-2 mb-2 border border-primary rounded-lg bg-input-bg"
               >
-                <option value={0}>misceláneos</option>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option key={category.id} value={category.id} className="bg-tertiary">
                     {category.name}
                   </option>
                 ))}

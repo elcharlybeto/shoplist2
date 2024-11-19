@@ -166,14 +166,14 @@ const Navbar = () => {
       <div className="flex items-center">
         <button
           onClick={toggleMenu}
-          className="text-white focus:outline-none lg:hidden"
+          className="text-white focus:outline-none"
         >
           <FaBars size={24} />
         </button>
       </div>
 
-      <div className="ml-4 text-xl font-bold flex ">
-        <Link href="/">ShopList v3.0</Link>
+      <div className="flex">
+        <Link href="/"><span className="text-xl font-bold">ShopList</span> <span className="opacity-60 ml-1">v3.0</span></Link>
       </div>
 
       <div

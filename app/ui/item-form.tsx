@@ -109,7 +109,6 @@ const ItemForm = ({
           price: Number(price),
           onSalePrice: Number(price),
           location: "cart",
-          boughtDate: today(),
           categoryId: selectedCategory,
         };
 
