@@ -160,6 +160,11 @@ const Navbar = () => {
     router.replace("/categories");
   };
 
+  const showTicket = () => {
+    setIsOpen(false);
+    router.replace("/ticket");
+  }
+
   return (
     <nav className="bg-primary opacity-95 text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -252,6 +257,14 @@ const Navbar = () => {
                 onClick={editCategories}
                 size={24}
               />
+            </li>
+            <li className="flex items-center justify-between p-2">
+              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
+                disabled={qCart === 0}
+                onClick={showTicket}
+                >
+                  Ver ticket
+              </button>
             </li>
             <li className="p-2">
               <div className="cursor-pointer flex justify-between">
