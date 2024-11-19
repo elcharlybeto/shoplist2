@@ -80,7 +80,9 @@ const Listcard = ({
   };
 
   const filterByThisCategory = (id: number) => {
-    setCategories(updateCategoryActiveState(id, categories));
+    const newCategories = updateCategoryActiveState(id, categories);
+    setCategories(newCategories);
+    localStorage.setItem("categories",JSON.stringify(newCategories));
   };
 
   const handleSelectCategory = (categoryId: string) => {
