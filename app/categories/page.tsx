@@ -26,7 +26,8 @@ const Page = () => {
           name: formatString(name),
           active: true,
         };
-        setCategories([newCategory, ...categories]);
+        const newCategories = [newCategory, ...categories].sort((a, b) => a.name.localeCompare(b.name));
+        setCategories(newCategories);
         Toast.fire({
           icon: "success",
           title: "¡Categoría agregada!",
@@ -36,7 +37,7 @@ const Page = () => {
 
         localStorage.setItem(
           "categories",
-          JSON.stringify([newCategory, ...categories])
+          JSON.stringify(newCategories)
         );
       } else setNameError(true);
     } else setNameError(true);
@@ -83,8 +84,6 @@ const Page = () => {
             <li key={category.id}>
               <CategoryCard
                 category={category}
-                categories={categories}
-                setCategories={setCategories}
               />
             </li>
           ))}

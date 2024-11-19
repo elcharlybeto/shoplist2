@@ -59,14 +59,14 @@ const CartCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[370px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[370px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap justify-between">
             <div className="flex ">
               <span
                 className="p-1 text-lg cursor-pointer"
@@ -82,15 +82,15 @@ const CartCard = ({
               </span>
             </div>
             <div className="p-1 font-bold">
-              <span className="text-lg">{` ( $ ${total} ) `}</span>
-              <span className="text-sm text-white bg-icon-form">
-                {item.onSalePrice < item.price ? "PROMO" : ""}
-              </span>
+              <span className="p-1 bg-accent rounded-2xl shadow-md">{`$ ${total}`}</span>
+              {item.onSalePrice < item.price &&<span className="text-sm p-1 text-white bg-icon-form">
+                PROMO
+              </span>}
             </div>
           </div>
 
           <div className=" p-1 flex justify-between">
-            <span className="cursor-pointer font-bold" onClick={() => editValue("price")}>
+            <span className="cursor-pointer text-lg font-bold" onClick={() => editValue("price")}>
               {`$ ${item.price} uni/Kg`}</span>
               <span>{`${item.boughtDate}`}
             </span>
