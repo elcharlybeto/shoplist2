@@ -173,7 +173,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="flex">
+      <div className="flex" style={{ fontFamily: 'var(--font-sour-gummy)' }}>
         <Link href="/">
           <span className="text-xl font-bold">ShopList</span>{" "}
           <span className="opacity-60 ml-1">v3.0</span>
