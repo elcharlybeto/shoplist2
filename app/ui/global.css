@@ -12,7 +12,7 @@
 body {
   color: var(--text);
   background: var(--background);
-  font-family:var(--font-sour-gummy), Arial, Helvetica, sans-serif;
+  font-family:var(--font-roboto), Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
