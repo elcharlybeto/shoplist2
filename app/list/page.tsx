@@ -10,6 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend, TouchTransition } from "dnd-multi-backend";
 import { isCategoryActive } from "../lib/utils";
+import { FaPencil } from "react-icons/fa6";
 
 const multiBackendOptions = {
   backends: [
@@ -86,6 +87,10 @@ const Page = () => {
         <div className="min-w-full fixed">
           <Total items={items} />
         </div>
+        { items.filter(item => item.location === 'list').length === 0 ? 
+        <div className="flex h-full items-center justify-center">
+        <FaPencil size={150} />
+      </div> :
         <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
           {items.map((item, index) =>
             item.location === "list" && isCategoryActive(item.categoryId, categories) ? (
@@ -99,6 +104,7 @@ const Page = () => {
             ) : null
           )}
         </ul>
+}
       </div>
     </DndProvider>
   );

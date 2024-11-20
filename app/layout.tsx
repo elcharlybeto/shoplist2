@@ -16,9 +16,9 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
+    <html lang="es">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MyContextProvider>
         <div className="fixed top-0 left-0 w-full z-10"><NavBar /></div>

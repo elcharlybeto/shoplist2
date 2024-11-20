@@ -296,7 +296,7 @@ const Navbar = () => {
         <Link
           href="/list"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300 ": pathname === "/list",
+            "text-secondary ": pathname === "/list",
           })}
         >
           <FaList size={24} />
@@ -304,7 +304,7 @@ const Navbar = () => {
         <Link
           href="/cart"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/cart",
+            "text-secondary": pathname === "/cart",
           })}
         >
           <FaShoppingCart size={24} />
@@ -312,7 +312,7 @@ const Navbar = () => {
         <Link
           href="/historial"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/historial",
+            "text-secondary": pathname === "/historial",
           })}
         >
           <GoBook size={24} />
@@ -320,7 +320,7 @@ const Navbar = () => {
         <Link
           href="/add"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/add",
+            "text-secondary": pathname === "/add",
           })}
         >
           <FaPlus size={24} />
