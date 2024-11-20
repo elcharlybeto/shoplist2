@@ -15,23 +15,45 @@ const Total = ({ items }: { items: Array<Item> }) => {
   );
 
   return (
-    <div className="w-full h-14 flex border-text border-2">
-      <Link
-        href="/list"
-        className="bg-secondary w-1/2  flex justify-center items-center font-bold"
-      >
-        <div>
-          <span>{`Pendiente: $ `}</span><span className="text-xl">{`${roundToNDecimals(estimated,0)}`}</span>
-        </div>
-      </Link>
-      <Link
-        href="/cart"
-        className="bg-accent w-1/2  flex justify-center items-center font-bold"
-      >
-        <div>
-        <span>{`Facturado: $ `}</span><span className="text-xl">{`${roundToNDecimals(spent,0)}`}</span>
-        </div>
-      </Link>
+    <div className="w-full h-12 flex border-text border-2">
+      {spent > 0 ? (
+        <>
+          <Link
+            href="/list"
+            className="bg-secondary w-1/2  flex justify-center items-center font-bold"
+          >
+            <div>
+              <span>{`Pendiente: $ `}</span>
+              <span className="text-xl">{`${roundToNDecimals(
+                estimated,
+                0
+              )}`}</span>
+            </div>
+          </Link>
+          <Link
+            href="/cart"
+            className="bg-accent w-1/2  flex justify-center items-center font-bold"
+          >
+            <div>
+              <span>{`Facturado: $ `}</span>
+              <span className="text-xl">{`${roundToNDecimals(spent, 0)}`}</span>
+            </div>
+          </Link>
+        </>
+      ) : (
+        <Link
+          href="/list"
+          className="bg-secondary w-full  flex justify-center items-center font-bold"
+        >
+          <div>
+            <span>{`Gasto Total Estimado: $ `}</span>
+            <span className="text-xl">{`${roundToNDecimals(
+              estimated,
+              0
+            )}`}</span>
+          </div>
+        </Link>
+      )}
     </div>
   );
 };

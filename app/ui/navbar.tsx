@@ -160,6 +160,11 @@ const Navbar = () => {
     router.replace("/categories");
   };
 
+  const showTicket = () => {
+    setIsOpen(false);
+    router.replace("/ticket");
+  }
+
   return (
     <nav className="bg-primary opacity-95 text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -168,7 +173,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="flex">
+      <div className="flex" style={{ fontFamily: 'var(--font-sour-gummy)' }}>
         <Link href="/">
           <span className="text-xl font-bold">ShopList</span>{" "}
           <span className="opacity-60 ml-1">v3.0</span>
@@ -253,6 +258,14 @@ const Navbar = () => {
                 size={24}
               />
             </li>
+            <li className="flex items-center justify-between p-2">
+              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
+                disabled={qCart === 0}
+                onClick={showTicket}
+                >
+                  Ver ticket
+              </button>
+            </li>
             <li className="p-2">
               <div className="cursor-pointer flex justify-between">
                 <button onClick={toggleTheme}>Cambiar tema</button>
@@ -283,7 +296,7 @@ const Navbar = () => {
         <Link
           href="/list"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300 ": pathname === "/list",
+            "text-secondary ": pathname === "/list",
           })}
         >
           <FaList size={24} />
@@ -291,7 +304,7 @@ const Navbar = () => {
         <Link
           href="/cart"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/cart",
+            "text-secondary": pathname === "/cart",
           })}
         >
           <FaShoppingCart size={24} />
@@ -299,7 +312,7 @@ const Navbar = () => {
         <Link
           href="/historial"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/historial",
+            "text-secondary": pathname === "/historial",
           })}
         >
           <GoBook size={24} />
@@ -307,7 +320,7 @@ const Navbar = () => {
         <Link
           href="/add"
           className={clsx("hover:text-gray-400", {
-            "text-blue-300": pathname === "/add",
+            "text-secondary": pathname === "/add",
           })}
         >
           <FaPlus size={24} />

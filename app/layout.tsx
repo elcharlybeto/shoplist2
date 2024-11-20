@@ -1,8 +1,7 @@
-import { geistMono, geistSans } from "@/app/ui/fonts";
 import "@/app/ui/global.css";
 import type { Metadata } from "next";
-import NavBar from "./ui/navbar";
 import { MyContextProvider } from "./lib/myContext";
+import NavBar from "./ui/navbar";
 
 export const metadata: Metadata = {
   title: "ShopList",
@@ -16,10 +15,8 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="es">
+      <body>
         <MyContextProvider>
         <div className="fixed top-0 left-0 w-full z-10"><NavBar /></div>
         <div className="flex justify-center">{children}</div>
