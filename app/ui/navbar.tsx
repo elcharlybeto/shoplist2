@@ -181,9 +181,9 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`fixed top-0 left-0 h-full w-full bg-blue-900 text-white transform ${
+        className={`fixed top-0 left-0 h-full w-full  bg-blue-900 text-white transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        } transition-transform duration-300 z-20 ease-in-out`}
       >
         <div className="flex justify-between p-4">
           <span className="p-2 font-semibold">ShopList</span>
@@ -295,15 +295,15 @@ const Navbar = () => {
       <div className="flex space-x-6">
         <Link
           href="/list"
-          className={clsx("hover:text-gray-400", {
-            "text-secondary ": pathname === "/list",
+          className={clsx("hover:text-secondary", {
+            "text-secondary": pathname === "/list",
           })}
         >
           <FaList size={24} />
         </Link>
         <Link
           href="/cart"
-          className={clsx("hover:text-gray-400", {
+          className={clsx("hover:text-secondary", {
             "text-secondary": pathname === "/cart",
           })}
         >
@@ -311,7 +311,7 @@ const Navbar = () => {
         </Link>
         <Link
           href="/historial"
-          className={clsx("hover:text-gray-400", {
+          className={clsx("hover:text-secondary", {
             "text-secondary": pathname === "/historial",
           })}
         >
@@ -319,7 +319,7 @@ const Navbar = () => {
         </Link>
         <Link
           href="/add"
-          className={clsx("hover:text-gray-400", {
+          className={clsx("hover:text-secondary", {
             "text-secondary": pathname === "/add",
           })}
         >
@@ -327,7 +327,7 @@ const Navbar = () => {
         </Link>
         <span
           className={clsx("", {
-            "text-primary bg-secondary p-1 rounded-md cursor-pointer hover:text-gray-400": countInactiveCategories(categories) > 0,
+            "text-primary bg-secondary p-1 rounded-md cursor-pointer hover:text-secondary": countInactiveCategories(categories) > 0,
           })}
           onClick={clearFilters}
         >

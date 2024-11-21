@@ -70,7 +70,7 @@ const Page = () => {
         <form className="flex border border-text bg-accent mb-2">
           <div className="flex py-2 pl-4 w-11/12 flex-col">
             <label htmlFor="item" className="text-sm">
-              Buscar en Historial
+              Buscar en productos ingresados antes
             </label>
             <input
               type="text"
