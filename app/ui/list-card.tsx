@@ -1,12 +1,16 @@
 "use client";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaEdit, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa6";
+import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
 import { Field, Item, Mode } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import {
+  activateAllCategories,
+  countInactiveCategories,
   getCategoryNameById,
   roundToNDecimals,
   Toast,
@@ -29,7 +33,7 @@ const Listcard = ({
   const [editCategory, setEditCategory] = useState(false);
   const total = roundToNDecimals(item.qty * item.price, 2);
   const { categories, setCategories } = useMyContext();
-
+  
   const editValue = (field: Field) => {
     setEditField(field);
     setStatus("edit");
@@ -83,6 +87,12 @@ const Listcard = ({
     const newCategories = updateCategoryActiveState(id, categories);
     setCategories(newCategories);
     localStorage.setItem("categories",JSON.stringify(newCategories));
+  };
+
+  const clearFilters = () => {
+    const newCategories = activateAllCategories(categories);
+    setCategories(newCategories);
+    localStorage.setItem("categories", JSON.stringify(newCategories));
   };
 
   const handleSelectCategory = (categoryId: string) => {
@@ -149,18 +159,27 @@ const Listcard = ({
               <div className="flex gap-1">
                 <span
                   className="rounded-lg p-2 bg-tertiary border border-primary cursor-pointer"
-                  onClick={() => filterByThisCategory(item.categoryId)}
+                  onClick={() => setEditCategory(true)}
                 >
                   {item.categoryId === 0
                     ? "misceláneos"
                     : getCategoryNameById(item.categoryId, categories)}{" "}
                 </span>
+                {countInactiveCategories(categories) > 0  ? 
+                <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                onClick={() => clearFilters() }
+              >
+                <MdFilterAltOff size={24} />
+              </button>
+                :
                 <button
                   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
-                  onClick={() => setEditCategory(true)}
+                  onClick={() => filterByThisCategory(item.categoryId) }
                 >
-                  <FaEdit size={24} />
+                  <FaFilter size={24} />
                 </button>
+                }
               </div>
             )}
 

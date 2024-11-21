@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import {
-  FaRegCheckCircle,
   FaRegWindowClose,
   FaShoppingCart,
 } from "react-icons/fa";
 import { Action, Item, Mode } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import { formatString, isItemNameInArray, Toast, today } from "../lib/utils";
+import { RiPlayListAddFill } from "react-icons/ri";
 
 const ItemForm = ({
   item,
@@ -210,7 +210,7 @@ const ItemForm = ({
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
           onClick={(e) => handleSubmit(e, "save")}
         >
-          <FaRegCheckCircle size={24} />
+          <RiPlayListAddFill size={24} />
         </span>
         <span
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
