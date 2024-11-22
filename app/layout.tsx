@@ -5,7 +5,9 @@ import NavBar from "./ui/navbar";
 
 export const metadata: Metadata = {
   title: "ShopList",
-  description: "Don´t forget anything!"
+  description: "Don´t forget anything",
+  manifest: "/manifest.json",
+  icons: "/icons/icon-128x128.png" 
 };
 
 export default function RootLayout({
