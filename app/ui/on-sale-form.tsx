@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Action, Item, Mode } from "../lib/definitions";
 import { FaRegWindowClose, FaShoppingCart } from "react-icons/fa";
-import Swal from "sweetalert2";
+import { Action, Item, Mode } from "../lib/definitions";
 import { Toast } from "../lib/utils";
 
 const OnSaleForm = ({
