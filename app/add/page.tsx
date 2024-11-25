@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback} from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Item, Mode } from "../lib/definitions";
 import { today } from "../lib/utils";
 import ItemForm from "../ui/item-form";
@@ -8,10 +8,9 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { useMyContext } from "../lib/myContext";
 
 const Page = () => {
-
-  const {items, setItems} = useMyContext();
+  const { items, setItems } = useMyContext();
   const [fromHistorial, setFromHistorial] = useState<Item[]>([]);
-  const [status, setStatus] = useState<Mode>("show");
+  const [status, setStatus] = useState<Mode>("hide");
   const [search, setSearch] = useState("");
 
   const [itemCard, setItemCard] = useState<Item>({
@@ -23,7 +22,7 @@ const Page = () => {
     onSale: false,
     onSalePrice: 0,
     boughtDate: today(),
-    categoryId: 0
+    categoryId: 0,
   });
 
   const handleSave = (updatedItem: Item) => {
@@ -31,32 +30,36 @@ const Page = () => {
 
     localStorage.setItem("items", JSON.stringify([updatedItem, ...items]));
 
-    setStatus("show");
+    setSearch("");
   };
 
   const handleSearch = (search: string) => {
-    setSearch(search);
+    if (search.length >= 0) {
+      setSearch(search);
 
-    setStatus("show");
+      // setStatus("show");
 
-    const newItem = {
-      ...itemCard,
-      name: search,
-    };
-    setItemCard(newItem);
+      const newItem = {
+        ...itemCard,
+        name: search,
+      };
+      setItemCard(newItem);
+    }
   };
 
-  const filterItemsByName = useCallback((searchTerm: string): Item[] => {
-    return items.filter(
-      (item) =>
-        item.location === "historial" &&
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [items]);
+  const filterItemsByName = useCallback(
+    (searchTerm: string): Item[] => {
+      return items.filter(
+        (item) =>
+          item.location === "historial" &&
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    },
+    [items]
+  );
 
-  
   useEffect(() => {
-    if (search.length > 0) {
+    if (search.length >= 0) {
       const filteredItems = filterItemsByName(search);
       setFromHistorial(filteredItems);
 
@@ -66,7 +69,7 @@ const Page = () => {
 
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
-      <div className="w-11/12 p-2">
+      {status === "hide" && <div className="w-11/12 p-2">
         <form className="flex border border-text bg-accent mb-2">
           <div className="flex py-2 pl-4 w-11/12 flex-col">
             <label htmlFor="item" className="text-sm">
@@ -83,14 +86,17 @@ const Page = () => {
               autoComplete="off"
             />
           </div>
-          <button className="w-1/12 flex justify-center pt-7" onClick={() => setSearch("")}>
-          <TiDeleteOutline size={32}/>
+          <button
+            className="w-1/12 flex justify-center pt-7"
+            onClick={() => setSearch("")}
+          >
+            <TiDeleteOutline size={32} />
           </button>
         </form>
-      </div>
+      </div>}
 
       {status === "show" && (
-        <div className="flex w-[400px] shadow-lg items-center justify-around p-2 bg-secondary shadow-shadow-list">
+        <div className="flex w-[400px] shadow-xl rounded-2xl border border-primary items-center justify-around p-2 bg-secondary shadow-shadow-list">
           <ItemForm
             item={itemCard}
             onSave={handleSave}
@@ -99,7 +105,7 @@ const Page = () => {
           />
         </div>
       )}
-      {status === "hide" && (
+      {status === "hide" && search.length > 0 && (
         <div>
           <ul className="flex flex-col gap-2 p-2 items-center">
             {fromHistorial.map((item) => (
