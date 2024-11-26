@@ -3,8 +3,8 @@ import { roundToNDecimals } from "../lib/utils";
 
 const TotalTicket = ({rows , checked}: {rows: Item[], checked: boolean}) => {
   const spent = rows.reduce((total, row) => {
-    if (checked && row.onSalePrice < 0) return total - row.onSalePrice;
-    if (!checked && row.onSalePrice > 0) return total - row.onSalePrice;
+    if (checked && row.onSalePrice < 0) return total - row.onSalePrice * row.qty;
+    if (!checked && row.onSalePrice > 0) return total - row.onSalePrice * row.qty;
     return total;
   }, 0);
   

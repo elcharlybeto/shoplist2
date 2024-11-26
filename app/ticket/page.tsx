@@ -42,7 +42,7 @@ const Page = () => {
         className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl "
         onClick={() => setSortedByAmount((prev)=>!prev)}
       >
-      {sortedByAmount ?  <FaSortNumericDown  size={32}/> : <FaSortAlphaDown size={32} />}
+      {sortedByAmount ?  <FaSortAlphaDown size={32}/> : <FaSortNumericDown  size={32}/> }
       </button>
       <ul className="flex flex-col gap-1 mt-14 items-center">
         {rows.map((row) => {
