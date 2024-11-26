@@ -19,7 +19,7 @@ const Page = () => {
         className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl "
         onClick={() => setSorted((prev)=>!prev)}
       >
-      {sorted ?  <IoTimeOutline  size={24}/> : <FaSortAlphaDown size={24} />}
+      {sorted ?  <IoTimeOutline  size={32}/> : <FaSortAlphaDown size={32} />}
       </button>
       {items.filter(item => item.location === 'historial').length === 0 ? (
         <div className="flex h-full items-center justify-center">

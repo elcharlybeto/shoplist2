@@ -44,6 +44,7 @@ const CartCard = ({
     const deletedItem: Item = {
       ...item,
       location: "list",
+      onSale: false,
       onSalePrice: item.price,
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);

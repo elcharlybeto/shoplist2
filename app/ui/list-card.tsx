@@ -57,6 +57,8 @@ const Listcard = ({
     const deletedItem: Item = {
       ...item,
       location: "historial",
+      onSale: false,
+      onSalePrice: item.price
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));

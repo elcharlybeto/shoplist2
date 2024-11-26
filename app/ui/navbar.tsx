@@ -72,7 +72,11 @@ const Navbar = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const newList = items.map((item) => {
-          if (item.location === "list") item.location = "historial";
+          if (item.location === "list") {
+            item.location = "historial";
+            item.onSale = false;
+            item.onSalePrice = item.price;
+          }
           return item;
         });
         localStorage.setItem("items", JSON.stringify(newList));
@@ -95,7 +99,11 @@ const Navbar = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const newList = items.map((item) => {
-          if (item.location === "cart") item.location = "historial";
+          if (item.location === "cart"){
+            item.location = "historial";
+            item.onSale = false;
+            item.onSalePrice = item.price;
+          }
           return item;
         });
         localStorage.setItem("items", JSON.stringify(newList));
@@ -138,7 +146,11 @@ const Navbar = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const newList = items.map((item) => {
-          if (item.location === "cart") item.location = "list";
+          if (item.location === "cart"){
+             item.location = "list";
+             item.onSale = false;
+             item.onSalePrice = item.price;
+          }
           return item;
         });
         localStorage.setItem("items", JSON.stringify(newList));
@@ -163,7 +175,7 @@ const Navbar = () => {
   const showTicket = () => {
     setIsOpen(false);
     router.replace("/ticket");
-  }
+  };
 
   return (
     <nav className="bg-primary opacity-95 text-white p-4 flex items-center justify-between">
@@ -173,7 +185,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="flex" style={{ fontFamily: 'var(--font-sour-gummy)' }}>
+      <div className="flex" style={{ fontFamily: "var(--font-sour-gummy)" }}>
         <Link href="/">
           <span className="text-xl font-bold">ShopList</span>{" "}
           <span className="opacity-60 ml-1">v3.0</span>
@@ -259,11 +271,12 @@ const Navbar = () => {
               />
             </li>
             <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
+              <button
+                className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
                 disabled={qCart === 0}
                 onClick={showTicket}
-                >
-                  Ver ticket
+              >
+              Controlar ticket
               </button>
             </li>
             <li className="p-2">
@@ -327,11 +340,14 @@ const Navbar = () => {
         </Link>
         <span
           className={clsx("", {
-            "text-primary bg-secondary p-1 rounded-md cursor-pointer hover:text-secondary": countInactiveCategories(categories) > 0,
+            "text-primary bg-secondary p-1 rounded-md cursor-pointer hover:text-secondary":
+              countInactiveCategories(categories) > 0,
           })}
           onClick={clearFilters}
         >
-          <MdFilterAltOff size={countInactiveCategories(categories) > 0 ? 16 : 24} />
+          <MdFilterAltOff
+            size={countInactiveCategories(categories) > 0 ? 16 : 24}
+          />
         </span>
       </div>
     </nav>
