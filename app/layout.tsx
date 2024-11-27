@@ -1,5 +1,5 @@
 import "@/app/ui/global.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { MyContextProvider } from "./lib/myContext";
 import NavBar from "./ui/navbar";
 
@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   title: "ShopList",
   description: "Don´t forget anything",
   manifest: "/manifest.json",
-  icons: "/icons/icon-128x128.png" 
+};
+
+export const viewport: Viewport = {
+  themeColor: "#140374",
 };
 
 export default function RootLayout({
