@@ -18,6 +18,7 @@ const HistorialCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [expanded, setExpanded] = useState(false);
 
   const editValue = (field: Field) => {
