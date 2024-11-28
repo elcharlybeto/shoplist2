@@ -1,18 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Sour+Gummy&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Sour+Gummy&display=swap");
 
 :root {
-  --font-roboto: 'Roboto', sans-serif;
-  --font-sour-gummy: 'Sour Gummy', cursive;
+  --font-roboto: "Roboto", sans-serif;
+  --font-sour-gummy: "Sour Gummy", cursive;
 }
-
 
 body {
   color: var(--text);
   background: var(--background);
-  font-family:var(--font-roboto), Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -31,31 +30,31 @@ body {
     --border-list: #172554;
     --bg-list: #cfdde3;
     --shadow-list: #a2a7ad;
-    --icon-list:#1e3a8a;
+    --icon-list: #1e3a8a;
     --hover-icon-list: #9ca3af;
     --error-msg: #b91c1c;
     --icon-form: #7f1d1d;
     --hover-icon-form: #9ca3af;
-    --input-border:  #374151;
+    --input-border: #374151;
     --input-bg: #ffffff;
-    --font-roboto: 'Roboto', sans-serif;
-  --font-sour-gummy: 'Sour Gummy', cursive;
+    --font-roboto: "Roboto", sans-serif;
+    --font-sour-gummy: "Sour Gummy", cursive;
   }
   .dark {
     --text: #fbeae9;
-    --background: #171831;
+    --background: #2b2c47;
     --primary: #140374;
-    --secondary: #217b2f;
-    --tertiary: #e90d0d;
-    --accent: #8957a2;
-    --border-list: #94a3b8;
+    --secondary: #21702d;
+    --tertiary: #e01c1cb6;
+    --accent: #472b55;
+    --border-list: #fff;
     --bg-list: #696f7e;
-    --shadow-list: #965eb2;
+    --shadow-list: #5a376c;
     --icon-list: #5a2407;
-    --hover-icon-list: #d0dbeb ;
+    --hover-icon-list: #d0dbeb;
     --error-msg: #a2fdc3;
-    --icon-form:  rgb(30 58 138 /1);
-    --hover-icon-form: #9ca3af;
+    --icon-form: #9ca3af;
+    --hover-icon-form: #140374;
     --input-border: #1e293b;
     --input-bg: #64748b;
   }

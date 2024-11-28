@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaCheckCircle, FaRegWindowClose } from "react-icons/fa";
 import { Action, Field, Item, Mode } from "../lib/definitions";
 import { formatString, today } from "../lib/utils";
@@ -9,11 +9,13 @@ const EditForm = ({
   field,
   onSave,
   setStatus,
+  setExpanded
 }: {
   item: Item;
   field: Field;
   onSave: (updatedItem: Item) => void;
   setStatus: (status: Mode) => void;
+  setExpanded: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [editValue, setEditValue] = useState(
     field === "name" ? item.name : field === "price" ? item.price : item.qty
@@ -36,6 +38,7 @@ const EditForm = ({
           setEditValueError(false);
         } else setEditValueError(true);
         setEditValue(value);
+        if(field === 'price') setExpanded(false);
       }
     } else {
       setEditValueError(false);
@@ -63,7 +66,10 @@ const EditForm = ({
         setStatus("show");
         
       }
-    } else setStatus("show");
+    } else {
+      setExpanded(false);
+      setStatus("show");
+    }
   };
 
   useEffect(() => {

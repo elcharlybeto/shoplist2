@@ -30,14 +30,15 @@ const CategoryCard = ({ category }: { category: Category }) => {
 
   const deleteCategory = () => {
     const newItems = items.map((item) => {
-      if (item.categoryId === category.id) 
-        return item = { ...item, categoryId: 0 };
+      if (item.categoryId === category.id)
+        return (item = { ...item, categoryId: 0 });
       else return item;
     });
     const newCategories = categories.filter(
       (savedCategory) => savedCategory.id !== category.id
     );
     localStorage.setItem("categories", JSON.stringify(newCategories));
+    localStorage.setItem("items", JSON.stringify(newItems));
     setItems(newItems);
     setCategories(newCategories);
   };
@@ -62,7 +63,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
     <>
       <div
         className={clsx(
-          "flex categories-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          "flex w-[400px] items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
           {
             hidden: status === "edit",
             "opacity-50": !category.active,
@@ -84,12 +85,14 @@ const CategoryCard = ({ category }: { category: Category }) => {
         </div>
 
         <div className="flex gap-4 mr-2">
-          <button
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={deleteCategory}
-          >
-            <RiDeleteBin6Line size={24} />
-          </button>
+          {category.id !== 0 && (
+            <button
+              className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
+              onClick={deleteCategory}
+            >
+              <RiDeleteBin6Line size={24} />
+            </button>
+          )}
           <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
             onClick={toggleActiveStatus}
@@ -100,7 +103,7 @@ const CategoryCard = ({ category }: { category: Category }) => {
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md categories-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show",
           }
