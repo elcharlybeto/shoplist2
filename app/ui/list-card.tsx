@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa6";
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -31,9 +31,10 @@ const Listcard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const [editCategory, setEditCategory] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const total = roundToNDecimals(item.qty * item.price, 2);
   const { categories, setCategories } = useMyContext();
-  
+
   const editValue = (field: Field) => {
     setEditField(field);
     setStatus("edit");
@@ -117,7 +118,7 @@ const Listcard = ({
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between mb-1">
             <div className="flex">
               <span
                 className="p-1 text-lg cursor-pointer"
@@ -132,40 +133,42 @@ const Listcard = ({
                 {item.name}
               </span>
             </div>
-            <span className="p-1 bg-accent rounded-2xl shadow-md">{`$ ${total} `}</span>
+            <button className="p-1 px-2 bg-accent rounded-2xl shadow-md" onClick={()=>setExpanded(!expanded)}>{`$ ${total} `}</button>
           </div>
 
-          <div className="p-1 flex justify-between">
+         {expanded && <div className="p-1 flex justify-between">
             <span
               className="cursor-pointer text-lg font-bold"
               onClick={() => editValue("price")}
             >{`$ ${item.price} uni/Kg`}</span>
             <span>{`${item.boughtDate}`}</span>
-          </div>
+          </div>}
 
           <div className="flex justify-between">
             {editCategory ? (
-              <select
-                id="category"
-                value={item.categoryId}
-                onChange={(e) => handleSelectCategory(e.target.value)}
-                className="p-1 mr-2 mb-2 border border-primary rounded-lg bg-input-bg"
-              >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id} className="bg-tertiary">
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+             <div>
+               <select
+                 id="category"
+                 value={item.categoryId}
+                 onChange={(e) => handleSelectCategory(e.target.value)}
+                 className="p-1 mr-2 mb-2 border border-primary rounded-lg bg-input-bg"
+               >
+                 {categories.map((category) => (
+                   <option key={category.id} value={category.id} className="bg-tertiary">
+                     {category.name}
+                   </option>
+                 ))}
+               </select>
+               <button   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg" onClick={()=>setEditCategory(false)}><FaCheckCircle />
+               </button>
+             </div>
             ) : (
               <div className="flex gap-1">
                 <span
                   className="rounded-lg p-2 bg-tertiary border border-primary cursor-pointer"
                   onClick={() => setEditCategory(true)}
                 >
-                  {item.categoryId === 0
-                    ? "misceláneos"
-                    : getCategoryNameById(item.categoryId, categories)}{" "}
+                  {getCategoryNameById(item.categoryId, categories)}
                 </span>
                 {countInactiveCategories(categories) > 0  ? 
                 <button
@@ -224,6 +227,7 @@ const Listcard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
+          setExpanded={setExpanded}
         />
       </div>
       <div

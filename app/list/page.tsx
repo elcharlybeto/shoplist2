@@ -10,7 +10,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend, TouchTransition } from "dnd-multi-backend";
 import { isCategoryActive } from "../lib/utils";
-import { FaPencil } from "react-icons/fa6";
+import { FaFilterCircleXmark, FaPencil } from "react-icons/fa6";
+import Link from "next/link";
 
 const multiBackendOptions = {
   backends: [
@@ -84,6 +85,13 @@ const Page = () => {
   return (
     <DndProvider backend={MultiBackend} options={multiBackendOptions}>
       <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
+        <Link href={'/filters'}>
+      <span
+        className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl disabled:hidden "
+      >
+        <FaFilterCircleXmark size={32} />
+      </span>
+      </Link>
         <div className="min-w-full fixed">
           <Total items={items} />
         </div>

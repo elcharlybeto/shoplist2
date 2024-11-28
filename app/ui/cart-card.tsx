@@ -19,8 +19,8 @@ const CartCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  const total = roundToNDecimals(item.qty * item.onSalePrice,2);
-
+  const [expanded, setExpanded] = useState(false);
+  const total = roundToNDecimals(item.qty * item.onSalePrice, 2);
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -83,45 +83,49 @@ const CartCard = ({
               </span>
             </div>
             <div className="p-1 font-bold">
-              <span className="p-1 bg-accent rounded-2xl shadow-md">{`$ ${total}`}</span>
-              {item.onSalePrice < item.price &&<span className="text-sm p-1 text-white bg-icon-form">
-                PROMO
-              </span>}
+              <span className="p-1 px-2 bg-accent rounded-2xl shadow-md" onClick={()=>setExpanded(expanded ? false : false)}>{`$ ${total}`}</span>
+              {item.onSalePrice < item.price && (
+                <span className="text-sm p-1 text-white bg-icon-form">
+                  PROMO
+                </span>
+              )}
             </div>
           </div>
+          <div className="flex justify-between w-full">
+            <div className=" p-1 flex justify-between items-center gap-2">
+              <span
+                className="cursor-pointer text-lg font-bold"
+                onClick={() => editValue("price")}
+              >
+                {`$ ${item.price} uni/Kg`}
+              </span>
+              <span>{`${item.boughtDate}`}</span>
+            </div>
 
-          <div className=" p-1 flex justify-between">
-            <span className="cursor-pointer text-lg font-bold" onClick={() => editValue("price")}>
-              {`$ ${item.price} uni/Kg`}</span>
-              <span>{`${item.boughtDate}`}
-            </span>
+            <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
+                onClick={deleteItem}
+              >
+                <RiDeleteBin6Line size={24} />
+              </button>
+              <button
+                className={clsx(
+                  "text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none",
+                  {
+                    "text-error-msg": item.price !== item.onSalePrice,
+                  }
+                )}
+                disabled={item.price === 0}
+                onClick={() => {
+                  if (item.price > 0) setStatus("onsale");
+                }}
+              >
+                <TbRosetteDiscountCheck size={24} />
+              </button>
+            </div>
           </div>
-        
-
-        <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
-          <button
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={deleteItem}
-          >
-            <RiDeleteBin6Line size={24} />
-          </button>
-          <button
-            className={clsx(
-              "text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none",
-              {
-                "text-error-msg": item.price !== item.onSalePrice,
-              }
-            )}
-            disabled={item.price === 0}
-            onClick={() => {
-              if (item.price > 0) setStatus("onsale");
-            }}
-          >
-            <TbRosetteDiscountCheck size={24} />
-          </button>
         </div>
-
-      </div>
       </div>
 
       <div
@@ -137,6 +141,7 @@ const CartCard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
+          setExpanded={setExpanded}
         />
       </div>
       <div

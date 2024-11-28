@@ -50,7 +50,7 @@ export const isItemNameInArray = (items: Item[], name: string): boolean =>  {
 
 export const getCategoryNameById = (categoryId: number, categories: Category[]): string => {
   const category = categories.find((cat) => cat.id === categoryId);
-  return category ? category.name : "Categoría no encontrada";
+  return category !== undefined ? category.name : "undefined";
 }
 
 export const updateCategoryActiveState = (id: number, categories: Category[]): Category[] => {

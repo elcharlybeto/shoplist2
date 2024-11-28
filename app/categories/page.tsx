@@ -113,7 +113,7 @@ const Page = () => {
       </div>
 
       <div>
-        <ul className="flex flex-col gap-2 p-2 categories-center">
+        <ul className="flex flex-col gap-2 p-2 items-center">
           {categories.map((category) => (
             <li key={category.id}>
               <CategoryCard category={category} />
