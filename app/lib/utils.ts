@@ -73,6 +73,10 @@ export const countInactiveCategories = (categories: Category[]): number => {
  return categories.filter(category => category.active === false).length
 };
 
+export const countActiveCategories = (categories: Category[]): number => {
+  return categories.filter(category => category.active === true).length
+ };
+
 export const inactivateAllCategories = (categories: Category[]): Category[] => {
   return categories.map((category) => ({ ...category, active: false }));
 };
