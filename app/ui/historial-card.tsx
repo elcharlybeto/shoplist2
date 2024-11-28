@@ -18,6 +18,7 @@ const HistorialCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
+  const [expanded, setExpanded] = useState(false);
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -75,7 +76,7 @@ const HistorialCard = ({
       
         <div className="flex flex-col px-4 ">
           <div className="flex flex-wrap w-60">
-            <div className="flex ">
+            <div className="flex">
               <span
                 className="py-2 px-1 text-lg cursor-pointer"
                 onClick={() => editValue("qty")}
@@ -127,6 +128,7 @@ const HistorialCard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
+          setExpanded={setExpanded}
         />
       </div>
     </>
