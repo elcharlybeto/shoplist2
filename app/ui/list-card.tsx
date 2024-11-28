@@ -111,7 +111,7 @@ const Listcard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[350px] bg-gradient-to-r",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[350px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
