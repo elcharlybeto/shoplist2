@@ -32,7 +32,7 @@ export default function Home() {
         />
       </div>
       <h1
-        className="font-bold text-center  m-4 text-5xl"
+        className="font-bold text-center m-8 text-5xl"
         style={{ fontFamily: "var(--font-sour-gummy)" }}
       >
         ¡No te olvides nada!
@@ -42,7 +42,7 @@ export default function Home() {
           ¡Es fácil!
         </span>
         <div className="mt-6 w-full">
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-4">
             <Link href="/add">
               <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">
                 <LiaHandPointRightSolid size={18} />
