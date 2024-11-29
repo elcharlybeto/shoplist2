@@ -32,7 +32,7 @@ export default function Home() {
         />
       </div>
       <h1
-        className="font-bold text-center  text-5xl"
+        className="font-bold text-center  m-4 text-5xl"
         style={{ fontFamily: "var(--font-sour-gummy)" }}
       >
         ¡No te olvides nada!
