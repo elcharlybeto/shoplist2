@@ -42,7 +42,7 @@ body {
   }
   .dark {
     --text: #fbeae9;
-    --background: #2b2c47;
+    --background: #3b3c5f;
     --primary: #140374;
     --secondary: #21702d;
     --tertiary: #e01c1cb6;
@@ -50,8 +50,8 @@ body {
     --border-list: #fff;
     --bg-list: #696f7e;
     --shadow-list: #5a376c;
-    --icon-list: #5a2407;
-    --hover-icon-list: #d0dbeb;
+    --icon-list: #d0dbeb;
+    --hover-icon-list: #5a2407 ;
     --error-msg: #a2fdc3;
     --icon-form: #9ca3af;
     --hover-icon-form: #140374;

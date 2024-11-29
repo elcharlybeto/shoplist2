@@ -1,36 +1,71 @@
-'use client'
+"use client";
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
-import { LiaClipboardListSolid } from "react-icons/lia";
-import { useMyContext } from "../lib/myContext";
 import { useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
+import { LiaHandPointRightSolid } from "react-icons/lia";
+import { useMyContext } from "../lib/myContext";
 
 export default function Home() {
+  const { items } = useMyContext();
 
-  const {items} = useMyContext();
   const router = useRouter();
 
- useEffect(() => {
-   if(items.filter(item => item.location === 'list').length > 0) router.replace('/list')
- }, [items, router])
- 
+  const [emptyHistorial, setEmptyHistorial] = useState(true);
+
+  useEffect(() => {
+    if (items.filter((item) => item.location === "historial").length > 0)
+      setEmptyHistorial(false);
+    if (items.filter((item) => item.location === "list").length > 0)
+      router.replace("/list");
+  }, [items, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
-      <main className="flex flex-col gap-8 items-center">
-      <LiaClipboardListSolid size={150} />
-        <h1 className="font-bold text-center  text-3xl" style={{ fontFamily: 'var(--font-sour-gummy)' }}>¡No te olvides nada!</h1>
-        <div className="flex flex-col min-w-9/12 p-8">
-          <span className="bg-secondary text-center font-bold border border-primary p-2 rounded-md">¡Comenzá ahora!</span>
-          <div className="mt-4 w-full">
+    <div className="min-h-screen  flex flex-col items-center justify-center">
+      <div className="w-[150px] h-[150px] rounded-full overflow-hidden relative">
+        <Image
+          src="/notas.png"
+          alt="anotador"
+          width={150}
+          height={150}
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+      <h1
+        className="font-bold text-center  text-5xl"
+        style={{ fontFamily: "var(--font-sour-gummy)" }}
+      >
+        ¡No te olvides nada!
+      </h1>
+      <div className="flex flex-col items-center min-w-9/12 p-8">
+        <span className="bg-secondary text-center font-bold border border-primary p-2 w-[150px] rounded-md">
+          ¡Es fácil!
+        </span>
+        <div className="mt-6 w-full">
           <ul className="flex flex-col gap-2">
-            <Link href='/add' ><li className="bg-tertiary shadow-lg p-2 px-4 text-center rounded-xl">Agregá un producto a la lista...</li></Link>
-            <Link href='/categories' ><li className="bg-tertiary shadow-lg p-2 px-4 text-center rounded-xl">Creá una categoría de productos...</li></Link>
+            <Link href="/add">
+              <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent">
+                <LiaHandPointRightSolid size={18} />
+                <span>Agregá un producto nuevo a la lista...</span>
+              </li>
+            </Link>
+            <Link href="/categories">
+              <li className="bg-tertiary shadow-lg p-2 px-4 text-center flex gap-2 items-center rounded-xl">
+                <LiaHandPointRightSolid size={18} />
+                <span>Creá una categoría de productos...</span>
+              </li>
+            </Link>
+            {!emptyHistorial && (
+              <Link href="/add">
+                <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent">
+                  <LiaHandPointRightSolid size={18} />
+                  <span>Agregá un producto nuevo a la lista...</span>
+                </li>
+              </Link>
+            )}
           </ul>
-          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

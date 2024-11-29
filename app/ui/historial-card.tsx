@@ -18,8 +18,7 @@ const HistorialCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [expanded, setExpanded] = useState(false);
+
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -68,31 +67,31 @@ const HistorialCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list  w-[350px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
       
-        <div className="flex flex-col px-4 ">
-          <div className="flex flex-wrap w-60">
+        <div className="flex flex-col px-4 w-9/12 ">
+          <div className="flex flex-wrap">
             <div className="flex">
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="py-2 px-1 text-lg cursor-pointer capitalize"
+                className="p-1 text-lg cursor-pointer capitalize"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
             </div>
           </div>
-          <div className=" pl-2 text-xs font-bold w-60">
+          <div className=" pl-2 text-xs font-bold ">
             <span className="cursor-pointer" onClick={() => editValue("price")}>
               {" "}
               {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
@@ -100,7 +99,7 @@ const HistorialCard = ({
           </div>
         </div>
 
-        <div className="flex gap-4 mr-2">
+        <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary w-3/12">
          
           <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
@@ -129,7 +128,6 @@ const HistorialCard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
-          setExpanded={setExpanded}
         />
       </div>
     </>
