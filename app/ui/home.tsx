@@ -44,9 +44,9 @@ export default function Home() {
         <div className="mt-6 w-full">
           <ul className="flex flex-col gap-2">
             <Link href="/add">
-              <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent">
+              <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">
                 <LiaHandPointRightSolid size={18} />
-                <span>Agregá un producto nuevo a la lista...</span>
+                <span>Agregá un producto <span className="italic text-error-msg font-semibold">nuevo</span> a la lista...</span>
               </li>
             </Link>
             <Link href="/categories">
@@ -56,10 +56,10 @@ export default function Home() {
               </li>
             </Link>
             {!emptyHistorial && (
-              <Link href="/add">
-                <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent">
+              <Link href="/historial">
+                <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">
                   <LiaHandPointRightSolid size={18} />
-                  <span>Agregá un producto nuevo a la lista...</span>
+                  <span>Agregá un producto <span className="italic text-error-msg font-semibold">histórico</span> a la lista...</span>
                 </li>
               </Link>
             )}
