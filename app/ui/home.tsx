@@ -43,18 +43,21 @@ export default function Home() {
         </span>
         <div className="mt-6 w-full">
           <ul className="flex flex-col gap-4">
+
+          <Link href="/categories">
+              <li className=" bg-accent shadow-lg p-2 px-4 text-center flex gap-2 items-center rounded-xl">
+                <LiaHandPointRightSolid size={18} />
+                <span>Creá categorías de productos...</span>
+              </li>
+            </Link>
+
             <Link href="/add">
-              <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">
+              <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-tertiary shadow-lg">
                 <LiaHandPointRightSolid size={18} />
                 <span>Agregá un producto <span className="italic text-error-msg font-semibold">nuevo</span> a la lista...</span>
               </li>
             </Link>
-            <Link href="/categories">
-              <li className="bg-tertiary shadow-lg p-2 px-4 text-center flex gap-2 items-center rounded-xl">
-                <LiaHandPointRightSolid size={18} />
-                <span>Creá una categoría de productos...</span>
-              </li>
-            </Link>
+            
             {!emptyHistorial && (
               <Link href="/historial">
                 <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">

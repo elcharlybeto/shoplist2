@@ -22,7 +22,7 @@ body {
 @layer base {
   :root {
     --text: #160504;
-    --background: #ebecf6;
+    --background: #aaabb5;
     --primary: #140374;
     --secondary: #fff479;
     --tertiary: #68ee9c;
@@ -42,13 +42,13 @@ body {
   }
   .dark {
     --text: #fbeae9;
-    --background: #3b3c5f;
+    --background: #696f7e;
     --primary: #140374;
     --secondary: #21702d;
     --tertiary: #e01c1cb6;
     --accent: #472b55;
     --border-list: #fff;
-    --bg-list: #696f7e;
+    --bg-list:  #3b3c5f;
     --shadow-list: #5a376c;
     --icon-list: #d0dbeb;
     --hover-icon-list: #5a2407 ;
