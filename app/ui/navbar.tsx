@@ -180,6 +180,7 @@ const Navbar = () => {
   };
 
   const toggleHelp = ()=>{ 
+    localStorage.setItem("help", JSON.stringify(!helpActive));
     setHelpActive(!helpActive);
     setIsOpen(false);
   }

@@ -41,6 +41,7 @@ export const MyContextProvider = ({
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem("items") || "[]"))
     setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'))
+    setHelpActive(JSON.parse(localStorage.getItem("help") || 'true'));
   }, []);
   
 
