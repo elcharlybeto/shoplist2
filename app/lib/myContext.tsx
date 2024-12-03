@@ -12,6 +12,8 @@ interface myContextType {
   setCategories : React.Dispatch<React.SetStateAction<Category[]>>;
   helpActive: boolean;
   setHelpActive: React.Dispatch<React.SetStateAction<boolean>>;
+  sorting: boolean;
+  setSorting: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const myContext = createContext<myContextType | undefined>(undefined);
@@ -36,17 +38,19 @@ export const MyContextProvider = ({
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [helpActive, setHelpActive] = useState<boolean>(true);
+  const [sorting, setSorting] = useState<boolean>(false);
 
 
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem("items") || "[]"))
     setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'))
     setHelpActive(JSON.parse(localStorage.getItem("help") || 'true'));
+    setSorting(JSON.parse(localStorage.getItem("sorting") || 'false'));
   }, []);
   
 
   return (
-    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive }}>
+    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive, sorting, setSorting }}>
       {children}
     </myContext.Provider>
   );

@@ -10,6 +10,7 @@ import {
   FaList,
   FaPlus,
   FaShoppingCart,
+  FaSort,
   FaTimes,
 } from "react-icons/fa";
 import { MdFilterAltOff } from "react-icons/md";
@@ -259,25 +260,7 @@ const Navbar = () => {
                 </span>
               </Link>
             </li>
-            <li className="p-2">
-              <button
-                className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
-                disabled={qCart === 0}
-                onClick={unShop}
-              >
-                Anular Compra
-              </button>
-            </li>
-            <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer" onClick={editCategories}>
-                Categorías
-              </button>
-              <FaFilter
-                className="cursor-pointer"
-                onClick={editCategories}
-                size={24}
-              />
-            </li>
+
             <li className="flex items-center justify-between p-2">
               <button
                 className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
@@ -288,6 +271,39 @@ const Navbar = () => {
               </button>
             </li>
 
+            <li className="p-2">
+              <button
+                className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
+                disabled={qCart === 0}
+                onClick={unShop}
+              >
+                Anular Compra
+              </button>
+            </li>
+
+            <li className="flex items-center justify-between p-2">
+              <button className="cursor-pointer" onClick={editCategories}>
+                Crear y Activar Categorías
+              </button>
+              <FaFilter
+                className="cursor-pointer"
+                onClick={editCategories}
+                size={20}
+              />
+            </li>
+
+            <li >
+             <Link href='/sorting' className="flex items-center justify-between p-2">
+               <button className="cursor-pointer" onClick={editCategories}>
+                 Ordenar Categorías
+               </button>
+               <FaSort
+                 className="cursor-pointer"
+                 size={24}
+               />
+             </Link>
+            </li>
+          
             <li className="p-2">
               <div className="cursor-pointer flex justify-between">
                 <button onClick={toggleHelp}>{helpActive ? "Ocultar " : "Mostrar "} guías de ayuda</button>
