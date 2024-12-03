@@ -294,13 +294,13 @@ const Navbar = () => {
 
             <li >
              <Link href='/sorting' className="flex items-center justify-between p-2">
-               <button className="cursor-pointer" onClick={editCategories}>
+               <span className="cursor-pointer">
                  Ordenar Categorías
-               </button>
                <FaSort
                  className="cursor-pointer"
                  size={24}
                />
+               </span>
              </Link>
             </li>
           
