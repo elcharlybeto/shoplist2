@@ -12,7 +12,6 @@ import {
   activateAllCategories,
   countInactiveCategories,
   getCategoryNameById,
-  roundToNDecimals,
   Toast,
   updateCategoryActiveState
 } from "../lib/utils";
@@ -31,8 +30,6 @@ const Listcard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const [editCategory, setEditCategory] = useState(false);
-  const [expanded, setExpanded] = useState(false);
-  const total = roundToNDecimals(item.qty * item.price, 2);
   const { categories, setCategories } = useMyContext();
 
   const editValue = (field: Field) => {
@@ -111,38 +108,34 @@ const Listcard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[350px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[350px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between mb-1">
+          <div className="flex flex-wrap justify-between mb-1 pl-2 border border-black bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex">
               <span
-                className="p-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer font-semibold"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="p-1 text-lg cursor-pointer capitalize"
+                className="p-1 text-lg cursor-pointer capitalize font-semibold"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
+
             </div>
-            <button className="p-1 px-2 bg-accent rounded-2xl shadow-md" onClick={()=>setExpanded(!expanded)}>{`$ ${total} `}</button>
+           
+            <span className="p-1 px-2 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text" onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
           </div>
 
-         {expanded && <div className="p-1 flex justify-between">
-            <span
-              className="cursor-pointer text-lg font-bold"
-              onClick={() => editValue("price")}
-            >{`$ ${item.price} uni/Kg`}</span>
-            <span>{`${item.boughtDate}`}</span>
-          </div>}
+        
 
           <div className="flex justify-between">
             {editCategory ? (
@@ -227,7 +220,6 @@ const Listcard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
-          setExpanded={setExpanded}
         />
       </div>
       <div

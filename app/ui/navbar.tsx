@@ -19,9 +19,11 @@ import { MdDarkMode } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useMyContext } from "../lib/myContext";
 import { activateAllCategories, countInactiveCategories } from "../lib/utils";
+import { LuHelpCircle } from "react-icons/lu";
+import { BiSolidHide } from "react-icons/bi";
 
 const Navbar = () => {
-  const { items, setItems, isOpen, setIsOpen, categories, setCategories } =
+  const { items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive } =
     useMyContext();
 
   const [theme, setTheme] = useState<"dark" | "light">("light");
@@ -177,6 +179,12 @@ const Navbar = () => {
     router.replace("/ticket");
   };
 
+  const toggleHelp = ()=>{ 
+    localStorage.setItem("help", JSON.stringify(!helpActive));
+    setHelpActive(!helpActive);
+    setIsOpen(false);
+  }
+
   return (
     <nav className="bg-primary opacity-95 text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
@@ -279,6 +287,22 @@ const Navbar = () => {
               Controlar ticket
               </button>
             </li>
+
+            <li className="p-2">
+              <div className="cursor-pointer flex justify-between">
+                <button onClick={toggleHelp}>{helpActive ? "Ocultar " : "Mostrar "} guías de ayuda</button>
+                {helpActive ?  <BiSolidHide
+                className="cursor-pointer"
+                onClick={toggleHelp}
+                size={24}
+              />:<LuHelpCircle
+              className="cursor-pointer"
+              onClick={toggleHelp}
+              size={24}
+            />}
+              </div>
+            </li>
+
             <li className="p-2">
               <div className="cursor-pointer flex justify-between">
                 <button onClick={toggleTheme}>Cambiar tema</button>

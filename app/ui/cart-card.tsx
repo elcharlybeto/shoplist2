@@ -19,7 +19,6 @@ const CartCard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  const [expanded, setExpanded] = useState(false);
   const total = roundToNDecimals(item.qty * item.onSalePrice, 2);
 
   const editValue = (field: Field) => {
@@ -60,30 +59,30 @@ const CartCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list w-[370px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[350px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between pl-2 bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex ">
               <span
-                className="p-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer font-semibold"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="p-1 text-lg cursor-pointer capitalize"
+                className="p-1 text-lg cursor-pointer capitalize font-semibold"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
             </div>
-            <div className="p-1 font-bold">
-              <span className="p-1 px-2 bg-accent rounded-2xl shadow-md" onClick={()=>setExpanded(expanded ? false : false)}>{`$ ${total}`}</span>
+            <div className="p-1 font-bold mb-1">
+              <span className="p-1 px-2 bg-accent rounded-2xl shadow-md text-text" >{`$ ${total}`}</span>
               {item.onSalePrice < item.price && (
                 <span className="text-sm p-1 text-white bg-icon-form">
                   PROMO
@@ -141,7 +140,6 @@ const CartCard = ({
           field={editField}
           onSave={handleSave}
           setStatus={setStatus}
-          setExpanded={setExpanded}
         />
       </div>
       <div

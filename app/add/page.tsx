@@ -37,8 +37,6 @@ const Page = () => {
     if (search.length >= 0) {
       setSearch(search);
 
-      // setStatus("show");
-
       const newItem = {
         ...itemCard,
         name: search,

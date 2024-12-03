@@ -15,35 +15,31 @@ const Total = ({ items }: { items: Array<Item> }) => {
   );
 
   return (
-    <div className="w-full h-12 flex border-text border-2">
+    <div className="w-full h-14 flex px-2 gap-2">
       {spent > 0 ? (
         <>
           <Link
             href="/list"
-            className="bg-secondary w-1/2  flex justify-center items-center font-bold"
+            className="bg-tertiary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110"
           >
-            <div>
-              <span>{`Pendiente: $ `}</span>
-              <span className="text-xl">{`${roundToNDecimals(
+              <span className="uppercase text-sm">pendiente</span>
+              <span className="text-xl">{`$ ${roundToNDecimals(
                 estimated,
                 0
               )}`}</span>
-            </div>
           </Link>
           <Link
             href="/cart"
-            className="bg-accent w-1/2  flex justify-center items-center font-bold"
+            className="bg-accent w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110"
           >
-            <div>
-              <span>{`Facturado: $ `}</span>
-              <span className="text-xl">{`${roundToNDecimals(spent, 0)}`}</span>
-            </div>
+              <span className="uppercase text-sm">Facturado</span>
+              <span className="text-xl">{`$ ${roundToNDecimals(spent, 0)}`}</span>
           </Link>
         </>
       ) : (
         <Link
           href="/list"
-          className="bg-secondary w-full  flex justify-center items-center font-bold"
+          className="bg-secondary w-full  flex justify-center items-center font-semibold border-text border-2 rounded-md shadow-md"
         >
           <div>
             <span>{`Gasto Total Estimado: $ `}</span>

@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaRegCheckCircle,
   FaRegWindowClose,
   FaToggleOff,
+  FaToggleOn,
 } from "react-icons/fa";
 import { Category } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
@@ -15,12 +16,15 @@ import {
   Toast,
 } from "../lib/utils";
 import CategoryCard from "../ui/category-card";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { MdFilterAltOff } from "react-icons/md";
 
 const Page = () => {
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories, helpActive } = useMyContext();
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
+  const [showHelp, setShowHelp] = useState(helpActive);
 
   const showErrorMsg = (msg: string) => {
     return (
@@ -63,6 +67,10 @@ const Page = () => {
     localStorage.setItem("categories", JSON.stringify(newCategories));
   };
 
+  useEffect(() => {
+    setShowHelp(helpActive);
+  }, [helpActive]);
+
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       <button
@@ -72,7 +80,30 @@ const Page = () => {
       >
         <FaToggleOff size={32} />
       </button>
-      <div className="flex w-[400px] shadow-lg mt-4 items-center justify-around py-2 px-4 bg-tertiary rounded-md shadow-shadow-list border border-primary">
+      {showHelp && (
+        <div className="mt-1 bg-secondary flex">
+          <span className="p-4 italic text-justify">
+            Para filtrar los productos de la lista por categorías, se pueden
+            crear ingresando un nombre en el siguiente formulario y a
+            continuación tocar en
+            <FaRegCheckCircle
+              size={16}
+              className="inline ml-2 align-baseline"
+            />
+            <span className="ml-1">.</span>
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="flex w-[400px] shadow-lg mt-2 items-center justify-around py-2 px-4 bg-tertiary rounded-md shadow-shadow-list border border-primary">
         <div className="flex flex-col w-11/12 p-2">
           <label htmlFor="name" className="text-sm">
             Nueva Categoría
@@ -111,6 +142,58 @@ const Page = () => {
           </span>
         </div>
       </div>
+
+      {showHelp && (
+        <div className="mt-1 bg-secondary flex">
+          <span className="p-4 italic text-justify">
+            Para modificar el nombre de una categoría, simplemente tocarlo.
+            <RiDeleteBin6Line
+              size={16}
+              className="inline ml-2 align-baseline"
+            />
+            <span className="ml-1">, elimina la categoría, mientras que </span>
+            <FaToggleOff size={16} className="inline ml-2 align-baseline" />
+            <span className="ml-1">
+              , desactiva la categoría, es decir, oculta los productos de esa categoría en la lista y{" "}
+            </span>
+            <FaToggleOn size={16} className="inline ml-2 align-baseline" />{" "}
+            <span> la activa, o sea, los hace visibles en la lista. </span>
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showHelp && (
+        <div className="mt-1 bg-secondary flex">
+          <span className="p-4 italic text-justify">
+            El botón flotante
+            <FaToggleOff size={16} className="inline ml-2 align-baseline" />
+            <span className="ml-1">
+              , desactiva todas las categorías, mientras que con el ícono{" "}
+            </span>
+            <MdFilterAltOff size={16} className="inline ml-2 align-baseline" />
+            <span className="ml-1">
+              {" "}
+              en la barra superior, se vuelven a activar todas.{" "}
+            </span>
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
 
       <div>
         <ul className="flex flex-col gap-2 p-2 items-center">
