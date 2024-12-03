@@ -115,7 +115,7 @@ const Listcard = ({
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between mb-1 ">
+          <div className="flex flex-wrap justify-between mb-1 pl-2 border border-black bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
@@ -132,7 +132,7 @@ const Listcard = ({
 
             </div>
            
-            <span className="p-1 px-2 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold" onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
+            <span className="p-1 px-2 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text" onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
           </div>
 
         

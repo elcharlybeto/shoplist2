@@ -66,7 +66,7 @@ const CartCard = ({
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between pl-2 bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex ">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
@@ -82,7 +82,7 @@ const CartCard = ({
               </span>
             </div>
             <div className="p-1 font-bold mb-1">
-              <span className="p-1 px-2 bg-accent rounded-2xl shadow-md" >{`$ ${total}`}</span>
+              <span className="p-1 px-2 bg-accent rounded-2xl shadow-md text-text" >{`$ ${total}`}</span>
               {item.onSalePrice < item.price && (
                 <span className="text-sm p-1 text-white bg-icon-form">
                   PROMO
