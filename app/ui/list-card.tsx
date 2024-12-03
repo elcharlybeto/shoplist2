@@ -115,7 +115,7 @@ const Listcard = ({
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between mb-1 pl-2 border border-black bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
+          <div className="flex flex-wrap justify-between mb-1 pl-2 p-1  bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
@@ -139,12 +139,12 @@ const Listcard = ({
 
           <div className="flex justify-between">
             {editCategory ? (
-             <div>
+             <div className="flex items-center">
                <select
                  id="category"
                  value={item.categoryId}
                  onChange={(e) => handleSelectCategory(e.target.value)}
-                 className="p-1 mr-2 mb-2 border border-primary rounded-lg bg-input-bg"
+                 className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
                >
                  {categories.map((category) => (
                    <option key={category.id} value={category.id} className="bg-tertiary">
@@ -152,7 +152,7 @@ const Listcard = ({
                    </option>
                  ))}
                </select>
-               <button   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg" onClick={()=>setEditCategory(false)}><FaCheckCircle />
+               <button   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg" onClick={()=>setEditCategory(false)}><FaCheckCircle size={16} />
                </button>
              </div>
             ) : (
@@ -168,14 +168,14 @@ const Listcard = ({
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
                 onClick={() => clearFilters() }
               >
-                <MdFilterAltOff size={24} />
+                <MdFilterAltOff size={18} />
               </button>
                 :
                 <button
                   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
                   onClick={() => filterByThisCategory(item.categoryId) }
                 >
-                  <FaFilter size={24} />
+                  <FaFilter size={18} />
                 </button>
                 }
               </div>

@@ -66,7 +66,7 @@ const CartCard = ({
         )}
       >
         <div className="w-full min-w-full">
-          <div className="flex flex-wrap justify-between pl-2 bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
+          <div className="flex flex-wrap justify-between pl-2 p-1 bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
             <div className="flex ">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
@@ -91,7 +91,7 @@ const CartCard = ({
             </div>
           </div>
           <div className="flex justify-between w-full">
-            <div className=" p-1 flex justify-between items-center gap-2">
+            <div className=" p-1 pl-2 flex justify-between items-center gap-2">
               <span
                 className="cursor-pointer text-lg font-bold"
                 onClick={() => editValue("price")}

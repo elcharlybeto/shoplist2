@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BiSolidHide } from "react-icons/bi";
 import { CiLight } from "react-icons/ci";
 import {
   FaBars,
@@ -11,19 +12,19 @@ import {
   FaPlus,
   FaShoppingCart,
   FaTimes,
+  FaToggleOff,
+  FaToggleOn
 } from "react-icons/fa";
-import { MdFilterAltOff } from "react-icons/md";
 import { FaFilter } from "react-icons/fa6";
 import { GoBook } from "react-icons/go";
-import { MdDarkMode } from "react-icons/md";
+import { LuHelpCircle } from "react-icons/lu";
+import { MdDarkMode, MdFilterAltOff } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useMyContext } from "../lib/myContext";
 import { activateAllCategories, countInactiveCategories } from "../lib/utils";
-import { LuHelpCircle } from "react-icons/lu";
-import { BiSolidHide } from "react-icons/bi";
 
 const Navbar = () => {
-  const { items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive } =
+  const { items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive, sorting } =
     useMyContext();
 
   const [theme, setTheme] = useState<"dark" | "light">("light");
@@ -259,25 +260,7 @@ const Navbar = () => {
                 </span>
               </Link>
             </li>
-            <li className="p-2">
-              <button
-                className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
-                disabled={qCart === 0}
-                onClick={unShop}
-              >
-                Anular Compra
-              </button>
-            </li>
-            <li className="flex items-center justify-between p-2">
-              <button className="cursor-pointer" onClick={editCategories}>
-                Categorías
-              </button>
-              <FaFilter
-                className="cursor-pointer"
-                onClick={editCategories}
-                size={24}
-              />
-            </li>
+
             <li className="flex items-center justify-between p-2">
               <button
                 className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
@@ -288,6 +271,43 @@ const Navbar = () => {
               </button>
             </li>
 
+            <li className="p-2">
+              <button
+                className="cursor-pointer disabled:opacity-60 disabled:cursor-none"
+                disabled={qCart === 0}
+                onClick={unShop}
+              >
+                Anular Compra
+              </button>
+            </li>
+
+            <li className="flex items-center justify-between p-2">
+              <button className="cursor-pointer" onClick={editCategories}>
+                Crear y Activar Categorías
+              </button>
+              <FaFilter
+                className="cursor-pointer"
+                onClick={editCategories}
+                size={20}
+              />
+            </li>
+
+            <li >
+             <Link href='/sorting' >
+               <span className="flex items-center justify-between p-2">
+                 Ordenar Categorías
+                 {sorting ? <FaToggleOn
+                 className="cursor-pointer"
+                 size={24}
+               />:<FaToggleOff
+               className="cursor-pointer"
+               size={24}
+             />}
+               
+               </span>
+             </Link>
+            </li>
+          
             <li className="p-2">
               <div className="cursor-pointer flex justify-between">
                 <button onClick={toggleHelp}>{helpActive ? "Ocultar " : "Mostrar "} guías de ayuda</button>
