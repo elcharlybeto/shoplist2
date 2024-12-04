@@ -1,22 +1,22 @@
-import React, { useState, ChangeEvent } from "react";
-import { useMyContext } from "../lib/myContext";
+import { ChangeEvent } from "react";
 import { Category } from "../lib/definitions";
+import { useMyContext } from "../lib/myContext";
 
 const RadioForm = () => {
-  const [selectedOption, setSelectedOption] = useState<string>("end");
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories, settings, updateSettings } = useMyContext();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSelectedOption(event.target.value);
     setCategories(repositionCategory(categories, 0, event.target.value));
     localStorage.setItem("categories", JSON.stringify(categories));
+    updateSettings({ miscPosition: event.target.value as "start" | "end" });
+
   };
 
-  function repositionCategory(
+  const repositionCategory = (
     categories: Category[],
     targetId: number,
     position: string
-  ): Category[] {
+  ): Category[] => {
     const index = categories.findIndex((category) => category.id === targetId);
     if (index === -1) return categories;
 
@@ -42,7 +42,7 @@ const RadioForm = () => {
             type="radio"
             name="options"
             value="end"
-            checked={selectedOption === "end"}
+            checked={settings.miscPosition === "end"}
             onChange={handleChange}
           />
           <span className="ml-2">Final de la Lista</span>
@@ -54,7 +54,7 @@ const RadioForm = () => {
             type="radio"
             name="options"
             value="start"
-            checked={selectedOption === "start"}
+            checked={settings.miscPosition === "start"}
             onChange={handleChange}
           />
           <span className="ml-2">Comienzo de la Lista</span>

@@ -13,18 +13,17 @@ import RadioForm from "../ui/radio-form";
 import SortingCard from "../ui/sorting-card";
 
 const Page = () => {
-  const { categories, helpActive, sorting, setSorting } = useMyContext();
+  const { categories, settings, updateSettings } = useMyContext();
 
-  const [showHelp, setShowHelp] = useState(helpActive);
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
 
   const toggleSort = () => {
-    localStorage.setItem("sorting", JSON.stringify(!sorting));
-    setSorting(!sorting);
+    updateSettings({ sorting: !settings.sorting });
   };
 
   useEffect(() => {
-    setShowHelp(helpActive);
-  }, [helpActive]);
+    setShowHelp(settings.helpActive);
+  }, [settings]);
 
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
@@ -33,7 +32,7 @@ const Page = () => {
           className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl disabled:hidden "
           onClick={toggleSort}
         >
-          {sorting ? <FaToggleOn size={32} /> : <FaToggleOff size={32} />}
+          {settings.sorting ? <FaToggleOn size={32} /> : <FaToggleOff size={32} />}
         </button>
       )}
 

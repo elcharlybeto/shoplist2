@@ -1,6 +1,6 @@
 "use client";
-
-import { Dispatch, SetStateAction, useEffect } from "react";
+import clsx from "clsx";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Category, Item } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import Listcard from "../ui/list-card";
@@ -11,7 +11,12 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { MultiBackend, TouchTransition } from "dnd-multi-backend";
 import { isCategoryActive } from "../lib/utils";
 import { FaFilterCircleXmark, FaPencil } from "react-icons/fa6";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbRosetteDiscountCheck } from "react-icons/tb";
+import { FaFilter } from "react-icons/fa6";
+import { MdFilterAltOff } from "react-icons/md";
 import Link from "next/link";
+import { FaShoppingCart } from "react-icons/fa";
 
 const multiBackendOptions = {
   backends: [
@@ -79,7 +84,8 @@ const DraggableListcard = ({
 };
 
 const Page = () => {
-  const { items, setItems, categories, sorting } = useMyContext();
+  const { items, setItems, categories, settings } = useMyContext();
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
 
   const sortItemsByCategoryOrder = (
     items: Item[],
@@ -97,7 +103,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    if (sorting) {
+    if (settings.sorting) {
       setItems((prevItems) => {
         const newItems = sortItemsByCategoryOrder(prevItems, categories);
         localStorage.setItem("items", JSON.stringify(newItems));
@@ -105,7 +111,11 @@ const Page = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting, categories]);
+  }, [settings, categories]);
+
+  useEffect(() => {
+    setShowHelp(settings.helpActive);
+  }, [settings]);
   
   return (
     <DndProvider backend={MultiBackend} options={multiBackendOptions}>
@@ -123,7 +133,68 @@ const Page = () => {
             <FaPencil size={150} />
           </div>
         ) : (
-          <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
+          <>
+           {showHelp && (
+            <div className="mt-16 bg-secondary flex">
+              <span className="p-4 italic text-justify">
+                Estos productos son los que necesitamos comprar. Por cada producto puedes editar su
+                nombre, cantidad, precio o categoría simplemente tocándolos. Si se presiona el botón a la derecha de la categoría, sólo se mostrarán los productos de esa categoría cuando muestra el ícono
+                <FaFilter
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />{" "} o todos los productos cuando muestra el ícono 
+                <MdFilterAltOff
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                /> Se puede eliminar un producto de la lista (vuelve al historial) tocando el botón  <RiDeleteBin6Line
+                size={16}
+                className="inline ml-2 align-baseline"
+              />{" "}Con el
+                botón{" "}
+                <TbRosetteDiscountCheck
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />{" "}
+                se puede cargar un precio promocional para ese producto, válido
+                únicamente para la compra actual (si se devuelve al historial o se
+                incorpora en el futuro desde el historial, se hará al precio
+                normal). Finalmente, con el botón <FaShoppingCart
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />{" "} se registra la compra del producto (pasa al carrito).
+              </span>
+              <div className="flex justify-start mr-2">
+                <button
+                  className="h-2 w-2 p-2 opacity-50"
+                  onClick={() => setShowHelp(false)}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          )}
+           {showHelp && (
+            <div className="mt-2 bg-secondary flex">
+              <span className="p-4 italic text-justify">
+                Si queremos mostrar (activar) u ocultar (desactivar) más de una categoría a la vez, podemos hacerlo tocando el botón flotante 
+                <FaFilterCircleXmark
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />
+              </span>
+              <div className="flex justify-start mr-2">
+                <button
+                  className="h-2 w-2 p-2 opacity-50"
+                  onClick={() => setShowHelp(false)}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          )}
+          <ul className={clsx("flex flex-col gap-2 p-2 mt-14 items-center", {
+              "mt-2": showHelp,
+            })}>
             {items.map((item, index) =>
               item.location === "list" &&
               isCategoryActive(item.categoryId, categories) ? (
@@ -137,6 +208,7 @@ const Page = () => {
               ) : null
             )}
           </ul>
+          </>
         )}
       </div>
     </DndProvider>

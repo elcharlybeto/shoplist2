@@ -20,7 +20,7 @@ const Total = ({ items }: { items: Array<Item> }) => {
         <>
           <Link
             href="/list"
-            className="bg-tertiary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110"
+            className="bg-tertiary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-all"
           >
               <span className="uppercase text-sm">pendiente</span>
               <span className="text-xl">{`$ ${roundToNDecimals(
@@ -30,7 +30,7 @@ const Total = ({ items }: { items: Array<Item> }) => {
           </Link>
           <Link
             href="/cart"
-            className="bg-accent w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110"
+            className="bg-accent w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-all  "
           >
               <span className="uppercase text-sm">Facturado</span>
               <span className="text-xl">{`$ ${roundToNDecimals(spent, 0)}`}</span>

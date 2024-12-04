@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Category, Item } from './definitions';
+import { Category, Item, Settings } from './definitions';
 
 
 interface myContextType {
@@ -10,10 +10,8 @@ interface myContextType {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   categories : Category[];
   setCategories : React.Dispatch<React.SetStateAction<Category[]>>;
-  helpActive: boolean;
-  setHelpActive: React.Dispatch<React.SetStateAction<boolean>>;
-  sorting: boolean;
-  setSorting: React.Dispatch<React.SetStateAction<boolean>>;
+  settings: Settings;
+  updateSettings: (updated: Partial<Settings>) => void;
 }
 
 const myContext = createContext<myContextType | undefined>(undefined);
@@ -37,20 +35,27 @@ export const MyContextProvider = ({
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [helpActive, setHelpActive] = useState<boolean>(true);
-  const [sorting, setSorting] = useState<boolean>(false);
 
+  const [settings, setSettings] = useState<Settings>( { helpActive: true, sorting: false, miscPosition: 'end' });
+  
+  const updateSettings = (updated: Partial<Settings>) => {
+    setSettings((prev) => ({ ...prev, ...updated }));
+  };
 
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem("items") || "[]"))
-    setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'))
-    setHelpActive(JSON.parse(localStorage.getItem("help") || 'true'));
-    setSorting(JSON.parse(localStorage.getItem("sorting") || 'false'));
+    setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'));
+      const storedSettings = localStorage.getItem('settings');
+      if(storedSettings) setSettings(JSON.parse(storedSettings));
   }, []);
-  
 
+  useEffect(() => {
+    localStorage.setItem('settings', JSON.stringify(settings));
+  }, [settings]);
+
+    
   return (
-    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories, helpActive, setHelpActive, sorting, setSorting }}>
+    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories, settings, updateSettings }}>
       {children}
     </myContext.Provider>
   );

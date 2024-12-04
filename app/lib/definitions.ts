@@ -21,3 +21,9 @@ export type Category = {
     name: string;
     active: boolean;
 }
+
+export type Settings = {
+    helpActive: boolean;
+    sorting: boolean;
+    miscPosition: 'start' | 'end';
+  }

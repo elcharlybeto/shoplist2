@@ -6,12 +6,19 @@ import ItemForm from "../ui/item-form";
 import HistorialCard from "../ui/historial-card";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useMyContext } from "../lib/myContext";
+import { GoBook } from "react-icons/go";
+import { useRouter } from "next/navigation";
+import { FaShoppingCart } from "react-icons/fa";
+import { RiCloseLine, RiPlayListAddFill } from "react-icons/ri";
 
 const Page = () => {
-  const { items, setItems } = useMyContext();
+  const { items, setItems, settings } = useMyContext();
   const [fromHistorial, setFromHistorial] = useState<Item[]>([]);
   const [status, setStatus] = useState<Mode>("hide");
   const [search, setSearch] = useState("");
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
+
+  const router = useRouter();
 
   const [itemCard, setItemCard] = useState<Item>({
     id: Date.now(),
@@ -65,33 +72,93 @@ const Page = () => {
     }
   }, [search, filterItemsByName]);
 
+  useEffect(() => {
+    setShowHelp(settings.helpActive);
+  }, [settings]);
+
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
-      {status === "hide" && <div className="w-11/12 p-2">
-        <form className="flex border border-text bg-accent mb-2">
-          <div className="flex py-2 pl-4 w-11/12 flex-col">
-            <label htmlFor="item" className="text-sm">
-              Buscar en productos ingresados antes
-            </label>
-            <input
-              type="text"
-              id="item"
-              value={search}
-              onChange={(e) => {
-                handleSearch(e.target.value);
-              }}
-              className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
-              autoComplete="off"
-            />
+      {showHelp && status === "hide" && (
+        <div className="mt-1 bg-secondary flex mb-4">
+          <span className="p-4 italic text-justify">
+            Se detectaron productos previamente ingresados. Puedes agregarlos a
+            la lista buscándolos manualmente recorriendo el historial de ventas
+            desde el botón
+            <GoBook
+              size={16}
+              className="inline ml-2 align-baseline cursor-pointer"
+              onClick={() => router.replace("/historial")}
+            />{" "}
+            o tipear parte del nombre del producto para encontrarlo
+            automáticamente usando la siguiente barra de búsqueda (si no se
+            encuentra se muestra un formulario para incorporarlo como producto
+            nuevo).
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
           </div>
-          <button
-            className="w-1/12 flex justify-center pt-7"
-            onClick={() => setSearch("")}
-          >
-            <TiDeleteOutline size={32} />
-          </button>
-        </form>
-      </div>}
+        </div>
+      )}
+      {status === "hide" && (
+        <div className="w-11/12 p-2">
+          <form className="flex border border-text bg-accent mb-2">
+            <div className="flex py-2 pl-4 w-11/12 flex-col">
+              <label htmlFor="item" className="text-sm">
+                Buscar en productos ingresados antes
+              </label>
+              <input
+                type="text"
+                id="item"
+                value={search}
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+                className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
+                autoComplete="off"
+              />
+            </div>
+            <button
+              className="w-1/12 flex justify-center pt-7"
+              onClick={() => setSearch("")}
+            >
+              <TiDeleteOutline size={32} />
+            </button>
+          </form>
+        </div>
+      )}
+
+      {showHelp && status === "show" && (
+        <div className="mt-1 bg-secondary flex mb-4">
+          <span className="p-4 italic text-justify">
+            Puedes agregar un producto nuevo cargando sus datos en el siguiente
+            formulario. Cuantos más datos completes, mejor. Se puede agregar a
+            la lista, tocando el botón
+            <RiPlayListAddFill
+              size={16}
+              className="inline ml-2 align-baseline "
+            />{" "}
+            o directamente al carrito de compras, si lo estamos agregando en el
+            momento que estamos comprando (requiere que se haya ingresado un
+            precio) tocando el botón{" "}
+            <FaShoppingCart size={16} className="inline ml-2 align-baseline " />
+            . Para limpiar el formulario, tocar el botón{" "}
+            <RiCloseLine size={16} className="inline ml-2 align-baseline " />.
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
 
       {status === "show" && (
         <div className="flex w-[400px] shadow-xl rounded-2xl border border-primary items-center justify-around p-2 bg-secondary shadow-shadow-list">

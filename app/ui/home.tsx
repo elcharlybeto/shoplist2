@@ -47,7 +47,7 @@ export default function Home() {
           <Link href="/categories">
               <li className=" bg-accent shadow-lg p-2 px-4 text-center flex gap-2 items-center rounded-xl">
                 <LiaHandPointRightSolid size={18} />
-                <span>Creá categorías de productos...</span>
+                <span>Creá categorías para organizar tus productos...</span>
               </li>
             </Link>
 
