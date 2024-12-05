@@ -47,7 +47,7 @@ const Page = () => {
   return (
     <div className="pt-4 min-w-full min-h-screen flex flex-col items-center bg-background">
       <button
-        className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl "
+        className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl "
         onClick={() => setSortedByAmount((prev) => !prev)}
       >
         {sortedByAmount ? (

@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
+import { FaCheckCircle, FaRegStar, FaShoppingCart, FaStar } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa6";
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -30,7 +30,7 @@ const Listcard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const [editCategory, setEditCategory] = useState(false);
-  const { categories, setCategories } = useMyContext();
+  const { categories, setCategories, marked, setMarked } = useMyContext();
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -104,6 +104,45 @@ const Listcard = ({
     updateList(updatedItem);
   };
 
+  const isItemMarked = (id: number, marked: { id: number }[]): boolean => 
+    marked.some(item => item.id === id);
+
+  const moveItemToMarked = (
+    id: number,
+  ): void => {
+    const itemIndex = items.findIndex((item) => item.id === id);
+    if (itemIndex === -1) return; 
+  
+    const [movedItem] = items.splice(itemIndex, 1);
+  
+    const newItems = [...items];
+    const newMarked = [...marked, movedItem];
+    setItems(newItems);
+    setMarked(newMarked);
+  
+    localStorage.setItem("items", JSON.stringify(newItems));
+    localStorage.setItem("marked", JSON.stringify(newMarked));
+  };
+  
+  const moveMarkedToItems = (
+    id: number,
+  ): void => {
+    const itemIndex = marked.findIndex((item) => item.id === id);
+    if (itemIndex === -1) return; 
+  
+    const [movedItem] = marked.splice(itemIndex, 1);
+  
+    const newMarked = [...marked];
+    const newItems = [...items, movedItem];
+    setMarked(newMarked);
+    setItems(newItems);
+  
+    localStorage.setItem("marked", JSON.stringify(newMarked));
+    localStorage.setItem("items", JSON.stringify(newItems));
+  };
+  
+  
+  
   return (
     <>
       <div
@@ -116,7 +155,7 @@ const Listcard = ({
       >
         <div className="w-full min-w-full">
           <div className="flex flex-wrap justify-between mb-1 pl-2 p-1  bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
-            <div className="flex">
+            <div className="flex w-1/2">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
                 onClick={() => editValue("qty")}
@@ -132,7 +171,16 @@ const Listcard = ({
 
             </div>
            
-            <span className="p-1 px-2 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text" onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
+            <div
+                className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-1/4"
+              >
+                {isItemMarked(item.id,marked) ? <button><FaStar size={24} onClick={()=>moveMarkedToItems(item.id)} /></button>  : <button><FaRegStar size={24} onClick={()=>moveItemToMarked(item.id)} /></button>}
+              </div>
+
+<div className="flex items-center w-1/4 justify-end ">
+  
+              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
+</div>
           </div>
 
         
@@ -146,7 +194,7 @@ const Listcard = ({
                  onChange={(e) => handleSelectCategory(e.target.value)}
                  className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
                >
-                 {categories.map((category) => (
+                 {categories.sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
                    <option key={category.id} value={category.id} className="bg-tertiary">
                      {category.name}
                    </option>
@@ -181,6 +229,8 @@ const Listcard = ({
               </div>
             )}
 
+             
+            
             <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
               <button
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"

@@ -79,7 +79,7 @@ const Page = () => {
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       <button
-        className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl disabled:hidden "
+        className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl disabled:hidden "
         onClick={inactiveAll}
         disabled={countInactiveCategories(categories) === categories.length}
       >
@@ -150,7 +150,7 @@ const Page = () => {
       </div>
 
       {showHelp && (
-        <div className="mt-1 bg-secondary flex">
+        <div className="mt-2 bg-secondary flex">
           <span className="p-4 italic text-justify">
             Para modificar el nombre de una categoría, simplemente debes
             tocarlo. Elimina una categoría tocando sobre su botón

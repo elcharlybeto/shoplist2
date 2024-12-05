@@ -1,12 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import {
-  FaSortDown,
-  FaSortUp,
-  FaToggleOff,
-  FaToggleOn
-} from "react-icons/fa";
+import { FaSortDown, FaSortUp, FaToggleOff, FaToggleOn } from "react-icons/fa";
 import { useMyContext } from "../lib/myContext";
 import { countActiveCategories } from "../lib/utils";
 import RadioForm from "../ui/radio-form";
@@ -29,10 +24,14 @@ const Page = () => {
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       {countActiveCategories(categories) !== 0 && (
         <button
-          className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl disabled:hidden "
+          className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl disabled:hidden "
           onClick={toggleSort}
         >
-          {settings.sorting ? <FaToggleOn size={32} /> : <FaToggleOff size={32} />}
+          {settings.sorting ? (
+            <FaToggleOn size={32} />
+          ) : (
+            <FaToggleOff size={32} />
+          )}
         </button>
       )}
 
@@ -113,9 +112,15 @@ const Page = () => {
                 queremos desactivar, usamos el mismo botón ahora con el ícono{" "}
               </span>
               <FaToggleOn size={16} className="inline ml-2 align-baseline" />
-              <span className="ml-1">{" . (NOTA: Si ya está activo, es decir con el ícono en "}</span>
+              <span className="ml-1">
+                {" . (NOTA: Si ya está activo, es decir con el ícono en "}
+              </span>
               <FaToggleOn size={16} className="inline ml-2 align-baseline" />
-              <span className="ml-1">{" y modificamos el orden de las categorías, no es necesario volver a tocar el botón ya que los items se ordenarán como corresponde automáticamente.) "}</span>
+              <span className="ml-1">
+                {
+                  " y modificamos el orden de las categorías, no es necesario volver a tocar el botón ya que los items se ordenarán como corresponde automáticamente). "
+                }
+              </span>
             </span>
             <div className="flex justify-start mr-2">
               <button

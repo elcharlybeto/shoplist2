@@ -1,26 +1,26 @@
-'use client'
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Category, Item, Settings } from './definitions';
-
+"use client";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { Category, Item, Settings } from "./definitions";
 
 interface myContextType {
-  items : Item[];
-  setItems : React.Dispatch<React.SetStateAction<Item[]>>;
+  items: Item[];
+  setItems: React.Dispatch<React.SetStateAction<Item[]>>;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  categories : Category[];
-  setCategories : React.Dispatch<React.SetStateAction<Category[]>>;
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   settings: Settings;
   updateSettings: (updated: Partial<Settings>) => void;
+  marked: Item[];
+  setMarked: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
 const myContext = createContext<myContextType | undefined>(undefined);
 
-
 export const useMyContext = () => {
   const context = useContext(myContext);
   if (!context) {
-    throw new Error('useMyContext debe ser usado dentro de un ContextProvider');
+    throw new Error("useMyContext debe ser usado dentro de un ContextProvider");
   }
   return context;
 };
@@ -30,32 +30,55 @@ export const MyContextProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-
   const [items, setItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const [settings, setSettings] = useState<Settings>( { helpActive: true, sorting: false, miscPosition: 'end' });
-  
+  const [settings, setSettings] = useState<Settings>({
+    helpActive: true,
+    sorting: false,
+    miscPosition: "end",
+  });
+
   const updateSettings = (updated: Partial<Settings>) => {
     setSettings((prev) => ({ ...prev, ...updated }));
   };
 
+  const [marked, setMarked] = useState<Item[]>([]);
+
   useEffect(() => {
-    setItems(JSON.parse(localStorage.getItem("items") || "[]"))
-    setCategories(JSON.parse(localStorage.getItem("categories") || '[{"id":0,"name":"misceláneos","active":true}]'));
-      const storedSettings = localStorage.getItem('settings');
-      if(storedSettings) setSettings(JSON.parse(storedSettings));
+    setItems(JSON.parse(localStorage.getItem("items") || "[]"));
+    setCategories(
+      JSON.parse(
+        localStorage.getItem("categories") ||
+          '[{"id":0,"name":"misceláneos","active":true}]'
+      )
+    );
+    const storedSettings = localStorage.getItem("settings");
+    if (storedSettings) setSettings(JSON.parse(storedSettings));
+    setMarked(JSON.parse(localStorage.getItem("marked") || "[]"));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('settings', JSON.stringify(settings));
+    localStorage.setItem("settings", JSON.stringify(settings));
   }, [settings]);
 
-    
   return (
-    <myContext.Provider value={{ items, setItems, isOpen, setIsOpen, categories, setCategories, settings, updateSettings }}>
+    <myContext.Provider
+      value={{
+        items,
+        setItems,
+        isOpen,
+        setIsOpen,
+        categories,
+        setCategories,
+        settings,
+        updateSettings,
+        marked,
+        setMarked
+      }}
+    >
       {children}
     </myContext.Provider>
   );

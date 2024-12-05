@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { Item } from "../lib/definitions";
 import { roundToNDecimals } from "../lib/utils";
+import { useMyContext } from "../lib/myContext";
 
 const Total = ({ items }: { items: Array<Item> }) => {
+
+const { marked} = useMyContext(); 
+
   const estimated = items.reduce(
     (acc, item) =>
       item.location === "list" ? acc + item.qty * item.price : acc + 0,
     0
-  );
+  )+marked.reduce((total, item) => total + item.qty * item.onSalePrice, 0);
+  
   const spent = items.reduce(
     (acc, item) =>
       item.location === "cart" ? acc + item.qty * item.onSalePrice : acc + 0,
@@ -20,7 +25,7 @@ const Total = ({ items }: { items: Array<Item> }) => {
         <>
           <Link
             href="/list"
-            className="bg-tertiary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-all"
+            className="bg-tertiary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-transform"
           >
               <span className="uppercase text-sm">pendiente</span>
               <span className="text-xl">{`$ ${roundToNDecimals(
@@ -30,7 +35,7 @@ const Total = ({ items }: { items: Array<Item> }) => {
           </Link>
           <Link
             href="/cart"
-            className="bg-accent w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-all  "
+            className="bg-accent w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-transform  "
           >
               <span className="uppercase text-sm">Facturado</span>
               <span className="text-xl">{`$ ${roundToNDecimals(spent, 0)}`}</span>

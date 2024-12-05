@@ -15,6 +15,7 @@ const config: Config = {
         'primary': 'var(--primary)',
         'secondary': 'var(--secondary)',
         'tertiary': 'var(--tertiary)',
+        'floating': 'var(--floating)',
         'accent': 'var(--accent)',
         'border-list': 'var(--border-list)',
         'bg-list': 'var(--bg-list)',
