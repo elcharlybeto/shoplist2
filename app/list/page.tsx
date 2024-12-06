@@ -89,11 +89,16 @@ const DraggableListcard = ({
 };
 
 const Page = () => {
-  const { items, setItems, categories, settings, marked } = useMyContext();
+  const { items, setItems, categories, settings } = useMyContext();
   const [showHelp, setShowHelp] = useState(settings.helpActive);
   const [showMarked, setShowMarked] = useState(false);
   const [partial, setPartial] = useState(
-    marked.reduce((total, item) => total + item.qty * item.onSalePrice, 0)
+    items
+      .filter((item) => item.price < 0)
+      .reduce((total, item) => total + item.qty * item.onSalePrice, 0)
+  );
+  const [qList, setQList] = useState(
+    items.filter((item) => item.location === "list").length
   );
 
   const sortItemsByCategoryOrder = (
@@ -124,7 +129,7 @@ const Page = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings, categories]);
+  }, [settings, categories, qList]);
 
   useEffect(() => {
     setShowHelp(settings.helpActive);
@@ -132,39 +137,61 @@ const Page = () => {
 
   useEffect(() => {
     setPartial(
-      marked.reduce((total, item) => total + item.qty * item.onSalePrice, 0)
+      items
+        .filter((item) => item.price < 0 && item.location === "list")
+        .reduce((total, item) => total + item.qty * item.onSalePrice, 0)
     );
-  }, [marked]);
+    if (
+      items.filter((item) => item.price < 0 && item.location === "list")
+        .length === 0
+    )
+      setShowMarked(false);
+    setQList(items.filter((item) => item.location === "list").length);
+  }, [items]);
 
   return (
     <DndProvider backend={MultiBackend} options={multiBackendOptions}>
-      <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
+      <div
+        className={clsx(
+          "pt-16 pb-4 pl-2 min-w-full min-h-screen flex flex-col items-start bg-background",
+          {
+            "items-center":
+              items.filter((item) => item.location === "list").length === 0,
+          }
+        )}
+      >
         <Link href={"/filters"}>
-          <button className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl disabled:hidden ">
+          <button className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden ">
             <FaFilterCircleXmark size={32} />
           </button>
         </Link>
 
         <button
-          className="fixed right-3 bottom-20 p-2 bg-floating border border-primary rounded-xl disabled:hidden "
+          className="fixed right-2 bottom-36 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden "
           onClick={toggleShowMarked}
+          disabled={
+            items.filter((item) => item.price < 0 && item.location === "list")
+              .length === 0
+          }
         >
           {showMarked ? <FaList size={32} /> : <FaStar size={32} />}
         </button>
 
         <Link href={"/compact"}>
-          <button className="fixed right-3 bottom-36 p-2 bg-floating border border-primary rounded-xl disabled:hidden ">
+          <button className="fixed right-2 bottom-20 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden ">
             <FaTableList size={32} />
           </button>
         </Link>
 
-        <div className="min-w-full fixed">
+        <div className="min-w-full fixed left-0">
           <Total items={items} />
         </div>
-        {items.filter((item) => item.location === "list").length === 0 &&
-        marked.length === 0 ? (
+        {items.filter((item) => item.location === "list").length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <FaPencil size={150} />
+            <div className="flex items-center">
+              {" "}
+              <FaPencil size={150} />
+            </div>
           </div>
         ) : (
           <>
@@ -245,31 +272,9 @@ const Page = () => {
                   "mt-2": showHelp,
                 })}
               >
-                {items.map((item, index) =>
-                  item.location === "list" &&
-                  isCategoryActive(item.categoryId, categories) ? (
-                    <DraggableListcard
-                      key={item.id}
-                      item={item}
-                      index={index}
-                      items={items}
-                      setItems={setItems}
-                    />
-                  ) : null
-                )}
-              </ul>
-            ) : (
-              <>
-                <div className="mt-16 bg-secondary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-transform capitalize">{`total parcial: ${roundToNDecimals(
-                  partial,
-                  0
-                )}`}</div>
-                <ul
-                  className={clsx("flex flex-col gap-2 p-2 mt-1 items-center", {
-                    "mt-2": showHelp,
-                  })}
-                >
-                  {marked.map((item, index) =>
+                {items
+                  .filter((item) => item.price >= 0)
+                  .map((item, index) =>
                     item.location === "list" &&
                     isCategoryActive(item.categoryId, categories) ? (
                       <DraggableListcard
@@ -281,6 +286,37 @@ const Page = () => {
                       />
                     ) : null
                   )}
+              </ul>
+            ) : (
+              <>
+                <div
+                  className={clsx(
+                    "mt-16 bg-secondary w-1/2 flex flex-col justify-center items-center font-semibold border-text border-2 rounded-md shadow-md py-1 hover:scale-110 transition-transform self-center",
+                    { "mt-4": showHelp }
+                  )}
+                >
+                  <span className="capitalize">pendiente parcial</span>
+                  <span>{`$ ${roundToNDecimals(partial, 0)}`}</span>
+                </div>
+                <ul
+                  className={clsx("flex flex-col gap-2 p-2 mt-1 items-center", {
+                    "mt-2": showHelp,
+                  })}
+                >
+                  {items
+                    .filter((item) => item.price < 0)
+                    .map((item, index) =>
+                      item.location === "list" &&
+                      isCategoryActive(item.categoryId, categories) ? (
+                        <DraggableListcard
+                          key={item.id}
+                          item={item}
+                          index={index}
+                          items={items}
+                          setItems={setItems}
+                        />
+                      ) : null
+                    )}
                 </ul>
               </>
             )}

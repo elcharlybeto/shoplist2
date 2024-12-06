@@ -11,8 +11,6 @@ interface myContextType {
   setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   settings: Settings;
   updateSettings: (updated: Partial<Settings>) => void;
-  marked: Item[];
-  setMarked: React.Dispatch<React.SetStateAction<Item[]>>;
 }
 
 const myContext = createContext<myContextType | undefined>(undefined);
@@ -45,8 +43,6 @@ export const MyContextProvider = ({
     setSettings((prev) => ({ ...prev, ...updated }));
   };
 
-  const [marked, setMarked] = useState<Item[]>([]);
-
   useEffect(() => {
     setItems(JSON.parse(localStorage.getItem("items") || "[]"));
     setCategories(
@@ -57,7 +53,10 @@ export const MyContextProvider = ({
     );
     const storedSettings = localStorage.getItem("settings");
     if (storedSettings) setSettings(JSON.parse(storedSettings));
-    setMarked(JSON.parse(localStorage.getItem("marked") || "[]"));
+    if(localStorage.getItem("marked")) localStorage.removeItem("marked");
+    if(localStorage.getItem("sorting")) localStorage.removeItem("sorting");
+    if(localStorage.getItem("help")) localStorage.removeItem("help");
+    if(localStorage.getItem("miscPosition")) localStorage.removeItem("miscPosition");
   }, []);
 
   useEffect(() => {
@@ -75,8 +74,6 @@ export const MyContextProvider = ({
         setCategories,
         settings,
         updateSettings,
-        marked,
-        setMarked
       }}
     >
       {children}

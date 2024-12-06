@@ -2,7 +2,7 @@
 import { useMyContext } from "../lib/myContext";
 
 const CompactView = () => {
-  const { items, marked } = useMyContext();
+  const { items } = useMyContext();
   const filteredItems = items.filter((item) => item.location === "list");
 
   return (
@@ -14,7 +14,7 @@ const CompactView = () => {
         </tr>
       </thead>
       <tbody>
-        {marked.map((item) => (
+        {filteredItems.filter(item => item.price <0).map((item) => (
           <tr key={item.id}>
             <td className="border border-icon-list p-1 text-center bg-accent">{item.qty}</td>
             <td className="border border-icon-list p-1 text-center bg-accent ">
@@ -22,7 +22,7 @@ const CompactView = () => {
             </td>
           </tr>
         ))}
-        {filteredItems.map((item) => (
+        {filteredItems.filter(item => item.price  >= 0).map((item) => (
           <tr key={item.id}>
             <td className="border border-icon-list p-1 text-center bg-tertiary">{item.qty}</td>
             <td className="border border-icon-list p-1 text-center bg-tertiary">

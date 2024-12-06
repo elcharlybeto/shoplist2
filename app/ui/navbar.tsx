@@ -86,7 +86,8 @@ const Navbar = () => {
           if (item.location === "list") {
             item.location = "historial";
             item.onSale = false;
-            item.onSalePrice = item.price;
+            item.price = Math.abs(item.price);
+            item.onSalePrice = Math.abs(item.price);
           }
           return item;
         });

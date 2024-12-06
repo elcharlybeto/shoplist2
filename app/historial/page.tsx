@@ -7,6 +7,7 @@ import { useMyContext } from "../lib/myContext";
 import { FaPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import HistorialCard from "../ui/historial-card";
+import clsx from "clsx";
 
 const Page = () => {
   const { items, setItems, settings } = useMyContext();
@@ -21,9 +22,17 @@ const Page = () => {
   }, [settings]);
 
   return (
-    <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center">
+    <div
+      className={clsx(
+        "pt-16 pb-4 min-w-full min-h-screen flex flex-col items-start",
+        {
+          "items-center":
+            items.filter((item) => item.location === "historial").length === 0,
+        }
+      )}
+    >
       <button
-        className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl "
+        className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl "
         onClick={() => setSorted((prev) => !prev)}
       >
         {sorted ? <IoTimeOutline size={32} /> : <FaSortAlphaDown size={32} />}

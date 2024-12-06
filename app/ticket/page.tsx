@@ -47,7 +47,7 @@ const Page = () => {
   return (
     <div className="pt-4 min-w-full min-h-screen flex flex-col items-center bg-background">
       <button
-        className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl "
+        className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl "
         onClick={() => setSortedByAmount((prev) => !prev)}
       >
         {sortedByAmount ? (
@@ -89,7 +89,7 @@ const Page = () => {
           </div>
         </div>
       )}
-      <ul className="flex flex-col gap-1 mt-14 items-center">
+      <ul className="flex flex-col gap-3 mt-14 items-center">
         {rows.map((row) => {
           if (row.onSalePrice > 0)
             return (
@@ -103,7 +103,7 @@ const Page = () => {
         })}
       </ul>
       <TotalTicket rows={rows} checked={false} />
-      <ul className="flex flex-col gap-1 mt-14 items-center">
+      <ul className="flex flex-col gap-3 mt-14 items-center">
         {rows.map((row) => {
           if (row.onSalePrice < 0)
             return (

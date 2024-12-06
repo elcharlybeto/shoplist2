@@ -24,7 +24,7 @@ const Page = () => {
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       {countActiveCategories(categories) !== 0 && (
         <button
-          className="fixed right-3 bottom-4 p-2 bg-floating border border-primary rounded-xl disabled:hidden "
+          className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden "
           onClick={toggleSort}
         >
           {settings.sorting ? (

@@ -30,7 +30,7 @@ const Listcard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
   const [editCategory, setEditCategory] = useState(false);
-  const { categories, setCategories, marked, setMarked } = useMyContext();
+  const { categories, setCategories } = useMyContext();
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -56,7 +56,8 @@ const Listcard = ({
       ...item,
       location: "historial",
       onSale: false,
-      onSalePrice: item.price
+      price: Math.abs(item.price),
+      onSalePrice: Math.abs(item.price)
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
@@ -104,50 +105,22 @@ const Listcard = ({
     updateList(updatedItem);
   };
 
-  const isItemMarked = (id: number, marked: { id: number }[]): boolean => 
-    marked.some(item => item.id === id);
-
-  const moveItemToMarked = (
-    id: number,
-  ): void => {
-    const itemIndex = items.findIndex((item) => item.id === id);
-    if (itemIndex === -1) return; 
-  
-    const [movedItem] = items.splice(itemIndex, 1);
-  
-    const newItems = [...items];
-    const newMarked = [...marked, movedItem];
-    setItems(newItems);
-    setMarked(newMarked);
-  
-    localStorage.setItem("items", JSON.stringify(newItems));
-    localStorage.setItem("marked", JSON.stringify(newMarked));
+  const toggleMarkItem = (id: number): void => {
+    setItems(prevItems => {
+      const updatedItems = prevItems.map(item =>
+        item.id === id ? { ...item, price: -item.price } : item
+      );
+      localStorage.setItem("items", JSON.stringify(updatedItems)); 
+      return updatedItems;
+    });
   };
-  
-  const moveMarkedToItems = (
-    id: number,
-  ): void => {
-    const itemIndex = marked.findIndex((item) => item.id === id);
-    if (itemIndex === -1) return; 
-  
-    const [movedItem] = marked.splice(itemIndex, 1);
-  
-    const newMarked = [...marked];
-    const newItems = [...items, movedItem];
-    setMarked(newMarked);
-    setItems(newItems);
-  
-    localStorage.setItem("marked", JSON.stringify(newMarked));
-    localStorage.setItem("items", JSON.stringify(newItems));
-  };
-  
   
   
   return (
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[350px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[340px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
@@ -174,12 +147,14 @@ const Listcard = ({
             <div
                 className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-1/4"
               >
-                {isItemMarked(item.id,marked) ? <button><FaStar size={24} onClick={()=>moveMarkedToItems(item.id)} /></button>  : <button><FaRegStar size={24} onClick={()=>moveItemToMarked(item.id)} /></button>}
+                <button onClick={()=>toggleMarkItem(item.id)} >
+                {item.price < 0 ? <FaStar size={24}  /> : <FaRegStar size={24} />}
+                </button>
               </div>
 
 <div className="flex items-center w-1/4 justify-end ">
   
-              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
+              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${Math.abs(item.price)}` }</span>
 </div>
           </div>
 
@@ -242,7 +217,7 @@ const Listcard = ({
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
                 disabled={item.price === 0}
                 onClick={() => {
-                  if (item.price > 0) setStatus("onsale");
+                  if (Math.abs(item.price) > 0) setStatus("onsale");
                 }}
               >
                 <TbRosetteDiscountCheck size={24} />
@@ -259,7 +234,7 @@ const Listcard = ({
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[330px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }
