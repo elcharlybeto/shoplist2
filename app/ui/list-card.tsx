@@ -169,7 +169,7 @@ const Listcard = ({
                  onChange={(e) => handleSelectCategory(e.target.value)}
                  className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
                >
-                 {categories.sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
+                 {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
                    <option key={category.id} value={category.id} className="bg-tertiary">
                      {category.name}
                    </option>

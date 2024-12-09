@@ -17,7 +17,7 @@ export default function Home() {
     if (items.filter((item) => item.location === "historial").length > 0)
       setEmptyHistorial(false);
     if (items.filter((item) => item.location === "list").length > 0)
-      router.replace("/list");
+      router.replace("/compact");
   }, [items, router]);
 
   return (
@@ -47,14 +47,14 @@ export default function Home() {
           <Link href="/categories">
               <li className=" bg-accent shadow-lg p-2 px-4 text-center flex gap-2 items-center rounded-xl">
                 <LiaHandPointRightSolid size={18} />
-                <span>Creá categorías para organizar tus productos...</span>
+                <span>Crea categorías para organizar tus productos...</span>
               </li>
             </Link>
 
             <Link href="/add">
               <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-tertiary shadow-lg">
                 <LiaHandPointRightSolid size={18} />
-                <span>Agregá un producto <span className="italic text-error-msg font-semibold">nuevo</span> a la lista...</span>
+                <span>Agrega un producto <span className="italic text-error-msg font-semibold">nuevo</span> a la lista...</span>
               </li>
             </Link>
             
@@ -62,7 +62,7 @@ export default function Home() {
               <Link href="/historial">
                 <li className="p-2 px-4 text-center flex items-center gap-2 rounded-xl bg-accent shadow-lg">
                   <LiaHandPointRightSolid size={18} />
-                  <span>Agregá un producto <span className="italic text-error-msg font-semibold">histórico</span> a la lista...</span>
+                  <span>Agrega un producto del <span className="italic text-error-msg font-semibold">historial</span> de compras a la lista...</span>
                 </li>
               </Link>
             )}

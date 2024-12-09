@@ -1,37 +1,32 @@
 'use client'
 import { useMyContext } from "../lib/myContext";
+import { rancho } from "./fonts";
 
 const CompactView = () => {
   const { items } = useMyContext();
   const filteredItems = items.filter((item) => item.location === "list");
 
   return (
-    <table className="table-auto border-collapse border border-icon-list w-full">
-      <thead >
-        <tr className="bg-secondary">
-          <th className="border border-icon-list p-1 text-center ">Cant</th>
-          <th className="border border-icon-list p-1 text-center">Producto</th>
-        </tr>
-      </thead>
-      <tbody>
+    <div className={`${rancho.className} w-8/12 ml-10 flex flex-col gap-2 items-center text-4xl  dark:text-primary antialiased`}>
+  
         {filteredItems.filter(item => item.price <0).map((item) => (
-          <tr key={item.id}>
-            <td className="border border-icon-list p-1 text-center bg-accent">{item.qty}</td>
-            <td className="border border-icon-list p-1 text-center bg-accent ">
-              {item.name}
-            </td>
-          </tr>
+          <div  key={item.id}>
+            <span className="p-2 text-center font-semibold ">
+              {`${item.name} (${item.qty})`}
+            </span>
+          </div>
         ))}
+        {filteredItems.filter(item => item.price <0).length > 0 &&
+          <div className="h-1 opacity-50 bg-primary w-full"></div>}
         {filteredItems.filter(item => item.price  >= 0).map((item) => (
-          <tr key={item.id}>
-            <td className="border border-icon-list p-1 text-center bg-tertiary">{item.qty}</td>
-            <td className="border border-icon-list p-1 text-center bg-tertiary">
-              {item.name}
-            </td>
-          </tr>
+          <div key={item.id}>
+          <span className=" p-2 text-center font-semibold">
+            {`${item.name} (${item.qty})`}
+          </span>
+        </div>
         ))}
-      </tbody>
-    </table>
+      
+    </div>
   );
 };
 

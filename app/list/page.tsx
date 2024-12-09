@@ -6,13 +6,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { BsEmojiSmile } from "react-icons/bs";
-import { FaList, FaShoppingCart, FaStar } from "react-icons/fa";
+import { FaRegEye, FaRegStar, FaShoppingCart, FaStar } from "react-icons/fa";
 import {
   FaFilter,
   FaFilterCircleXmark,
-  FaPencil,
-  FaTableList,
+  FaPencil
 } from "react-icons/fa6";
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -174,12 +172,12 @@ const Page = () => {
               .length === 0
           }
         >
-          {showMarked ? <FaList size={32} /> : <FaStar size={32} />}
+          {showMarked ? <FaRegStar size={32} /> : <FaStar size={32} />}
         </button>
 
         <Link href={"/compact"}>
           <button className="fixed right-2 bottom-20 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden ">
-            <FaTableList size={32} />
+            <FaRegEye size={32} />
           </button>
         </Link>
 
@@ -198,17 +196,17 @@ const Page = () => {
             {showHelp && (
               <div className="mt-16 bg-secondary flex">
                 <span className="p-4 italic text-justify">
-                  ¡Estos son los productos que necesitamos comprar!{" "}
-                  <BsEmojiSmile size={16} className="inline align-baseline" />{" "}
-                  Por cada producto puedes editar su nombre, cantidad, precio o
-                  categoría simplemente tocándolos. Si se presiona el botón a la
-                  derecha de la categoría, sólo se mostrarán los productos de
-                  esa categoría cuando muestra el ícono
-                  <FaFilter
+                  Esta vista de la lista activa las acciones para cada producto. Para volver a la lista compacta, presiona el botón flotante <FaRegEye
                     size={16}
                     className="inline ml-2 align-baseline"
-                  />{" "}
-                  o todos los productos cuando muestra el ícono
+                  />{"."}
+                  Por cada producto ves una tarjeta donde puedes editar su nombre, cantidad, precio o
+                  categoría simplemente tocándolos. Si presionas el botón <FaFilter
+                    size={16}
+                    className="inline ml-2 align-baseline"
+                  />{" "} a la
+                  derecha de la categoría, sólo se mostrarán los productos de
+                  esa categoría. Para volver a mostrar todos los productos, desactiva el filtro tocando el mismo botón cuando muestra el ícono
                   <MdFilterAltOff
                     size={16}
                     className="inline ml-2 align-baseline"
@@ -266,6 +264,33 @@ const Page = () => {
                 </div>
               </div>
             )}
+
+{showHelp && (
+              <div className="mt-2 bg-secondary flex">
+                <span className="p-4 italic text-justify">
+                  Se pueden separar los productos en dos listas: una lista de productos marcados y otra de no marcados. Para marcar o desmarcar un producto debes tocar su botón estrella, cuando está lleno significa que está marcado y será visible únicamente pulsando el botón flotante 
+                  <FaStar
+                    size={16}
+                    className="inline ml-2 align-baseline"
+                  />
+                  {", "}mientras que tocando el botón vacío <FaRegStar
+                    size={16}
+                    className="inline ml-2 align-baseline"
+                  />
+                  {", "} mostrará únicamente los productos no marcados.
+                  Cuando se visualiza la sublista de marcados, se puede observar un total parcial correspondiente a esos productos.
+                </span>
+                <div className="flex justify-start mr-2">
+                  <button
+                    className="h-2 w-2 p-2 opacity-50"
+                    onClick={() => setShowHelp(false)}
+                  >
+                    X
+                  </button>
+                </div>
+              </div>
+            )}
+
             {!showMarked ? (
               <ul
                 className={clsx("flex flex-col gap-2 p-2 mt-14 items-center", {

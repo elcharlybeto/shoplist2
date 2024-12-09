@@ -214,7 +214,7 @@ const ItemForm = ({
               className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
             >
               <option value={0}>misceláneos</option>
-              {categories
+              {[...categories]
                 .filter((category) => category.id !== 0)
                 .slice() 
                 .sort((a, b) => a.name.localeCompare(b.name)) 
