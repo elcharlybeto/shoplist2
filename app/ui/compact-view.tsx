@@ -11,7 +11,7 @@ const CompactView = () => {
   
         {filteredItems.filter(item => item.price <0).map((item) => (
           <div  key={item.id}>
-            <span className="p-2 text-center font-semibold ">
+            <span className="p-2 text-center font-semibold capitalize ">
               {`${item.name} (${item.qty})`}
             </span>
           </div>
@@ -20,7 +20,7 @@ const CompactView = () => {
           <div className="h-1 opacity-50 bg-primary w-full"></div>}
         {filteredItems.filter(item => item.price  >= 0).map((item) => (
           <div key={item.id}>
-          <span className=" p-2 text-center font-semibold">
+          <span className=" p-2 text-center font-semibold capitalize">
             {`${item.name} (${item.qty})`}
           </span>
         </div>

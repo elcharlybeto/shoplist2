@@ -15,9 +15,9 @@ import {
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
-import { Category, Item } from "../lib/definitions";
+import { Item } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
-import { isCategoryActive, roundToNDecimals } from "../lib/utils";
+import { isCategoryActive, roundToNDecimals, sortItemsByCategoryOrder } from "../lib/utils";
 import Listcard from "../ui/list-card";
 import Total from "../ui/total";
 
@@ -99,20 +99,7 @@ const Page = () => {
     items.filter((item) => item.location === "list").length
   );
 
-  const sortItemsByCategoryOrder = (
-    items: Item[],
-    categories: Category[]
-  ): Item[] => {
-    const categoryOrder = new Map(
-      categories.map((category, index) => [category.id, index])
-    );
-
-    return [...items].sort((a, b) => {
-      const orderA = categoryOrder.get(a.categoryId) ?? Infinity;
-      const orderB = categoryOrder.get(b.categoryId) ?? Infinity;
-      return orderA - orderB;
-    });
-  };
+ 
 
   const toggleShowMarked = () => {
     setShowMarked(!showMarked);

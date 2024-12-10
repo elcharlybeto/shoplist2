@@ -80,3 +80,18 @@ export const countActiveCategories = (categories: Category[]): number => {
 export const inactivateAllCategories = (categories: Category[]): Category[] => {
   return categories.map((category) => ({ ...category, active: false }));
 };
+
+export const sortItemsByCategoryOrder = (
+  items: Item[],
+  categories: Category[]
+): Item[] => {
+  const categoryOrder = new Map(
+    categories.map((category, index) => [category.id, index])
+  );
+
+  return [...items].sort((a, b) => {
+    const orderA = categoryOrder.get(a.categoryId) ?? Infinity;
+    const orderB = categoryOrder.get(b.categoryId) ?? Infinity;
+    return orderA - orderB;
+  });
+};

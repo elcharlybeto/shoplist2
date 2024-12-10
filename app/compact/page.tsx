@@ -6,15 +6,36 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../lib/myContext";
 import clsx from "clsx";
+import { sortItemsByCategoryOrder } from "../lib/utils";
 
 const Page = () => {
-  const { settings, } = useMyContext();
+  const { items, setItems, categories, settings } = useMyContext();
 
   const [showHelp, setShowHelp] = useState(settings.helpActive);
+
+  const [qList, setQList] = useState(
+    items.filter((item) => item.location === "list").length
+  );
+
+  useEffect(() => {
+     setQList(items.filter((item) => item.location === "list").length);
+  }, [items]);
 
   useEffect(() => {
     setShowHelp(settings.helpActive);
   }, [settings]);
+
+  useEffect(() => {
+    if (settings.sorting) {
+      setItems((prevItems) => {
+        const newItems = sortItemsByCategoryOrder(prevItems, categories);
+        localStorage.setItem("items", JSON.stringify(newItems));
+        return newItems;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings, categories, qList]);
+
 
   return (
     <div className=" bg-[url('/bckg.jpg')] bg-cover bg-fixed bg-center w-full min-h-screen flex flex-col justify-between" >
