@@ -45,9 +45,7 @@ const Page = () => {
           name: formatString(name),
           active: true,
         };
-        const newCategories = [newCategory, ...categories].sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
+        const newCategories = [newCategory, ...categories];
         setCategories(newCategories);
         Toast.fire({
           icon: "success",

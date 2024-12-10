@@ -17,11 +17,11 @@ const Page = () => {
   }, [settings]);
 
   return (
-    <div className=" bg-[url('/bckg.jpg')] bg-cover bg-fixed w-full min-h-screen flex flex-col justify-between " >
+    <div className=" bg-[url('/bckg.jpg')] bg-cover bg-fixed bg-center w-full min-h-screen flex flex-col justify-between" >
        {showHelp && (
-              <div className="mt-36 bg-secondary flex">
+              <div className="mt-16 bg-secondary flex">
                 <span className="p-4 italic text-justify">
-                  ¡Estos son los productos que necesitamos comprar!{" "}
+                  ¡Estos son los productos que necesitas comprar!{" "}
                   <BsEmojiSmile size={16} className="inline align-baseline" />{" "}
                   Es sólo una vista rápida. Para editar, comprar o activar más acciones, toca el botón flotante 
                   <TbHandFinger
