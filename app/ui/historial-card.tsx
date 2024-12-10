@@ -11,12 +11,10 @@ const HistorialCard = ({
   item,
   items,
   setItems,
-  setSearch
 }: {
   item: Item;
   items: Item[];
   setItems: Dispatch<SetStateAction<Item[]>>;
-  setSearch: Dispatch<SetStateAction<string>>;
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
@@ -58,8 +56,6 @@ const HistorialCard = ({
     const newList = items.filter((itemList) => itemList.id !== newListItem.id);
     localStorage.setItem("items", JSON.stringify([newListItem, ...newList]));
     setItems([newListItem, ...newList]);
-
-    setSearch("");
 
     Toast.fire({
       icon: "success",

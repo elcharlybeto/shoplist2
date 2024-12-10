@@ -141,7 +141,7 @@ const Page = () => {
       {showHelp && status === "show" && (
         <div className="mt-1 bg-secondary flex mb-4">
           <span className="p-4 italic text-justify">
-            No Hay productos para agregar desde el historial de compras. Puedes agregar un producto nuevo cargando sus datos en el siguiente
+            No hay productos para agregar desde el historial de compras. Puedes agregar un producto nuevo cargando sus datos en el siguiente
             formulario. Cuantos más datos completes, mejor. Se puede agregar a
             la lista, tocando el botón
             <RiPlayListAddFill
@@ -181,7 +181,7 @@ const Page = () => {
           <ul className="flex flex-col gap-2 p-2 items-center">
             {fromHistorial.map((item) => (
               <li key={item.id}>
-                <HistorialCard item={item} items={items} setItems={setItems} setSearch={setSearch} />
+                <HistorialCard item={item} items={items} setItems={setItems} />
               </li>
             ))}
           </ul>
