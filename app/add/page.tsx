@@ -14,7 +14,7 @@ import { RiCloseLine, RiPlayListAddFill } from "react-icons/ri";
 const Page = () => {
   const { items, setItems, settings } = useMyContext();
   const [fromHistorial, setFromHistorial] = useState<Item[]>([]);
-  const [status, setStatus] = useState<Mode>("hide");
+  const [status, setStatus] = useState<Mode>('hide');
   const [search, setSearch] = useState("");
   const [showHelp, setShowHelp] = useState(settings.helpActive);
 
@@ -64,17 +64,23 @@ const Page = () => {
   );
 
   useEffect(() => {
-    if (search.length >= 0) {
+    if (search.length > 0) {
       const filteredItems = filterItemsByName(search);
       setFromHistorial(filteredItems);
 
       setStatus(filteredItems.length > 0 ? "hide" : "show");
-    }
-  }, [search, filterItemsByName]);
+    }else if(items.filter(item=>item.location==='historial').length > 0)
+     setStatus('hide')
+  }, [search, filterItemsByName, items]);
 
   useEffect(() => {
     setShowHelp(settings.helpActive);
   }, [settings]);
+
+  useEffect(() => {
+    setStatus(items.filter(item=>item.location === 'historial').length > 0 ? "hide": 'show');
+  }, [items])
+  
 
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
@@ -135,7 +141,7 @@ const Page = () => {
       {showHelp && status === "show" && (
         <div className="mt-1 bg-secondary flex mb-4">
           <span className="p-4 italic text-justify">
-            Puedes agregar un producto nuevo cargando sus datos en el siguiente
+            No Hay productos para agregar desde el historial de compras. Puedes agregar un producto nuevo cargando sus datos en el siguiente
             formulario. Cuantos más datos completes, mejor. Se puede agregar a
             la lista, tocando el botón
             <RiPlayListAddFill
@@ -175,7 +181,7 @@ const Page = () => {
           <ul className="flex flex-col gap-2 p-2 items-center">
             {fromHistorial.map((item) => (
               <li key={item.id}>
-                <HistorialCard item={item} items={items} setItems={setItems} />
+                <HistorialCard item={item} items={items} setItems={setItems} setSearch={setSearch} />
               </li>
             ))}
           </ul>
