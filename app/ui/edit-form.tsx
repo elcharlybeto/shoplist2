@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { FaCheckCircle, FaRegWindowClose } from "react-icons/fa";
 import { Action, Field, Item, Mode } from "../lib/definitions";
-import { FaRegWindowClose, FaCheckCircle } from "react-icons/fa";
-import { today } from "../lib/utils";
+import { formatString, today } from "../lib/utils";
 
 const EditForm = ({
   item,
@@ -16,15 +16,13 @@ const EditForm = ({
   setStatus: (status: Mode) => void;
 }) => {
   const [editValue, setEditValue] = useState(
-    field === "name" ? item.name : field === "price" ? item.price : item.qty
+    field === "name" ? item.name : field === "price" ? Math.abs(item.price) : item.qty
   );
   const [editValueError, setEditValueError] = useState(false);
 
   const showErrorMsg = (msg: string) => {
     return (
-      <div className="text-sm text-error-msg font-semibold h-4">
-        {msg}
-      </div>
+      <div className="text-sm text-error-msg font-semibold h-4">{msg}</div>
     );
   };
 
@@ -36,7 +34,6 @@ const EditForm = ({
       if (regex.test(value) || value === "") {
         if (Number(value) > 0) {
           setEditValueError(false);
-          
         } else setEditValueError(true);
         setEditValue(value);
       }
@@ -50,32 +47,36 @@ const EditForm = ({
     e.preventDefault();
 
     if (action === "save") {
-      if(editValue !== "" || Number(editValue)>0){
-          const updatedItem: Item = item;
-          if (field === "name") updatedItem.name = String(editValue);
-          else if (field === "price") {
-            if(item.price !== Number(editValue)) 
-            {
+      if (editValue !== "" || Number(editValue) > 0) {
+        const updatedItem: Item = item;
+        if (field === "name") updatedItem.name = formatString(String(editValue));
+        else if (field === "price") {
+          if (item.price !== Number(editValue)) {
             updatedItem.price = Number(editValue);
+            updatedItem.onSalePrice= Number(editValue);
+            updatedItem.onSale = false;
             updatedItem.boughtDate = today();
-            }
-          } else updatedItem.qty = Number(editValue);
-
-          onSave(updatedItem);
-          setStatus("show");
-        }
-    } else setStatus("show");
+          }
+        } else updatedItem.qty = Number(editValue);
+        
+        onSave(updatedItem);
+        setStatus("show");
+        
+      }
+    } else {
+      setStatus("show");
+    }
   };
 
   useEffect(() => {
     setEditValue(
-      field === "name" ? item.name : field === "price" ? item.price : item.qty
+      field === "name" ? item.name : field === "price" ? Math.abs(item.price) : item.qty
     );
   }, [field, item.name, item.price, item.qty]);
 
   return (
     <div className="flex flex-col w-full p-1 ">
-      <div className=" bg-secondary py-1 font-bold border border-border-list text-center">
+      <div className=" bg-secondary py-1 font-bold border border-border-list uppercase text-center">
         {`${item.name}`}
       </div>
 
@@ -86,11 +87,11 @@ const EditForm = ({
               {field === "name"
                 ? "Producto"
                 : field === "price"
-                ? "Precio"
+                ? "Precio por Unidad o Kg"
                 : "Cantidad"}
             </label>
             <input
-              type="string"
+              type={field === "name" ? "string" : "number"}
               id="editValue"
               value={editValue}
               onChange={handleEditValueChange}
@@ -100,7 +101,7 @@ const EditForm = ({
               required
             />
             {editValueError ? (
-              showErrorMsg("Valor no válido")
+              showErrorMsg("¡Valor no válido!")
             ) : (
               <div className="min-h-4"></div>
             )}

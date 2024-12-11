@@ -1,48 +1,75 @@
 "use client";
-
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Dispatch, SetStateAction } from "react";
-import { FaGripLines } from "react-icons/fa";
-import { Item } from "../lib/definitions";
+import clsx from "clsx";
+import { TiShoppingCart } from "react-icons/ti";
 import { useMyContext } from "../lib/myContext";
 import CartCard from "../ui/cart-card";
 import Total from "../ui/total";
+import { useEffect, useState } from "react";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbRosetteDiscountCheck } from "react-icons/tb";
 
 const Page = () => {
-  const { items, setItems } = useMyContext();
+  const { items, setItems, settings } = useMyContext();
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (over !== null) {
-      if (active.id !== over.id) {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
 
-        const reorderedItems = arrayMove(items, oldIndex, newIndex);
-        setItems(reorderedItems);
-        localStorage.setItem("items", JSON.stringify(reorderedItems));
-      }
-    }
-  };
+  useEffect(() => {
+    setShowHelp(settings.helpActive);
+  }, [settings]);
 
   return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
-        <div className="min-w-full fixed">
-          <Total items={items} />
+    <div className="pt-16 pb-4 min-w-full min-h-screen flex flex-col items-center bg-background">
+      <div className="min-w-full fixed">
+        <Total items={items} />
+      </div>
+
+      {items.filter((item) => item.location === "cart").length === 0 ? (
+        <div className="flex h-full items-center justify-center">
+          <TiShoppingCart size={150} />
         </div>
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <ul className="flex flex-col gap-2 p-2 mt-14 items-center">
+      ) : (
+        <>
+          {showHelp && (
+            <div className="mt-16 bg-secondary flex">
+              <span className="p-4 italic text-justify">
+                Este es el contenido de tu carrito, se muestran los productos
+                empezando por el más recientemente comprado. En cada producto
+                puedes editar su nombre, cantidad o precio simplemente
+                tocándolos. En la esquina superior derecha se muestra el monto
+                total facturado para ese producto. El botón
+                <RiDeleteBin6Line
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />{" "}
+                anula la compra de ese producto (lo devuelve a la lista). Con el
+                botón{" "}
+                <TbRosetteDiscountCheck
+                  size={16}
+                  className="inline ml-2 align-baseline"
+                />{" "}
+                se puede cargar un precio promocional para ese producto, válido
+                únicamente para la compra actual (si se devuelve a la lista o se
+                incorpora en el futuro desde el historial, se hará al precio
+                normal).
+              </span>
+              <div className="flex justify-start mr-2">
+                <button
+                  className="h-2 w-2 p-2 opacity-50"
+                  onClick={() => setShowHelp(false)}
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          )}
+          <ul
+            className={clsx("flex flex-wrap gap-2 p-2 mt-14 items-center max-w-min", {
+              "mt-2": showHelp,
+            })}
+          >
             {items.map((item) =>
               item.location === "cart" ? (
-                <SortableListcard
+                <CartCard
                   key={item.id}
                   item={item}
                   items={items}
@@ -51,44 +78,10 @@ const Page = () => {
               ) : null
             )}
           </ul>
-        </SortableContext>
-      </div>
-    </DndContext>
+        </>
+      )}
+    </div>
   );
 };
 
 export default Page;
-
-
-const SortableListcard = ({
-  item,
-  items,
-  setItems,
-}: {
-  item: Item;
-  items: Item[];
-  setItems: Dispatch<SetStateAction<Item[]>>;
-}) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: item.id,
-    });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  return (
-    <li ref={setNodeRef} style={style}>
-      <div className="flex items-start">
-       
-        <div {...attributes} {...listeners} className="p-1 cursor-move rounded-md border border-border-list bg-icon-list shadow-xl shadow-shadow-list">
-          <FaGripLines className="text-secondary" size={12} />
-        </div>
-        
-        <CartCard item={item} items={items} setItems={setItems} />
-      </div>
-    </li>
-  );
-};

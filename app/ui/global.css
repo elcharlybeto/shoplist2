@@ -1,12 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Sour+Gummy&display=swap");
 
+:root {
+  --font-roboto: "Roboto", sans-serif;
+  --font-sour-gummy: "Sour Gummy", cursive;
+}
 
 body {
   color: var(--text);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {
@@ -17,36 +22,43 @@ body {
 @layer base {
   :root {
     --text: #160504;
-    --background: #cecfe8;
+    --background: #aaabb5;
     --primary: #140374;
     --secondary: #fff479;
+    --tertiary: #68ee9c;
+    --floating: #7f1d1d;
+    --text-floating: #fff;
     --accent: #f6baba;
     --border-list: #172554;
-    --bg-list: #cbd5e1;
+    --bg-list: #cfdde3;
     --shadow-list: #a2a7ad;
-    --icon-list:#1e3a8a;
+    --icon-list: #1e3a8a;
     --hover-icon-list: #9ca3af;
     --error-msg: #b91c1c;
     --icon-form: #7f1d1d;
     --hover-icon-form: #9ca3af;
-    --input-border:  #374151;
+    --input-border: #374151;
     --input-bg: #ffffff;
-    
+    --font-roboto: "Roboto", sans-serif;
+    --font-sour-gummy: "Sour Gummy", cursive;
   }
   .dark {
     --text: #fbeae9;
-    --background: #171831;
+    --background: #696f7e;
     --primary: #140374;
-    --secondary: #5baa67;
-    --accent: #82688f;
-    --border-list: #94a3b8;
-    --bg-list: #4c505a;
-    --shadow-list: #965eb2;
-    --icon-list: #93c5fd;
-    --hover-icon-list: #1f2937;
+    --secondary: #21702d;
+    --tertiary: #e01c1cb6;
+    --floating: #a9b9d6;
+    --text-floating: #000;
+    --accent: #472b55;
+    --border-list: #fff;
+    --bg-list:  #3b3c5f;
+    --shadow-list: #5a376c;
+    --icon-list: #d0dbeb;
+    --hover-icon-list: #5a2407 ;
     --error-msg: #a2fdc3;
-    --icon-form:  rgb(30 58 138 /1);
-    --hover-icon-form: #9ca3af;
+    --icon-form: #9ca3af;
+    --hover-icon-form: #140374;
     --input-border: #1e293b;
     --input-bg: #64748b;
   }

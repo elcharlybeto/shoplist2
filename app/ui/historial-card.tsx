@@ -3,9 +3,9 @@ import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Swal from "sweetalert2";
 import { Field, Item, Mode } from "../lib/definitions";
 import EditForm from "./edit-form";
+import { Toast } from "../lib/utils";
 
 const HistorialCard = ({
   item,
@@ -19,22 +19,13 @@ const HistorialCard = ({
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
 
+
   const editValue = (field: Field) => {
     setEditField(field);
     setStatus("edit");
   };
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-start",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    },
-  });
+ 
 
   const updateHistorial = (item: Item) => {
     const newHistorial = items.map((itemHistorial) =>
@@ -58,7 +49,7 @@ const HistorialCard = ({
   const addItemToList = () => {
     const newListItem: Item = {
       ...item,
-      qty: 1,
+      categoryId: item?.categoryId ? item.categoryId : 0, 
       location: "list",
     };
 
@@ -68,7 +59,7 @@ const HistorialCard = ({
 
     Toast.fire({
       icon: "success",
-      title: "Item agregado a lista!",
+      title: "¡Item agregado a lista!",
     });
   };
 
@@ -76,31 +67,31 @@ const HistorialCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list  w-[330px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
       
-        <div className="flex flex-col px-4 ">
-          <div className="flex flex-wrap w-60">
-            <div className="flex ">
+        <div className="flex flex-col px-4 w-9/12 ">
+          <div className="flex flex-wrap">
+            <div className="flex">
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer capitalize"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
             </div>
           </div>
-          <div className=" pl-2 text-xs font-bold w-60">
+          <div className=" pl-2 text-xs font-bold ">
             <span className="cursor-pointer" onClick={() => editValue("price")}>
               {" "}
               {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
@@ -108,7 +99,7 @@ const HistorialCard = ({
           </div>
         </div>
 
-        <div className="flex gap-4 mr-2">
+        <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary w-3/12">
          
           <button
             className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
@@ -126,7 +117,7 @@ const HistorialCard = ({
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[330px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }

@@ -1,13 +1,22 @@
 "use client";
+import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Field, Item, Mode } from "../lib/definitions";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaCheckCircle, FaRegStar, FaShoppingCart, FaStar } from "react-icons/fa";
+import { FaFilter } from "react-icons/fa6";
+import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TbRosetteDiscountCheck } from "react-icons/tb";
-import clsx from "clsx";
-import { roundToTwoDecimals, today } from "../lib/utils";
-import OnSaleForm from "./on-sale-form";
+import { Field, Item, Mode } from "../lib/definitions";
+import { useMyContext } from "../lib/myContext";
+import {
+  activateAllCategories,
+  countInactiveCategories,
+  getCategoryNameById,
+  Toast,
+  updateCategoryActiveState
+} from "../lib/utils";
 import EditForm from "./edit-form";
+import OnSaleForm from "./on-sale-form";
 
 const Listcard = ({
   item,
@@ -20,7 +29,8 @@ const Listcard = ({
 }) => {
   const [status, setStatus] = useState<Mode>("show");
   const [editField, setEditField] = useState<Field>("qty");
-  const total = roundToTwoDecimals(item.qty * item.price);
+  const [editCategory, setEditCategory] = useState(false);
+  const { categories, setCategories } = useMyContext();
 
   const editValue = (field: Field) => {
     setEditField(field);
@@ -31,6 +41,7 @@ const Listcard = ({
     const newList = items.map((itemList) =>
       itemList.id === item.id ? item : itemList
     );
+
     localStorage.setItem("items", JSON.stringify(newList));
     setItems(newList);
   };
@@ -43,12 +54,18 @@ const Listcard = ({
   const deleteItem = () => {
     const deletedItem: Item = {
       ...item,
-      qty: 1,
       location: "historial",
+      onSale: false,
+      price: Math.abs(item.price),
+      onSalePrice: Math.abs(item.price)
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
     setItems([deletedItem, ...newList]);
+    Toast.fire({
+      icon: "success",
+      title: "¡Item devuelto al historial!",
+    });
   };
 
   const buyItem = () => {
@@ -56,76 +73,168 @@ const Listcard = ({
       const boughtItem: Item = {
         ...item,
         location: "cart",
-        boughtDate: today(),
       };
       const newList = items.filter((itemList) => itemList.id !== boughtItem.id);
       localStorage.setItem("items", JSON.stringify([boughtItem, ...newList]));
       setItems([boughtItem, ...newList]);
+      Toast.fire({
+        icon: "success",
+        title: "¡Item agregado al carrito!",
+      });
     }
   };
 
+  const filterByThisCategory = (id: number) => {
+    const newCategories = updateCategoryActiveState(id, categories);
+    setCategories(newCategories);
+    localStorage.setItem("categories",JSON.stringify(newCategories));
+  };
+
+  const clearFilters = () => {
+    const newCategories = activateAllCategories(categories);
+    setCategories(newCategories);
+    localStorage.setItem("categories", JSON.stringify(newCategories));
+  };
+
+  const handleSelectCategory = (categoryId: string) => {
+    const updatedItem = {
+      ...item,
+      categoryId: Number(categoryId)
+    }
+    setEditCategory(false);
+    updateList(updatedItem);
+  };
+
+  const toggleMarkItem = (id: number): void => {
+    setItems(prevItems => {
+      const updatedItems = prevItems.map(item =>
+        item.id === id ? { ...item, price: -item.price } : item
+      );
+      localStorage.setItem("items", JSON.stringify(updatedItems)); 
+      return updatedItems;
+    });
+  };
+  
+  
   return (
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-3 shadow-xl shadow-shadow-list",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[340px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
         )}
       >
-        <div className="flex flex-col pr-4 ">
-          <div className="flex flex-wrap w-60">
-            <div className="flex ">
+        <div className="w-full min-w-full">
+          <div className="flex flex-wrap justify-between mb-1 pl-2 p-1  bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
+            <div className="flex w-1/2">
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer font-semibold"
                 onClick={() => editValue("qty")}
               >
                 {item.qty}
               </span>
               <span
-                className="py-2 px-1 text-lg cursor-pointer"
+                className="p-1 text-lg cursor-pointer capitalize font-semibold"
                 onClick={() => editValue("name")}
               >
                 {item.name}
               </span>
+
             </div>
-            <span className="py-2 px-1 text-lg font-bold">{` ( $ ${total} )`}</span>
+           
+            <div
+                className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-1/4"
+              >
+                <button onClick={()=>toggleMarkItem(item.id)} >
+                {item.price < 0 ? <FaStar size={24}  /> : <FaRegStar size={24} />}
+                </button>
+              </div>
+
+<div className="flex items-center w-1/4 justify-end ">
+  
+              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${Math.abs(item.price)}` }</span>
+</div>
           </div>
-          <div className=" pl-2 text-xs font-bold w-60">
-            <span className="cursor-pointer" onClick={() => editValue("price")}>
-              {" "}
-              {`$ ${item.price} uni/Kg, ${item.boughtDate}`}
-            </span>
+
+        
+
+          <div className="flex justify-between">
+            {editCategory ? (
+             <div className="flex items-center">
+               <select
+                 id="category"
+                 value={item.categoryId}
+                 onChange={(e) => handleSelectCategory(e.target.value)}
+                 className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
+               >
+                 {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
+                   <option key={category.id} value={category.id} className="bg-tertiary">
+                     {category.name}
+                   </option>
+                 ))}
+               </select>
+               <button   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg" onClick={()=>setEditCategory(false)}><FaCheckCircle size={16} />
+               </button>
+             </div>
+            ) : (
+              <div className="flex gap-1">
+                <span
+                  className="rounded-lg p-2 bg-tertiary border border-primary cursor-pointer"
+                  onClick={() => setEditCategory(true)}
+                >
+                  {getCategoryNameById(item.categoryId, categories)}
+                </span>
+                {countInactiveCategories(categories) > 0  ? 
+                <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                onClick={() => clearFilters() }
+              >
+                <MdFilterAltOff size={18} />
+              </button>
+                :
+                <button
+                  className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                  onClick={() => filterByThisCategory(item.categoryId) }
+                >
+                  <FaFilter size={18} />
+                </button>
+                }
+              </div>
+            )}
+
+             
+            
+            <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
+                onClick={deleteItem}
+              >
+                <RiDeleteBin6Line size={24} />
+              </button>
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                disabled={item.price === 0}
+                onClick={() => {
+                  if (Math.abs(item.price) > 0) setStatus("onsale");
+                }}
+              >
+                <TbRosetteDiscountCheck size={24} />
+              </button>
+              <button
+                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                disabled={item.price === 0 || item.qty === 0}
+              >
+                <FaShoppingCart size={24} onClick={buyItem} />
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-4 mr-2">
-          <button
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
-            onClick={deleteItem}
-          >
-            <RiDeleteBin6Line size={24} />
-          </button>
-          <button
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
-            disabled={item.price === 0}
-            onClick={() => {
-              if (item.price > 0) setStatus("onsale");
-            }}
-          >
-            <TbRosetteDiscountCheck size={24} />
-          </button>
-          <button
-            className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
-            disabled={item.price === 0 || item.qty === 0}
-          >
-            <FaShoppingCart size={24} onClick={buyItem} />
-          </button>
         </div>
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[330px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }

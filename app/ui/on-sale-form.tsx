@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { Action, Item, Mode } from "../lib/definitions";
 import { FaRegWindowClose, FaShoppingCart } from "react-icons/fa";
+import { Action, Item, Mode } from "../lib/definitions";
+import { Toast } from "../lib/utils";
 
 const OnSaleForm = ({
   item,
@@ -15,6 +16,7 @@ const OnSaleForm = ({
   const [onSalePrice, setOnSalePrice] = useState("");
   const [onSalePriceError, setOnSalePriceError] = useState(false);
 
+
   const showErrorMsg = (msg: string) => {
     return <div className="text-sm text-red-700 dark:text-red-200 font-semibold h-4">{msg}</div>;
   };
@@ -23,7 +25,7 @@ const OnSaleForm = ({
     const value = e.target.value;
     const regex = /^[0-9]*\.?[0-9]*$/;
     if (regex.test(value)) {
-      if (Number(value) > 0 && Number(value) < item.price) {
+      if (Number(value) > 0 && Number(value) < Math.abs(item.price)) {
         setOnSalePriceError(false);
       } else setOnSalePriceError(true);
       setOnSalePrice(value);
@@ -42,13 +44,17 @@ const OnSaleForm = ({
       };
       setStatus("show");
       onSave(updatedItem);
+      Toast.fire({
+        icon: "success",
+        title: "¡Item agregado al carrito!",
+      });
     } else setStatus("show");
   };
 
   return (
     <div className="flex flex-col w-full p-1 ">
-      <div className=" bg-secondary py-1 font-bold border border-border-list text-center">
-        {`${item.name} - $${item.price}`} 
+      <div className=" bg-secondary py-1 font-bold border border-border-list capitalize text-center">
+        {`${item.name} - $${Math.abs(item.price)}`} 
       </div>
 
       <div className="flex ">
@@ -58,7 +64,7 @@ const OnSaleForm = ({
               Precio PROMO x un/kg
             </label>
             <input
-              type="string"
+              type="number"
               id="onSalePrice"
               value={onSalePrice}
               onChange={handleOnSalePriceChange}
@@ -68,7 +74,7 @@ const OnSaleForm = ({
               required
             />
             {onSalePriceError ? (
-              showErrorMsg("Precio de Oferta no válido")
+              showErrorMsg("¡Precio de Oferta no válido!")
             ) : (
               <div className="min-h-4"></div>
             )}
@@ -84,7 +90,7 @@ const OnSaleForm = ({
           <span
             className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
             onClick={(e) =>
-              Number(onSalePrice) > 0 && Number(onSalePrice) < item.price
+              Number(onSalePrice) > 0 && Number(onSalePrice) < Math.abs(item.price)
                 ? handleSubmit(e, "buy")
                 : setOnSalePriceError(true)
             }
