@@ -38,7 +38,7 @@ const Page = () => {
 
 
   return (
-    <div className=" bg-[url('/bckg.jpg')] bg-cover bg-fixed bg-center w-full min-h-screen flex flex-col justify-between" >
+    <div className=" bg-[url('/bckg.jpg')] bg-cover bg-fixed bg-center sm:bg-left-top w-full min-h-screen flex flex-col sm:justify-center" >
        {showHelp && (
               <div className="mt-16 bg-secondary flex">
                 <span className="p-4 italic text-justify">
@@ -50,14 +50,14 @@ const Page = () => {
                     className="inline ml-2 align-baseline"
                   />{" ."}
                 </span>
-                <div className="flex justify-start mr-2">
+                <span className="flex justify-start mr-2">
                   <button
                     className="h-2 w-2 p-2 opacity-50"
                     onClick={() => setShowHelp(false)}
                   >
                     X
                   </button>
-                </div>
+                </span>
               </div>
             )}
     <div className={clsx("w-full flex justify-center border py-4",{'mt-40':!showHelp})}>

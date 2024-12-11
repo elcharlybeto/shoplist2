@@ -92,7 +92,7 @@ const Page = () => {
           <GoBook size={150} />
         </div>
       ) : sorted ? (
-        <ul className="flex flex-col gap-2 p-2 items-center">
+        <ul className="flex flex-wrap gap-2 p-2 items-center">
           {sortedItems.map(
             (item) =>
               item.location === "historial" && (
@@ -107,7 +107,7 @@ const Page = () => {
           )}
         </ul>
       ) : (
-        <ul className="flex flex-col gap-2 p-2 items-center">
+        <ul className="flex flex-wrap gap-2 p-2 items-center">
           {unsorted.map(
             (item) =>
               item.location === "historial" && (

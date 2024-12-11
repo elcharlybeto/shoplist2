@@ -178,7 +178,7 @@ const Page = () => {
       )}
       {status === "hide" && search.length > 0 && (
         <div>
-          <ul className="flex flex-col gap-2 p-2 items-center">
+          <ul className="flex flex-wrap gap-2 p-2 items-center max-w-min">
             {fromHistorial.map((item) => (
               <li key={item.id}>
                 <HistorialCard item={item} items={items} setItems={setItems} />
