@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import {
+  FaArrowAltCircleRight,
+  FaBars,
   FaRegCheckCircle,
   FaRegWindowClose,
-  FaToggleOff,
-  FaToggleOn,
 } from "react-icons/fa";
+import { FaToggleOff, FaToggleOn } from "react-icons/fa6";
 import { Category } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import {
@@ -18,13 +19,17 @@ import {
 import CategoryCard from "../ui/category-card";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdFilterAltOff } from "react-icons/md";
+import { BsEmojiSmile } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const { categories, setCategories, helpActive } = useMyContext();
+  const { categories, setCategories, settings, setIsOpen } = useMyContext();
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
-  const [showHelp, setShowHelp] = useState(helpActive);
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
+
+  const router = useRouter();
 
   const showErrorMsg = (msg: string) => {
     return (
@@ -40,9 +45,7 @@ const Page = () => {
           name: formatString(name),
           active: true,
         };
-        const newCategories = [newCategory, ...categories].sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
+        const newCategories = [newCategory, ...categories];
         setCategories(newCategories);
         Toast.fire({
           icon: "success",
@@ -68,13 +71,13 @@ const Page = () => {
   };
 
   useEffect(() => {
-    setShowHelp(helpActive);
-  }, [helpActive]);
+    setShowHelp(settings.helpActive);
+  }, [settings]);
 
   return (
     <div className="pt-16 pb-4 w-full min-h-screen flex flex-col items-center">
       <button
-        className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl disabled:hidden "
+        className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl disabled:hidden "
         onClick={inactiveAll}
         disabled={countInactiveCategories(categories) === categories.length}
       >
@@ -83,9 +86,10 @@ const Page = () => {
       {showHelp && (
         <div className="mt-1 bg-secondary flex">
           <span className="p-4 italic text-justify">
-            Para filtrar los productos de la lista por categorías, se pueden
-            crear ingresando un nombre en el siguiente formulario y a
-            continuación tocar en
+            Podemos crear categorías para ordenar y filtrar los productos en la
+            lista. Simplemente ingresa un nombre que puede ser, por ejemplo, el
+            de una sección del supermercado en el siguiente formulario y a
+            continuación toca en
             <FaRegCheckCircle
               size={16}
               className="inline ml-2 align-baseline"
@@ -144,20 +148,25 @@ const Page = () => {
       </div>
 
       {showHelp && (
-        <div className="mt-1 bg-secondary flex">
+        <div className="mt-2 bg-secondary flex">
           <span className="p-4 italic text-justify">
-            Para modificar el nombre de una categoría, simplemente tocarlo.
+            Para modificar el nombre de una categoría, simplemente debes
+            tocarlo. Elimina una categoría tocando sobre su botón
             <RiDeleteBin6Line
               size={16}
               className="inline ml-2 align-baseline"
             />
-            <span className="ml-1">, elimina la categoría, mientras que </span>
+            <span className="ml-1">
+              {" "}
+              Desactivar una categoría implica ocultar los productos de la lista
+              pertenecientes a esa categoría, se hace tocando sobre su botón
+            </span>
             <FaToggleOff size={16} className="inline ml-2 align-baseline" />
             <span className="ml-1">
-              , desactiva la categoría, es decir, oculta los productos de esa categoría en la lista y{" "}
+              , mientras que para hacerlos visibles nuevamente, debemos
+              activarla tocando sobre
             </span>
             <FaToggleOn size={16} className="inline ml-2 align-baseline" />{" "}
-            <span> la activa, o sea, los hace visibles en la lista. </span>
           </span>
           <div className="flex justify-start mr-2">
             <button
@@ -176,7 +185,8 @@ const Page = () => {
             El botón flotante
             <FaToggleOff size={16} className="inline ml-2 align-baseline" />
             <span className="ml-1">
-              , desactiva todas las categorías, mientras que con el ícono{" "}
+              , desactiva todas las categorías al mismo tiempo, mientras que con
+              el ícono{" "}
             </span>
             <MdFilterAltOff size={16} className="inline ml-2 align-baseline" />
             <span className="ml-1">
@@ -196,7 +206,7 @@ const Page = () => {
       )}
 
       <div>
-        <ul className="flex flex-col gap-2 p-2 items-center">
+        <ul className="flex flex-wrap gap-2 p-2 items-center">
           {categories.map((category) => (
             <li key={category.id}>
               <CategoryCard category={category} />
@@ -204,6 +214,45 @@ const Page = () => {
           ))}
         </ul>
       </div>
+
+      {showHelp && (
+        <div className="mt-1 bg-secondary flex mb-4">
+          <span className="p-4 italic text-justify">
+            Ya dimos nuestro primer gran paso. Ahora para aprovechar las
+            categorías que creamos, podemos ordenarlas y activar el ordenamiento
+            automático de la lista, de modo que al incorporar un producto a la
+            misma, se ubique según un orden prestablecido. Esto va a ahorrarnos
+            tiempo para leer todos los productos de la misma sección juntos y si
+            ordenamos las categorías en el orden que recorremos el supermercado,
+            simplemente es cuestión de seguir la lista renglón a renglón.
+            <BsEmojiSmile size={16} className="inline ml-2 align-baseline" />
+            Para ordenar las categorías y activar el ordenamiento automático en
+            la lista, podemos seleccionar la opción{" "}
+            <span className="font-bold">Ordenar categorías </span>
+            del menú hamburguesa{" "}
+            <FaBars
+              size={16}
+              className="inline ml-2 align-baseline cursor-pointer"
+              onClick={() => setIsOpen(true)}
+            />{" "}
+            o tocar acá{" "}
+            <FaArrowAltCircleRight
+              size={16}
+              className="inline ml-2 align-baseline cursor-pointer"
+              onClick={() => router.replace("/sorting")}
+            />
+            .
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

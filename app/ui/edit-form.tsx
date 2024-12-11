@@ -16,7 +16,7 @@ const EditForm = ({
   setStatus: (status: Mode) => void;
 }) => {
   const [editValue, setEditValue] = useState(
-    field === "name" ? item.name : field === "price" ? item.price : item.qty
+    field === "name" ? item.name : field === "price" ? Math.abs(item.price) : item.qty
   );
   const [editValueError, setEditValueError] = useState(false);
 
@@ -70,7 +70,7 @@ const EditForm = ({
 
   useEffect(() => {
     setEditValue(
-      field === "name" ? item.name : field === "price" ? item.price : item.qty
+      field === "name" ? item.name : field === "price" ? Math.abs(item.price) : item.qty
     );
   }, [field, item.name, item.price, item.qty]);
 

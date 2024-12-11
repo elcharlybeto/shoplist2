@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaCheckCircle, FaShoppingCart } from "react-icons/fa";
+import { FaCheckCircle, FaRegStar, FaShoppingCart, FaStar } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa6";
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -56,7 +56,8 @@ const Listcard = ({
       ...item,
       location: "historial",
       onSale: false,
-      onSalePrice: item.price
+      price: Math.abs(item.price),
+      onSalePrice: Math.abs(item.price)
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
@@ -104,11 +105,22 @@ const Listcard = ({
     updateList(updatedItem);
   };
 
+  const toggleMarkItem = (id: number): void => {
+    setItems(prevItems => {
+      const updatedItems = prevItems.map(item =>
+        item.id === id ? { ...item, price: -item.price } : item
+      );
+      localStorage.setItem("items", JSON.stringify(updatedItems)); 
+      return updatedItems;
+    });
+  };
+  
+  
   return (
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[350px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[340px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
@@ -116,7 +128,7 @@ const Listcard = ({
       >
         <div className="w-full min-w-full">
           <div className="flex flex-wrap justify-between mb-1 pl-2 p-1  bg-blue-900 dark:bg-yellow-400 dark:text-black text-white ">
-            <div className="flex">
+            <div className="flex w-1/2">
               <span
                 className="p-1 text-lg cursor-pointer font-semibold"
                 onClick={() => editValue("qty")}
@@ -132,7 +144,18 @@ const Listcard = ({
 
             </div>
            
-            <span className="p-1 px-2 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text" onClick={() => editValue("price")} >{`$ ${item.price}` }</span>
+            <div
+                className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-1/4"
+              >
+                <button onClick={()=>toggleMarkItem(item.id)} >
+                {item.price < 0 ? <FaStar size={24}  /> : <FaRegStar size={24} />}
+                </button>
+              </div>
+
+<div className="flex items-center w-1/4 justify-end ">
+  
+              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${Math.abs(item.price)}` }</span>
+</div>
           </div>
 
         
@@ -146,7 +169,7 @@ const Listcard = ({
                  onChange={(e) => handleSelectCategory(e.target.value)}
                  className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
                >
-                 {categories.map((category) => (
+                 {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
                    <option key={category.id} value={category.id} className="bg-tertiary">
                      {category.name}
                    </option>
@@ -181,6 +204,8 @@ const Listcard = ({
               </div>
             )}
 
+             
+            
             <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
               <button
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
@@ -192,7 +217,7 @@ const Listcard = ({
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none"
                 disabled={item.price === 0}
                 onClick={() => {
-                  if (item.price > 0) setStatus("onsale");
+                  if (Math.abs(item.price) > 0) setStatus("onsale");
                 }}
               >
                 <TbRosetteDiscountCheck size={24} />
@@ -209,7 +234,7 @@ const Listcard = ({
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[330px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }

@@ -26,6 +26,8 @@ body {
     --primary: #140374;
     --secondary: #fff479;
     --tertiary: #68ee9c;
+    --floating: #7f1d1d;
+    --text-floating: #fff;
     --accent: #f6baba;
     --border-list: #172554;
     --bg-list: #cfdde3;
@@ -46,6 +48,8 @@ body {
     --primary: #140374;
     --secondary: #21702d;
     --tertiary: #e01c1cb6;
+    --floating: #a9b9d6;
+    --text-floating: #000;
     --accent: #472b55;
     --border-list: #fff;
     --bg-list:  #3b3c5f;

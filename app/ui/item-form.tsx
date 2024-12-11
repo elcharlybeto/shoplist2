@@ -1,11 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { RiCloseLine, RiPlayListAddFill } from "react-icons/ri";
 import { Action, Item, Mode } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import { formatString, isItemNameInArray, Toast, today } from "../lib/utils";
-import { RiCloseLine, RiPlayListAddFill } from "react-icons/ri";
-import Link from "next/link";
 
 const ItemForm = ({
   item,
@@ -124,13 +123,15 @@ const ItemForm = ({
   return (
     <div className="flex flex-col w-full p-1 ">
       <div className="flex justify-between mt-2">
-        <div className="bg-tertiary text-xl px-2 py-1 ml-28 rounded-lg border border-primary">Nuevo Item</div>
-        <Link
-          href="/list"
+        <div className="bg-tertiary text-xl px-2 py-1 ml-28 rounded-lg border border-primary">
+          Nuevo Item
+        </div>
+        <button
           className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
+          onClick={resetForm}
         >
           <RiCloseLine size={24} />
-        </Link>
+        </button>
       </div>
       <div className="flex">
         <div className="w-11/12 p-2 ">
@@ -205,6 +206,7 @@ const ItemForm = ({
             <label htmlFor="category" className="text-sm">
               Categoría
             </label>
+
             <select
               id="category"
               value={selectedCategory}
@@ -212,11 +214,15 @@ const ItemForm = ({
               className="p-1 mr-2 mb-2 border border-border-input bg-input-bg"
             >
               <option value={0}>misceláneos</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              {[...categories]
+                .filter((category) => category.id !== 0)
+                .slice() 
+                .sort((a, b) => a.name.localeCompare(b.name)) 
+                .map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
             </select>
           </form>
         </div>

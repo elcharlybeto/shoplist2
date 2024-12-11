@@ -44,7 +44,7 @@ const CartCard = ({
       ...item,
       location: "list",
       onSale: false,
-      onSalePrice: item.price,
+      onSalePrice: Math.abs(item.price),
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
@@ -59,7 +59,7 @@ const CartCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[350px]",
+          "flex items-center justify-around rounded-md border-2 border-opacity-50 border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list w-[330px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
@@ -83,7 +83,7 @@ const CartCard = ({
             </div>
             <div className="p-1 font-bold mb-1">
               <span className="p-1 px-2 bg-accent rounded-2xl shadow-md text-text" >{`$ ${total}`}</span>
-              {item.onSalePrice < item.price && (
+              {item.onSalePrice < Math.abs(item.price) && (
                 <span className="text-sm p-1 text-white bg-icon-form">
                   PROMO
                 </span>
@@ -96,7 +96,7 @@ const CartCard = ({
                 className="cursor-pointer text-lg font-bold"
                 onClick={() => editValue("price")}
               >
-                {`$ ${item.price} uni/Kg`}
+                {`$ ${Math.abs(item.price)} uni/Kg`}
               </span>
               <span>{`${item.boughtDate}`}</span>
             </div>
@@ -112,12 +112,12 @@ const CartCard = ({
                 className={clsx(
                   "text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors disabled:opacity-40 disabled:pointer-events-none",
                   {
-                    "text-error-msg": item.price !== item.onSalePrice,
+                    "text-error-msg": Math.abs(item.price) !== item.onSalePrice,
                   }
                 )}
                 disabled={item.price === 0}
                 onClick={() => {
-                  if (item.price > 0) setStatus("onsale");
+                  if (Math.abs(item.price) > 0) setStatus("onsale");
                 }}
               >
                 <TbRosetteDiscountCheck size={24} />

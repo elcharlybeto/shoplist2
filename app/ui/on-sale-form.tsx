@@ -25,7 +25,7 @@ const OnSaleForm = ({
     const value = e.target.value;
     const regex = /^[0-9]*\.?[0-9]*$/;
     if (regex.test(value)) {
-      if (Number(value) > 0 && Number(value) < item.price) {
+      if (Number(value) > 0 && Number(value) < Math.abs(item.price)) {
         setOnSalePriceError(false);
       } else setOnSalePriceError(true);
       setOnSalePrice(value);
@@ -53,8 +53,8 @@ const OnSaleForm = ({
 
   return (
     <div className="flex flex-col w-full p-1 ">
-      <div className=" bg-secondary py-1 font-bold border border-border-list text-center">
-        {`${item.name} - $${item.price}`} 
+      <div className=" bg-secondary py-1 font-bold border border-border-list capitalize text-center">
+        {`${item.name} - $${Math.abs(item.price)}`} 
       </div>
 
       <div className="flex ">
@@ -90,7 +90,7 @@ const OnSaleForm = ({
           <span
             className="text-icon-form hover:text-hover-icon-form cursor-pointer transition-colors"
             onClick={(e) =>
-              Number(onSalePrice) > 0 && Number(onSalePrice) < item.price
+              Number(onSalePrice) > 0 && Number(onSalePrice) < Math.abs(item.price)
                 ? handleSubmit(e, "buy")
                 : setOnSalePriceError(true)
             }

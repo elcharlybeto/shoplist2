@@ -6,11 +6,15 @@ import { Item } from "../lib/definitions";
 import { useMyContext } from "../lib/myContext";
 import TicketCard from "../ui/ticket-card";
 import TotalTicket from "../ui/total-ticket";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { FiDelete } from "react-icons/fi";
 
 const Page = () => {
-  const { items } = useMyContext();
+  const { items, settings } = useMyContext();
   const [rows, setRows] = useState<Item[]>([]);
   const [sortedByAmount, setSortedByAmount] = useState(false);
+
+  const [showHelp, setShowHelp] = useState(settings.helpActive);
 
   useEffect(() => {
     setRows(
@@ -36,15 +40,56 @@ const Page = () => {
     }
   }, [sortedByAmount, items]);
 
+  useEffect(() => {
+    setShowHelp(settings.helpActive);
+  }, [settings]);
+
   return (
     <div className="pt-4 min-w-full min-h-screen flex flex-col items-center bg-background">
-       <button
-        className="fixed right-3 bottom-4 p-2 bg-secondary border border-primary rounded-xl "
-        onClick={() => setSortedByAmount((prev)=>!prev)}
+      <button
+        className="fixed right-2 bottom-4 p-2 bg-floating text-text-floating border border-primary rounded-xl "
+        onClick={() => setSortedByAmount((prev) => !prev)}
       >
-      {sortedByAmount ?  <FaSortAlphaDown size={32}/> : <FaSortNumericDown  size={32}/> }
+        {sortedByAmount ? (
+          <FaSortAlphaDown size={32} />
+        ) : (
+          <FaSortNumericDown size={32} />
+        )}
       </button>
-      <ul className="flex flex-col gap-1 mt-14 items-center">
+      {showHelp && (
+        <div className="mt-12 bg-secondary flex mb-1">
+          <span className="p-4 italic text-justify">
+            Este ticket virtual te puede servir para verificar renglón a renglón
+            el ticket real de compras. Para verificar un renglón, simplemente
+            tocar su botón
+            <IoMdCheckmarkCircleOutline
+              size={16}
+              className="inline ml-2 align-baseline"
+            />{" "}
+            o su botón{" "}
+            <FiDelete size={16} className="inline ml-2 align-baseline" /> para
+            marcarlo como no verificado. Los renglones del ticket virtual pueden
+            ordenarse con el botón flotante alfabéticamente cuando muestra el
+            ícono{" "}
+            <FaSortAlphaDown size={16} className="inline ml-2 align-baseline" />{" "}
+            o por monto de mayor a menor cuando muestra el ícono{" "}
+            <FaSortNumericDown
+              size={16}
+              className="inline ml-2 align-baseline"
+            />{" "}
+            .
+          </span>
+          <div className="flex justify-start mr-2">
+            <button
+              className="h-2 w-2 p-2 opacity-50"
+              onClick={() => setShowHelp(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
+      <ul className="flex flex-col gap-3 mt-14 items-center">
         {rows.map((row) => {
           if (row.onSalePrice > 0)
             return (
@@ -58,7 +103,7 @@ const Page = () => {
         })}
       </ul>
       <TotalTicket rows={rows} checked={false} />
-      <ul className="flex flex-col gap-1 mt-14 items-center">
+      <ul className="flex flex-col gap-3 mt-14 items-center">
         {rows.map((row) => {
           if (row.onSalePrice < 0)
             return (

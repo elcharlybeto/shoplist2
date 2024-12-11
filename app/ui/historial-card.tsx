@@ -67,7 +67,7 @@ const HistorialCard = ({
     <>
       <div
         className={clsx(
-          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list  w-[350px]",
+          "flex items-center justify-around rounded-md border border-border-list bg-bg-list p-1 shadow-xl shadow-shadow-list  w-[330px]",
           {
             hidden: status === "edit" || status === "onsale",
           }
@@ -117,7 +117,7 @@ const HistorialCard = ({
       </div>
       <div
         className={clsx(
-          "flex w-[400px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
+          "flex w-[330px] px-4 shadow-xl rounded-md items-center justify-around bg-secondary shadow-shadow-list p-2",
           {
             hidden: status === "show" || status === "onsale",
           }
