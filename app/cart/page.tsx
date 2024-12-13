@@ -63,7 +63,7 @@ const Page = () => {
             </div>
           )}
           <ul
-            className={clsx("flex flex-wrap gap-2 p-2 mt-14 items-center max-w-min", {
+            className={clsx("flex flex-wrap-reverse gap-2 p-2 mt-14 items-center max-w-min", {
               "mt-2": showHelp,
             })}
           >
