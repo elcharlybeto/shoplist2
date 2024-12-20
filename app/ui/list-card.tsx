@@ -1,7 +1,12 @@
 "use client";
 import clsx from "clsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FaCheckCircle, FaRegStar, FaShoppingCart, FaStar } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaRegStar,
+  FaShoppingCart,
+  FaStar,
+} from "react-icons/fa";
 import { FaFilter } from "react-icons/fa6";
 import { MdFilterAltOff } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -13,7 +18,7 @@ import {
   countInactiveCategories,
   getCategoryNameById,
   Toast,
-  updateCategoryActiveState
+  updateCategoryActiveState,
 } from "../lib/utils";
 import EditForm from "./edit-form";
 import OnSaleForm from "./on-sale-form";
@@ -57,7 +62,7 @@ const Listcard = ({
       location: "historial",
       onSale: false,
       price: Math.abs(item.price),
-      onSalePrice: Math.abs(item.price)
+      onSalePrice: Math.abs(item.price),
     };
     const newList = items.filter((itemList) => itemList.id !== deletedItem.id);
     localStorage.setItem("items", JSON.stringify([deletedItem, ...newList]));
@@ -87,7 +92,7 @@ const Listcard = ({
   const filterByThisCategory = (id: number) => {
     const newCategories = updateCategoryActiveState(id, categories);
     setCategories(newCategories);
-    localStorage.setItem("categories",JSON.stringify(newCategories));
+    localStorage.setItem("categories", JSON.stringify(newCategories));
   };
 
   const clearFilters = () => {
@@ -99,23 +104,22 @@ const Listcard = ({
   const handleSelectCategory = (categoryId: string) => {
     const updatedItem = {
       ...item,
-      categoryId: Number(categoryId)
-    }
+      categoryId: Number(categoryId),
+    };
     setEditCategory(false);
     updateList(updatedItem);
   };
 
   const toggleMarkItem = (id: number): void => {
-    setItems(prevItems => {
-      const updatedItems = prevItems.map(item =>
+    setItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
         item.id === id ? { ...item, price: -item.price } : item
       );
-      localStorage.setItem("items", JSON.stringify(updatedItems)); 
+      localStorage.setItem("items", JSON.stringify(updatedItems));
       return updatedItems;
     });
   };
-  
-  
+
   return (
     <>
       <div
@@ -141,43 +145,56 @@ const Listcard = ({
               >
                 {item.name}
               </span>
-
             </div>
-           
-            <div
-                className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-1/4"
-              >
-                <button onClick={()=>toggleMarkItem(item.id)} >
-                {item.price < 0 ? <FaStar size={24}  /> : <FaRegStar size={24} />}
+
+            <div className="flex w-1/2 justify-between">
+              <div className="text-secondary flex items-center hover:text-hover-icon-list cursor-pointer transition-colors w-[24px]">
+                <button onClick={() => toggleMarkItem(item.id)}>
+                  {item.price < 0 ? (
+                    <FaStar size={24} />
+                  ) : (
+                    <FaRegStar size={24} />
+                  )}
                 </button>
               </div>
-
-<div className="flex items-center w-1/4 justify-end ">
-  
-              <span className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  " onClick={() => editValue("price")} >{`$ ${Math.abs(item.price)}` }</span>
-</div>
+              
+              <div className="flex items-center justify-end ">
+                <span
+                  className="p-1 px-2 mr-1 bg-tertiary rounded-2xl shadow-md cursor-pointer font-semibold text-text  "
+                  onClick={() => editValue("price")}
+                >{`$ ${Math.abs(item.price)}`}</span>
+              </div>
+            </div>
           </div>
-
-        
 
           <div className="flex justify-between">
             {editCategory ? (
-             <div className="flex items-center">
-               <select
-                 id="category"
-                 value={item.categoryId}
-                 onChange={(e) => handleSelectCategory(e.target.value)}
-                 className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
-               >
-                 {[...categories].sort((a, b) => a.name.localeCompare(b.name)).map((category) => (
-                   <option key={category.id} value={category.id} className="bg-tertiary">
-                     {category.name}
-                   </option>
-                 ))}
-               </select>
-               <button   className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg" onClick={()=>setEditCategory(false)}><FaCheckCircle size={16} />
-               </button>
-             </div>
+              <div className="flex items-center">
+                <select
+                  id="category"
+                  value={item.categoryId}
+                  onChange={(e) => handleSelectCategory(e.target.value)}
+                  className="p-1 mr-2 border border-primary rounded-lg bg-input-bg "
+                >
+                  {[...categories]
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((category) => (
+                      <option
+                        key={category.id}
+                        value={category.id}
+                        className="bg-tertiary"
+                      >
+                        {category.name}
+                      </option>
+                    ))}
+                </select>
+                <button
+                  className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                  onClick={() => setEditCategory(false)}
+                >
+                  <FaCheckCircle size={16} />
+                </button>
+              </div>
             ) : (
               <div className="flex gap-1">
                 <span
@@ -186,26 +203,24 @@ const Listcard = ({
                 >
                   {getCategoryNameById(item.categoryId, categories)}
                 </span>
-                {countInactiveCategories(categories) > 0  ? 
-                <button
-                className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
-                onClick={() => clearFilters() }
-              >
-                <MdFilterAltOff size={18} />
-              </button>
-                :
-                <button
-                  className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
-                  onClick={() => filterByThisCategory(item.categoryId) }
-                >
-                  <FaFilter size={18} />
-                </button>
-                }
+                {countInactiveCategories(categories) > 0 ? (
+                  <button
+                    className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                    onClick={() => clearFilters()}
+                  >
+                    <MdFilterAltOff size={18} />
+                  </button>
+                ) : (
+                  <button
+                    className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors p-2 border border-primary bg-secondary rounded-lg"
+                    onClick={() => filterByThisCategory(item.categoryId)}
+                  >
+                    <FaFilter size={18} />
+                  </button>
+                )}
               </div>
             )}
 
-             
-            
             <div className="flex gap-4 justify-end rounded-lg p-2 bg-secondary border border-primary">
               <button
                 className="text-icon-list hover:text-hover-icon-list cursor-pointer transition-colors"
